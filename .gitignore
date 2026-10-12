@@ -1,0 +1,15 @@
+.deps/
+.venv/
+.env
+.env.*
+!.env.example
+outputs/
+__pycache__/
+*.py[cod]
+*.egg-info/
+tasks/*/data.jsonl
+tasks/*/environment/files/
+tasks/*/.build.lock
+
+generated/
+.DS_Store
