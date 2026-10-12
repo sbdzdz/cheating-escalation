@@ -2,7 +2,6 @@
 .venv/
 .env
 .env.*
-!.env.example
 outputs/
 __pycache__/
 *.py[cod]
@@ -13,3 +12,5 @@ tasks/*/.build.lock
 
 generated/
 .DS_Store
+.vscode/
+reports/
