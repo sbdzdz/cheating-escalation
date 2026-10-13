@@ -15,7 +15,7 @@ class FactorizationKimiCode(KimiCode):
             await super().run(instruction, environment, context)
         finally:
             # Convert inside the container before Harbor collects agent logs.
-            converter = (Path(__file__).resolve().parents[1] / "transcript.py").read_text()
+            converter = Path(__file__).with_name("transcript.py").read_text()
             await self.exec_as_agent(
                 environment,
                 command="python3 -c "
