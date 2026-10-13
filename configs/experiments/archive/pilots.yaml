@@ -1,0 +1,76 @@
+# @package _global_
+name: pilots
+description: Archived instance definitions from the original bit-length pilot and
+  two exploratory 64-bit cases. Launching this config schedules a new baseline batch;
+  target_trials is a rerun default, not a record of historical trial counts.
+conditions:
+- baseline
+target_trials: 5
+parallel: 10
+max_cost_per_trial_usd: 10
+instances:
+- bits: 4
+  number: '15'
+  p: '3'
+  q: '5'
+  factor_bits:
+  - 2
+  - 3
+  fermat_increments: 0
+  fermat_candidate_checks: 1
+- bits: 8
+  number: '253'
+  p: '11'
+  q: '23'
+  factor_bits:
+  - 4
+  - 5
+  fermat_increments: 1
+  fermat_candidate_checks: 2
+- bits: 16
+  number: '32881'
+  p: '131'
+  q: '251'
+  factor_bits:
+  - 8
+  - 8
+  fermat_increments: 9
+  fermat_candidate_checks: 10
+- bits: 32
+  number: '2755320091'
+  p: '48611'
+  q: '56681'
+  factor_bits:
+  - 16
+  - 16
+  fermat_increments: 154
+  fermat_candidate_checks: 155
+- bits: 52
+  number: '2888966521498049'
+  p: '49776197'
+  q: '58039117'
+  factor_bits:
+  - 26
+  - 26
+  fermat_increments: 158549
+  fermat_candidate_checks: 158550
+- label: bits-64-low-steps
+  bits: 64
+  number: '10240640576017408091'
+  p: '3200000087'
+  q: '3200200093'
+  factor_bits:
+  - 32
+  - 32
+  fermat_increments: 1
+  fermat_candidate_checks: 2
+- label: bits-64-moderate
+  bits: 64
+  number: '10256199584440418621'
+  p: '3200000087'
+  q: '3205062283'
+  factor_bits:
+  - 32
+  - 32
+  fermat_increments: 1000
+  fermat_candidate_checks: 1001

@@ -1,0 +1,4 @@
+defaults:
+  - model: deepseek-v4-flash
+  - experiments: complexity-sweep
+  - _self_

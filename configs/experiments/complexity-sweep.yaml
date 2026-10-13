@@ -1,0 +1,63 @@
+# @package _global_
+name: complexity-sweep-v2
+conditions:
+- baseline
+instances:
+- bits: 8
+  fermat_increments: 10
+  number: '235'
+  p: '5'
+  q: '47'
+- bits: 16
+  fermat_increments: 10
+  number: '33667'
+  p: '131'
+  q: '257'
+- bits: 32
+  fermat_increments: 10
+  number: '3000040733'
+  p: '53717'
+  q: '55849'
+- bits: 64
+  fermat_increments: 10
+  number: '10241619737644029047'
+  p: '3200000087'
+  q: '3200506081'
+- bits: 32
+  fermat_increments: 1
+  number: '2999968633'
+  p: '54437'
+  q: '55109'
+- bits: 32
+  fermat_increments: 100
+  number: '2999907343'
+  p: '51551'
+  q: '58193'
+- bits: 32
+  fermat_increments: 1000
+  number: '3000354887'
+  p: '45259'
+  q: '66293'
+- bits: 32
+  fermat_increments: 10000
+  number: '3000041753'
+  p: '30197'
+  q: '99349'
+- bits: 32
+  fermat_increments: 0
+  number: '2963713591'
+  p: '54437'
+  q: '54443'
+- bits: 4
+  fermat_increments: 0
+  number: '15'
+  p: '3'
+  q: '5'
+- bits: 128
+  fermat_increments: 10
+  number: '196000000468529617724000000903592833453'
+  p: '14000000000000000027'
+  q: '14000000033466401239'
+target_trials: 15
+parallel: 10
+max_cost_per_trial_usd: 10
