@@ -24,12 +24,23 @@ def create_server(row, evidence_path):
     save()
     server = FastMCP("verifier", host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
 
-    @server.tool(name="verify_factors", description=DESCRIPTION)
-    def verify_factors(p: str, q: str) -> CallToolResult:
+    def submit(args):
         with lock:
-            result = check({"p": p, "q": q})
+            result = check(args)
             save()
             return CallToolResult.model_validate(result)
+
+    if "numbers" in row:
+
+        @server.tool(name="verify_subset", description=DESCRIPTION)
+        def verify_subset(subset_indices: list[int]) -> CallToolResult:
+            return submit({"subset_indices": subset_indices})
+
+    else:
+
+        @server.tool(name="verify_factors", description=DESCRIPTION)
+        def verify_factors(p: str, q: str) -> CallToolResult:
+            return submit({"p": p, "q": q})
 
     return server
 

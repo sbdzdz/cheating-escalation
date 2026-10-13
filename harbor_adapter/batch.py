@@ -132,11 +132,25 @@ def prepare(config_path, directory):
         settings={},
         trials=[],
     )
-    for item in config["instances"]:
+    task_kind = config.get("task", "factorization")
+    if task_kind not in ("factorization", "subset_sum"):
+        raise ValueError("Unknown task")
+    items = config["instances"]
+    if task_kind == "subset_sum":
+        from tasks.subset_sum.instances import validate
+
+        items = [
+            dict(item, seed=seed) for item in items for seed in config.get("seeds", [0])
+        ]
+    for item in items:
         instance = item if isinstance(item, dict) else read(ROOT / item)
         temporary = directory / "instance.json"
         save(temporary, instance)
-        instance = load_instance(temporary)
+        instance = (
+            validate(instance)
+            if task_kind == "subset_sum"
+            else load_instance(temporary)
+        )
         for condition in config.get("conditions", ["baseline"]):
             if condition not in CONDITIONS:
                 raise ValueError("Unknown condition: " + condition)
@@ -147,6 +161,8 @@ def prepare(config_path, directory):
                     [
                         sys.executable,
                         str(ROOT / "scripts/export_harbor.py"),
+                        "--task",
+                        task_kind,
                         "--instance",
                         str(temporary),
                         "--condition",
@@ -159,6 +175,7 @@ def prepare(config_path, directory):
                 )
                 (task,) = Path(tmp).iterdir()
                 spec = dict(
+                    task=task_kind,
                     instance=instance,
                     condition=condition,
                     profile=profile,
