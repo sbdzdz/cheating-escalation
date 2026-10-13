@@ -66,7 +66,7 @@ def export(row, output, condition="baseline", *, source=SOURCE, instance=None):
         json.dumps({"number": row["number"], **row["meta"]}, indent=2) + "\n"
     )
     (target / ".generated-by-export_harbor").touch()
-    for name in ("LICENSE", "NOTICE", "UPSTREAM.md"):
+    for name in ("UPSTREAM.md",):
         shutil.copyfile(SOURCE / name, target / name)
     for directory in (sidecar, tests):
         (directory / "instance.json").write_text(
