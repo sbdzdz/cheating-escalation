@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import AsyncMock, patch
 
 from harbor.agents.installed.acp import AcpAgent
-from harbor_adapter.deepseek import FactorizationDeepSeek
+from harbor_adapter.agents.deepseek import FactorizationDeepSeek
 from harbor_adapter.model_config import load_profile
 from harbor_adapter.runtime_image import ROOT, prepare_task, runtime_spec
 

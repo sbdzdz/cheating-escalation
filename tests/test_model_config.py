@@ -8,7 +8,7 @@ import unittest
 from unittest.mock import AsyncMock, patch
 
 from harbor_adapter.model_config import DEFAULT_CONFIG, ROOT, load_profile
-from harbor_adapter.deepseek import FactorizationDeepSeek, provider_patch
+from harbor_adapter.agents.deepseek import FactorizationDeepSeek, provider_patch
 from harbor.agents.installed.acp import AcpAgent
 from harbor.models.task.config import MCPServerConfig
 from harbor_adapter.outputs import compact_job
@@ -29,8 +29,7 @@ class ModelConfigTests(unittest.TestCase):
             self.assertEqual(agent['env'][target + '_BASE_URL'], 'http://host.docker.internal:PORT/v1')
 
     def test_config_default_selects_model(self):
-        config = json.loads(DEFAULT_CONFIG.read_text())
-        config['default'] = 'deepseek-v4-flash'
+        config = {'default': 'deepseek-v4-flash', 'profiles': {'deepseek-v4-flash': load_profile(name='deepseek-v4-flash')[1]}}
         with tempfile.TemporaryDirectory() as d:
             path = Path(d) / 'models.json'
             path.write_text(json.dumps(config))

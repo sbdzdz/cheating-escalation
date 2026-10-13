@@ -1,0 +1,17 @@
+# @package _global_
+profile: deepseek-v4-flash
+model:
+  agent: harbor_adapter.agents.deepseek:FactorizationDeepSeek
+  model: deepseek/deepseek-v4-flash
+  kwargs:
+    registry_entry_path: configs/acp/deepseek.json
+    auth_policy: disabled
+  api_key_env: OPENROUTER_API_KEY
+  key_target: DEEPSEEK_API_KEY
+  url_target: DEEPSEEK_BASE_URL
+  env:
+    DEEPSEEK_BASE_URL: https://openrouter.ai/api/v1
+    DSH_HOME: /logs/agent/.dsh
+    DSH_REASONING_EFFORT: high
+  setup_timeout_multiplier: 5
+  runtime: deepseek

@@ -74,7 +74,7 @@ class ExportTests(unittest.TestCase):
 class KimiTests(unittest.IsolatedAsyncioTestCase):
     async def test_mcp_registration_and_closed_book_policy(self):
         from unittest.mock import AsyncMock
-        from harbor_adapter.kimi_code import FactorizationKimiCode
+        from harbor_adapter.agents.kimi_code import FactorizationKimiCode
         from harbor.models.task.config import MCPServerConfig
         with tempfile.TemporaryDirectory() as directory:
             agent = FactorizationKimiCode(
