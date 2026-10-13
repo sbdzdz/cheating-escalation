@@ -9,6 +9,7 @@ __pycache__/
 tasks/*/data.jsonl
 tasks/*/environment/files/
 tasks/*/.build.lock
+literature/
 
 generated/
 .DS_Store
