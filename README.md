@@ -121,8 +121,8 @@ uv run scripts/summarize_complexity.py --manifest outputs/experiments/complexity
 Render the report and export figures:
 
 ```sh
-uv run scripts/render_results.py
-uv run scripts/export_report_figures.py
+uv run plotting/render_results.py
+uv run plotting/export_report_figures.py
 ```
 
 Open `results.html`; find SVGs in `reports/figures/`.
