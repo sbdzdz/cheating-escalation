@@ -14,14 +14,20 @@ TASK_FILES = "COPY rootfs/ /\nRUN chown -R agent:agent /workspace /home/runner\n
 
 
 def runtime_spec(runtime):
-    if runtime != "deepseek":
+    if runtime not in {"deepseek", "zcode"}:
         raise ValueError(f"Unknown prebuilt runtime: {runtime}")
-    package = ROOT / "configs/acp/deepseek-runtime"
-    files = {
-        name: (package / name).read_bytes()
-        for name in ("package.json", "package-lock.json")
-    }
-    recipe = (ROOT / "docker/deepseek-runtime.Dockerfile").read_text()
+    if runtime == "deepseek":
+        package = ROOT / "configs/acp/deepseek-runtime"
+        names = ("package.json", "package-lock.json")
+        version = json.loads((package / "package.json").read_text())["dependencies"][
+            "@deepseek-ai/dsh"
+        ]
+    else:
+        package = ROOT / "configs/zcode"
+        names = ("source.json",)
+        version = json.loads((package / "source.json").read_text())["commit"]
+    files = {name: (package / name).read_bytes() for name in names}
+    recipe = (ROOT / f"docker/{runtime}-runtime.Dockerfile").read_text()
     files["Dockerfile"] = recipe.replace(
         "# TASK_BASE", TASK_BASE.read_text().rstrip()
     ).encode()
@@ -31,9 +37,7 @@ def runtime_spec(runtime):
     metadata = {
         "runtime": runtime,
         "fingerprint": fingerprint,
-        "harness_version": json.loads(files["package.json"])["dependencies"][
-            "@deepseek-ai/dsh"
-        ],
+        "harness_version": version,
     }
     files["runtime.json"] = (json.dumps(metadata) + "\n").encode()
     return f"cheating-escalation/{runtime}:{fingerprint[:16]}", files, metadata

@@ -5,6 +5,8 @@ import shutil
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from harbor_adapter import model_log
+
 
 def compact_job(job: Path, *, keep_debug: bool = False) -> None:
     debug = job / "debug"
@@ -14,30 +16,56 @@ def compact_job(job: Path, *, keep_debug: bool = False) -> None:
     if (debug / "result.json").exists():
         shutil.copy2(debug / "result.json", job / "result.json")
     mapping = {}
+    # The proxy's harness-independent call log replaces harness transcripts at the
+    # top level; harness logs then remain only in the debug archive.
+    calls = job / "model-calls.jsonl"
+    standard = calls.exists() and len(trial_dirs) == 1
     for trial in trial_dirs:
         target = job / "trials" / trial.name
         target.mkdir(parents=True, exist_ok=True)
+        if standard:
+            (target / "transcript.json").write_text(
+                json.dumps(model_log.read(calls), indent=2) + "\n"
+            )
+            mapping[str(calls.relative_to(job))] = str(
+                (target / "transcript.json").relative_to(job)
+            )
         for source, name in [
             ("result.json", "result.json"),
             ("agent/kimi-code.json", "transcript.json"),
             ("agent/trajectory.json", "trajectory.json"),
             ("artifacts/evidence/state.json", "verifier.json"),
         ]:
+            if standard and name in ("transcript.json", "trajectory.json"):
+                continue
             if (trial / source).exists():
                 shutil.copy2(trial / source, target / name)
                 mapping[str((trial / source).relative_to(job))] = str(
                     (target / name).relative_to(job)
                 )
-        events = trial / "agent/acp-events.jsonl"
-        if events.exists():
+        for event_file, event_format in (
+            ("acp-events.jsonl", "acp-events-v1"),
+            ("zcode-events.jsonl", "zcode-events-v1"),
+        ):
+            events = trial / "agent" / event_file
+            if standard or not events.exists():
+                continue
+            records, incomplete = [], []
+            for line in events.read_text().splitlines():
+                if not line.strip():
+                    continue
+                try:
+                    records.append(json.loads(line))
+                except json.JSONDecodeError:
+                    # A timeout may interrupt the last write. Preserve that
+                    # evidence rather than preventing compaction of the job.
+                    incomplete.append(line)
             transcript = {
-                "format": "acp-events-v1",
-                "events": [
-                    json.loads(line)
-                    for line in events.read_text().splitlines()
-                    if line.strip()
-                ],
+                "format": event_format,
+                "events": records,
             }
+            if incomplete:
+                transcript["unparsed_lines"] = incomplete
             (target / "transcript.json").write_text(
                 json.dumps(transcript, indent=2) + "\n"
             )
@@ -52,6 +80,8 @@ def compact_job(job: Path, *, keep_debug: bool = False) -> None:
             annotation.write_text(json.dumps(data, indent=2) + "\n")
     if keep_debug:
         return
+    if calls.exists():
+        calls.replace(debug / calls.name)
     archive = job / ".debug/debug.zip.tmp"
     archive.parent.mkdir(parents=True, exist_ok=True)
     with ZipFile(archive, "w", ZIP_DEFLATED) as output:
