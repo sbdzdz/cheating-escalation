@@ -5,7 +5,10 @@ from unittest.mock import patch
 
 from harbor_adapter.batch import (
     add_slots,
+    check_settings,
     digest,
+    files_hash,
+    implementation,
     import_analysis,
     locked,
     read,
@@ -15,6 +18,51 @@ from harbor_adapter.batch import (
 
 
 class BatchTests(unittest.TestCase):
+    def test_changed_zcode_source_blocks_resume(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            pin_path = root / "configs/zcode/source.json"
+            pin = {"repository": "https://example.com/zcode.git", "commit": "a" * 40}
+            save(pin_path, pin)
+            directory = root / "experiment"
+            task = directory / "settings/s/task"
+            task.mkdir(parents=True)
+            (task / "task.toml").write_text('schema_version = "1.3"\n')
+            profile = {"runtime": "zcode"}
+            with patch("harbor_adapter.batch.ROOT", root):
+                spec = {
+                    "implementation": implementation(),
+                    "task_files": files_hash(task.rglob("*"), task),
+                    "profile": profile,
+                }
+                save(directory / "settings/s/setting.json", spec)
+                save(
+                    directory / "settings/s/model.json",
+                    {"profiles": {"zcode": profile}},
+                )
+                manifest = {
+                    "settings": {
+                        "s": {
+                            "fingerprint": digest(spec),
+                            "task": str(task),
+                            "profile": "zcode",
+                        }
+                    }
+                }
+                check_settings(directory, manifest)
+                for field, value in (
+                    ("commit", "b" * 40),
+                    ("repository", "https://example.com/another-zcode.git"),
+                ):
+                    with self.subTest(field=field):
+                        save(pin_path, {**pin, field: value})
+                        with self.assertRaisesRegex(
+                            ValueError, "Implementation/configuration changed"
+                        ):
+                            check_settings(directory, manifest)
+                        save(pin_path, pin)
+                        check_settings(directory, manifest)
+
     def test_target_counts_slots_not_retries(self):
         m = dict(settings={"a": {}, "old": {"historical": True}}, trials=[])
         add_slots(m, 2)

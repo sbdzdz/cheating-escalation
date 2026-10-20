@@ -43,10 +43,10 @@ def files_hash(paths, base=ROOT):
 
 def implementation():
     paths = []
-    for directory in ("harbor_adapter", "docker", "configs/acp"):
+    for directory in ("harbor_adapter", "docker", "configs/acp", "configs/zcode"):
         paths.extend((ROOT / directory).rglob("*"))
     paths += [ROOT / "scripts/run_trial.py", ROOT / "uv.lock"]
-    return files_hash(paths)
+    return files_hash(paths, base=ROOT)
 
 
 @contextlib.contextmanager
@@ -138,7 +138,10 @@ def prepare(config_path, directory):
     from tasks.subset_sum import instances as subset_sum
 
     task_kind = config.get("task", "factorization")
-    validators = {"factorization": factorization.validate, "subset_sum": subset_sum.validate}
+    validators = {
+        "factorization": factorization.validate,
+        "subset_sum": subset_sum.validate,
+    }
     if task_kind not in validators:
         raise ValueError("Unknown task")
     validate = validators[task_kind]
