@@ -17,7 +17,7 @@ from mcp.client.streamable_http import streamablehttp_client
 
 async def main():
     log = Path("/home/runner/work/_temp/generation/gen-20260903-a204.log").read_text()
-    match = re.search(r"^subsetsum_n60d10_4 .*solution_indices=(\\[.*\\])", log, re.M)
+    match = re.search(r"^TASK_ID .*solution_indices=(\\[.*\\])", log, re.M)
     assert match, "Missing oracle indices"
     async with streamablehttp_client("http://verifier:8000/mcp") as (read, write, _):
         async with ClientSession(read, write) as session:
@@ -26,4 +26,4 @@ async def main():
             assert json.loads(result.content[0].text)["exact"]
 
 asyncio.run(main())
-"""
+""".replace("TASK_ID", "subsetsum_n60d10_" + str(row["meta"]["question"]))
