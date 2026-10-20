@@ -1,0 +1,21 @@
+defaults:
+  - export_schema
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+
+task: factorization
+# A JSON path or an inline mapping, e.g. {bits: 16, set_size: 8, seed: 7}.
+# Null selects the original fixture.
+instance: null
+questions: [4]
+condition: baseline
+agent_timeout_sec: 3600
+output: generated/harbor
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false

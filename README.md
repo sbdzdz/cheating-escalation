@@ -69,35 +69,41 @@ uv run python tests/zcode_smoke.py
 Export a task, inspect its run configuration, then run it:
 
 ```sh
-uv run scripts/export_harbor.py --questions 4 --condition baseline
+uv run scripts/export_harbor.py 'questions=[4]' condition=baseline
 uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10 --print-config
 uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10
 ```
 
-Use `--profile kimi-k3` for Kimi. Set the same `--condition` when exporting and
-running: `baseline`, `b-caught`, `ab-caught`, or `manual-only`.
+Use `--profile kimi-k3` for Kimi. Set the same condition using `condition=...` on export and
+`--condition ...` on the trial command: `baseline`, `b-caught`, `ab-caught`, or `manual-only`.
 
 To select a custom number, create a JSON file with decimal-string `number`, `p`,
 and `q` fields and pass it to both commands:
 
 ```sh
-uv run scripts/export_harbor.py --instance configs/instances/original.json
+uv run scripts/export_harbor.py instance=configs/instances/original.json
 uv run scripts/run_trial.py --instance configs/instances/original.json --profile deepseek-v4-flash --max-cost-usd 10
 ```
 
 For an individual subset-sum run, select the task on both commands:
 
 ```sh
-uv run scripts/export_harbor.py --task subset_sum
+uv run scripts/export_harbor.py task=subset_sum
 uv run scripts/run_trial.py --task subset_sum --profile deepseek-v4-flash --max-cost-usd 10
 ```
 
 These select the original Q4 fixture. For a custom instance, pass the same
-`--instance` JSON file to both commands, containing e.g.
+JSON file using `instance=...` on export and `--instance ...` on the trial
+command, containing e.g.
 `{"bits": 16, "set_size": 8, "seed": 7}`. Custom subset-sum instances use Q4;
-original fixtures also support other questions via `--questions` on export
+original fixtures also support other questions via `questions=[5]` on export
 and `--question` on the trial command. Explicit `--task-path` snapshots take
 precedence over instance selection.
+
+Export defaults live in `configs/export.yaml`. Inline instances are also supported,
+for example `'instance={bits:16,set_size:8,seed:7}'` with `task=subset_sum`.
+Use `--cfg job --resolve` to inspect export configuration without writing files.
+Hydra leaves the working directory unchanged; relative export paths resolve there.
 
 ## Build the runtime
 
@@ -108,7 +114,7 @@ uv run scripts/build_runtime.py --profile deepseek-v4-flash
 ## Tests
 
 ```sh
-uv run scripts/export_harbor.py --questions 4
+uv run scripts/export_harbor.py 'questions=[4]'
 uv run python -m unittest discover -s tests -v
 ```
 

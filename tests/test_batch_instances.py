@@ -56,7 +56,7 @@ class BatchInstanceTests(unittest.TestCase):
                     instances=[{"bits": 16, "set_size": 8}],
                 )
                 config.update(overrides)
-                with patch("harbor_adapter.batch.subprocess.run") as export:
+                with patch("harbor_adapter.export.export_tasks") as export:
                     with self.assertRaisesRegex(ValueError, error):
                         prepare(config, directory)
                     export.assert_not_called()

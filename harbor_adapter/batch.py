@@ -128,6 +128,7 @@ def expand_instances(task_kind, items, seeds=None):
 
 
 def prepare(config_path, directory):
+    from harbor_adapter.export import export_tasks
     from harbor_adapter.model_config import load_profile, normalize_profile
 
     config = config_path if isinstance(config_path, dict) else read(config_path)
@@ -176,31 +177,17 @@ def prepare(config_path, directory):
         trials=[],
     )
     for instance in items:
-        temporary = directory / "instance.json"
-        save(temporary, instance)
         for condition in conditions:
             import tempfile
 
             with tempfile.TemporaryDirectory() as tmp:
-                subprocess.run(
-                    [
-                        sys.executable,
-                        str(ROOT / "scripts/export_harbor.py"),
-                        "--task",
-                        task_kind,
-                        "--instance",
-                        str(temporary),
-                        "--condition",
-                        condition,
-                        "--agent-timeout-sec",
-                        str(agent_timeout),
-                        "--output",
-                        tmp,
-                    ],
-                    check=True,
-                    stdout=subprocess.DEVNULL,
+                (task,) = export_tasks(
+                    task_kind,
+                    tmp,
+                    instance=instance,
+                    condition=condition,
+                    agent_timeout_sec=agent_timeout,
                 )
-                (task,) = Path(tmp).iterdir()
                 spec = dict(
                     task=task_kind,
                     instance=instance,
@@ -232,7 +219,6 @@ def prepare(config_path, directory):
                     task=str((dest / "task" / task.name).resolve()),
                     historical=False,
                 )
-    temporary.unlink()
     add_slots(manifest, target)
     save(directory / "manifest.json", manifest)
     return manifest
