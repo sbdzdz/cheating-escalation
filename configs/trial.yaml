@@ -1,0 +1,30 @@
+defaults:
+  - trial_schema
+  - model: deepseek-v4-flash
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+
+task: factorization
+instance: null
+question: 4
+condition: baseline
+# oracle/nop are Docker checks; null uses the selected model.
+agent: null
+print_config: false
+keep_raw_outputs: false
+max_cost_usd: null
+# Saved batches use these snapshots instead of the current model YAML.
+model_snapshot: null
+snapshot_profile: null
+task_path: null
+run_id: null
+# Relative to the project root, independent of the invocation directory.
+output: outputs/harbor
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false

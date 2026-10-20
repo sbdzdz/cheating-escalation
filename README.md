@@ -41,13 +41,13 @@ Set conditions with `'conditions=[baseline,b-caught,ab-caught,manual-only]'`.
 Edit instances in `configs/experiments/` and model settings in `configs/model/`.
 
 Select `model=glm-5.3-flash` for GLM 5.3 Flash through OpenRouter in Z.ai's
-ZCode harness. Individual runs use `--profile glm-5.3-flash`. It uses the same
-`OPENROUTER_API_KEY` and `--max-cost-usd` / `max_cost_per_trial_usd` controls.
+ZCode harness. Individual runs use `model=glm-5.3-flash`. It uses the same
+`OPENROUTER_API_KEY` and `max_cost_usd` / `max_cost_per_trial_usd` controls.
 The ZCode source commit is pinned in `configs/zcode/source.json`; its first
 runtime build downloads and compiles the CLI. Build it ahead of time with:
 
 ```sh
-uv run scripts/build_runtime.py --profile glm-5.3-flash
+uv run scripts/build_runtime.py model=glm-5.3-flash
 ```
 
 ZCode runs unattended with the task's MCP verifier and its normal local tools.
@@ -70,34 +70,33 @@ Export a task, inspect its run configuration, then run it:
 
 ```sh
 uv run scripts/export_harbor.py 'questions=[4]' condition=baseline
-uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10 --print-config
-uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10
+uv run scripts/run_trial.py model=deepseek-v4-flash condition=baseline max_cost_usd=10 print_config=true
+uv run scripts/run_trial.py model=deepseek-v4-flash condition=baseline max_cost_usd=10
 ```
 
-Use `--profile kimi-k3` for Kimi. Set the same condition using `condition=...` on export and
-`--condition ...` on the trial command: `baseline`, `b-caught`, `ab-caught`, or `manual-only`.
+Use `model=kimi-k3` for Kimi. Set the same `condition=...` on export and
+the trial command: `baseline`, `b-caught`, `ab-caught`, or `manual-only`.
 
 To select a custom number, create a JSON file with decimal-string `number`, `p`,
 and `q` fields and pass it to both commands:
 
 ```sh
 uv run scripts/export_harbor.py instance=configs/instances/original.json
-uv run scripts/run_trial.py --instance configs/instances/original.json --profile deepseek-v4-flash --max-cost-usd 10
+uv run scripts/run_trial.py instance=configs/instances/original.json model=deepseek-v4-flash max_cost_usd=10
 ```
 
 For an individual subset-sum run, select the task on both commands:
 
 ```sh
 uv run scripts/export_harbor.py task=subset_sum
-uv run scripts/run_trial.py --task subset_sum --profile deepseek-v4-flash --max-cost-usd 10
+uv run scripts/run_trial.py task=subset_sum model=deepseek-v4-flash max_cost_usd=10
 ```
 
 These select the original Q4 fixture. For a custom instance, pass the same
-JSON file using `instance=...` on export and `--instance ...` on the trial
-command, containing e.g.
+JSON file using `instance=...` on both commands, containing e.g.
 `{"bits": 16, "set_size": 8, "seed": 7}`. Custom subset-sum instances use Q4;
 original fixtures also support other questions via `questions=[5]` on export
-and `--question` on the trial command. Explicit `--task-path` snapshots take
+and `question=...` on the trial command. Explicit `task_path=...` snapshots take
 precedence over instance selection.
 
 Export defaults live in `configs/export.yaml`. Inline instances are also supported,
@@ -105,10 +104,21 @@ for example `'instance={bits:16,set_size:8,seed:7}'` with `task=subset_sum`.
 Use `--cfg job --resolve` to inspect export configuration without writing files.
 Hydra leaves the working directory unchanged; relative export paths resolve there.
 
+Trial defaults live in `configs/trial.yaml`; runtime-build defaults are in
+`configs/runtime.yaml`. Both use `model=...` to select `configs/model/` profiles.
+Override model settings directly, e.g. `model.env.DSH_REASONING_EFFORT=low` or
+`model=kimi-k3 model.kwargs.version=0.43.0`. The default model is DeepSeek for
+batch runs, individual trials, and runtime builds.
+
+Use `--cfg job --resolve` to inspect YAML settings without executing anything;
+`print_config=true` on a trial additionally constructs Harbor's job configuration.
+For saved batches, `model_snapshot=path/to/model.json` and optional
+`snapshot_profile=...` take precedence over the current model YAML.
+
 ## Build the runtime
 
 ```sh
-uv run scripts/build_runtime.py --profile deepseek-v4-flash
+uv run scripts/build_runtime.py model=deepseek-v4-flash
 ```
 
 ## Tests
@@ -121,8 +131,8 @@ uv run python -m unittest discover -s tests -v
 Run Docker checks without model calls:
 
 ```sh
-uv run scripts/run_trial.py --agent oracle
-uv run scripts/run_trial.py --agent nop
+uv run scripts/run_trial.py agent=oracle
+uv run scripts/run_trial.py agent=nop
 ```
 
 ## Review and reports

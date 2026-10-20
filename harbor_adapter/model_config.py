@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CONFIG = ROOT / "configs/model/kimi-k3.yaml"
+DEFAULT_CONFIG = ROOT / "configs/model/deepseek-v4-flash.yaml"
 
 
 def load_profile(path=DEFAULT_CONFIG, name=None):
@@ -57,3 +57,12 @@ def normalize_profile(profile):
             raise ValueError(f"Missing ACP registry entry: {registry}")
         profile["kwargs"]["registry_entry_path"] = str(registry)
     return profile
+
+
+def resolve_profile(config):
+    """Saved snapshots take precedence over the current YAML model selection."""
+    if config.get("model_snapshot"):
+        return load_profile(config["model_snapshot"], config.get("snapshot_profile"))
+    if config.get("snapshot_profile"):
+        raise ValueError("snapshot_profile requires model_snapshot")
+    return config["profile"], normalize_profile(config["model"])

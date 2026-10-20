@@ -21,16 +21,15 @@ class ModelConfigTests(unittest.TestCase):
         for name, target in [
             ("kimi-k3", "KIMI_MODEL"),
             ("deepseek-v4-flash", "DEEPSEEK"),
+            ("glm-5.3-flash", "ZCODE"),
         ]:
             result = subprocess.run(
                 [
                     sys.executable,
                     str(ROOT / "scripts/run_trial.py"),
-                    "--profile",
-                    name,
-                    "--max-cost-usd",
-                    "10",
-                    "--print-config",
+                    "model=" + name,
+                    "max_cost_usd=10",
+                    "print_config=true",
                 ],
                 env=env,
                 capture_output=True,

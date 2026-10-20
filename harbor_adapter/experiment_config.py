@@ -23,6 +23,32 @@ class ExportConfig:
     output: str = MISSING
 
 
+@dataclass
+class RuntimeConfig:
+    profile: str = MISSING
+    model: dict[str, Any] = MISSING
+    model_snapshot: str | None = None
+    snapshot_profile: str | None = None
+
+
+@dataclass
+class TrialConfig(RuntimeConfig):
+    task: str = MISSING
+    instance: Any = None
+    question: int = MISSING
+    condition: str = MISSING
+    agent: str | None = None
+    print_config: bool = MISSING
+    keep_raw_outputs: bool = MISSING
+    max_cost_usd: str | None = None
+    task_path: str | None = None
+    run_id: str | None = None
+    output: str = MISSING
+
+
+ConfigStore.instance().store(name="runtime_schema", node=RuntimeConfig)
+ConfigStore.instance().store(name="trial_schema", node=TrialConfig)
+
 ConfigStore.instance().store(name="export_schema", node=ExportConfig)
 
 

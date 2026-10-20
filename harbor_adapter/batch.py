@@ -300,21 +300,18 @@ def worker(directory, trial_id):
     result = dict(status="infrastructure_error")
     try:
         check_settings(directory, manifest)
-        command = [
-            sys.executable,
-            str(ROOT / "scripts/run_trial.py"),
-            "--task-path",
-            setting["task"],
-            "--config",
-            str(folder / "model.json"),
-            "--profile",
-            setting["profile"],
-            "--max-cost-usd",
-            spec["max_cost_usd"],
-            "--run-id",
-            trial["run_id"],
-        ]
-        code = subprocess.run(command, cwd=ROOT).returncode
+        from harbor_adapter.experiment_config import load_config
+        from harbor_adapter.trial import run_trial
+
+        config = load_config("trial")
+        config.update(
+            task_path=setting["task"],
+            model_snapshot=str(folder / "model.json"),
+            snapshot_profile=setting["profile"],
+            max_cost_usd=spec["max_cost_usd"],
+            run_id=trial["run_id"],
+        )
+        code = run_trial(config)
         job = ROOT / "outputs/harbor" / trial["run_id"]
         result.update(returncode=code, output=str(job.relative_to(ROOT)))
         ledger = read(job / "budget.json") if (job / "budget.json").exists() else {}
