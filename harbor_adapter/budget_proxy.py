@@ -10,6 +10,8 @@ from pathlib import Path
 
 import httpx
 
+from harbor_adapter.model_log import ModelLog, Response
+
 
 class Budget:
     def __init__(self, limit, path):
@@ -67,8 +69,9 @@ class Budget:
 
 
 class BudgetProxy:
-    def __init__(self, key, limit, path, *, client=None):
+    def __init__(self, key, limit, path, *, client=None, log_path=None):
         self.budget = Budget(limit, path)
+        self.log = ModelLog(log_path or Path(path).with_name("model-calls.jsonl"))
         self.token = secrets.token_urlsafe(32)
         self.client = client or httpx.Client(timeout=httpx.Timeout(600, connect=30))
         self.key = key
@@ -79,7 +82,7 @@ class BudgetProxy:
             protocol_version = "HTTP/1.1"
 
             def log_message(self, *args):
-                pass  # Never log headers, prompts, or credentials.
+                pass  # Never log headers or credentials; calls go to ModelLog.
 
             def error(self, status, message):
                 data = json.dumps(
@@ -123,11 +126,15 @@ class BudgetProxy:
             def forward(self, payload):
                 cost, generation = None, None
                 transport_error = None
+                status = None
+                parsed = Response()
+                began = time.time()
                 started = False
                 downstream_alive = True
 
                 def observe(data):
                     nonlocal cost, generation
+                    parsed.add(data)
                     if isinstance(data, dict):
                         generation = data.get("id") or generation
                         usage = data.get("usage")
@@ -154,6 +161,7 @@ class BudgetProxy:
                         },
                         json=payload,
                     ) as response:
+                        status = response.status_code
                         self.send_response(response.status_code)
                         self.send_header(
                             "Content-Type",
@@ -197,6 +205,20 @@ class BudgetProxy:
                         cost_source=source,
                         transport_error=transport_error,
                     )
+                    try:
+                        proxy.log.record(
+                            payload,
+                            parsed,
+                            started_at=began,
+                            finished_at=time.time(),
+                            status=status,
+                            generation_id=generation,
+                            cost_usd=str(cost) if cost is not None else None,
+                            transport_error=transport_error,
+                        )
+                    except Exception as exc:
+                        # Never fail the relayed call; leave a visible gap instead.
+                        proxy.log.write({"type": "log_error", "error": repr(exc)})
                     self.close_connection = True
 
         self.server = ThreadingHTTPServer(("0.0.0.0", 0), Handler)
