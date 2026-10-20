@@ -3,11 +3,16 @@
 import hashlib
 import json
 import random
+import re
 from copy import deepcopy
 
 
 def validate(parameters):
     p = dict(parameters)
+    if p.get("original") is True:
+        if len(p) != 1:
+            raise ValueError("The original instance takes no other parameters")
+        return p
     for key in ("bits", "set_size", "seed"):
         if type(p.get(key)) is not int:
             raise ValueError(f"{key} must be an integer")
@@ -46,7 +51,9 @@ def customize_assets(assets, parameters):
     new["instance"].update(numbers=numbers, target=target)
     new["instance_sha256"] = hashlib.sha256(instance_text(new).encode()).hexdigest()
     result = dict(assets)
-    # Preserve the historical corpus. Only replace material explicitly referring to Q4.
+    # Preserve the historical corpus. Only replace material explicitly referring to Q4,
+    # not questions 40-49, whose IDs share the prefix.
+    own = re.compile(re.escape(tid) + r"(?!\d)")
     for name, content in assets.items():
         if "git_metadata/" in name:
             continue
@@ -54,13 +61,11 @@ def customize_assets(assets, parameters):
             text = content.decode()
         except UnicodeDecodeError:
             continue
-        if tid not in text:
+        if not own.search(text):
             continue
         lines = []
         for line in text.splitlines(keepends=True):
-            if tid in line:
-                import re
-
+            if own.search(line):
                 line = line.replace(
                     str(old["instance"]["target"]), str(target)
                 ).replace(old["instance_sha256"], new["instance_sha256"])
