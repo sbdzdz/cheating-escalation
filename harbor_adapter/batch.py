@@ -45,7 +45,7 @@ def implementation():
     paths = []
     for directory in ("harbor_adapter", "docker", "configs/acp"):
         paths.extend((ROOT / directory).rglob("*"))
-    paths += [ROOT / "scripts/run_factorization.py", ROOT / "uv.lock"]
+    paths += [ROOT / "scripts/run_trial.py", ROOT / "uv.lock"]
     return files_hash(paths)
 
 
@@ -96,13 +96,13 @@ def add_slots(manifest, target):
 
 def prepare(config_path, directory):
     from harbor_adapter.conditions import CONDITIONS
-    from harbor_adapter.instances import load_instance
     from harbor_adapter.model_config import load_profile, normalize_profile
 
     config = config_path if isinstance(config_path, dict) else read(config_path)
     save(directory / "resolved-config.json", config)
     parallel, target = config.get("parallel", 1), config.get("target_trials", 1)
     cap = config.get("max_cost_per_trial_usd", 10)
+    agent_timeout = config.get("agent_timeout_sec", 3600)
     import math
 
     if (
@@ -112,8 +112,10 @@ def prepare(config_path, directory):
         or target < 1
         or not math.isfinite(float(cap))
         or float(cap) <= 0
+        or not isinstance(agent_timeout, int)
+        or agent_timeout < 1
     ):
-        raise ValueError("Parallel, target and cap must be positive")
+        raise ValueError("Parallel, target, cap and agent timeout must be positive")
     if "model" in config:
         profile_name, profile = config["profile"], normalize_profile(config["model"])
     else:
@@ -132,25 +134,28 @@ def prepare(config_path, directory):
         settings={},
         trials=[],
     )
+    from tasks.factorization_escalation import instances as factorization
+    from tasks.subset_sum import instances as subset_sum
+
     task_kind = config.get("task", "factorization")
-    if task_kind not in ("factorization", "subset_sum"):
+    validators = {"factorization": factorization.validate, "subset_sum": subset_sum.validate}
+    if task_kind not in validators:
         raise ValueError("Unknown task")
+    validate = validators[task_kind]
     items = config["instances"]
     if task_kind == "subset_sum":
-        from tasks.subset_sum.instances import validate
-
+        # The original CheatBench instance has a fixed generator seed.
         items = [
-            dict(item, seed=seed) for item in items for seed in config.get("seeds", [0])
-        ]
+            dict(item, seed=seed)
+            for item in items
+            if not item.get("original")
+            for seed in config.get("seeds", [0])
+        ] + [dict(item) for item in items if item.get("original")]
     for item in items:
         instance = item if isinstance(item, dict) else read(ROOT / item)
         temporary = directory / "instance.json"
         save(temporary, instance)
-        instance = (
-            validate(instance)
-            if task_kind == "subset_sum"
-            else load_instance(temporary)
-        )
+        instance = validate(instance)
         for condition in config.get("conditions", ["baseline"]):
             if condition not in CONDITIONS:
                 raise ValueError("Unknown condition: " + condition)
@@ -167,6 +172,8 @@ def prepare(config_path, directory):
                         str(temporary),
                         "--condition",
                         condition,
+                        "--agent-timeout-sec",
+                        str(agent_timeout),
                         "--output",
                         tmp,
                     ],
@@ -289,7 +296,7 @@ def worker(directory, trial_id):
         check_settings(directory, manifest)
         command = [
             sys.executable,
-            str(ROOT / "scripts/run_factorization.py"),
+            str(ROOT / "scripts/run_trial.py"),
             "--task-path",
             setting["task"],
             "--config",
