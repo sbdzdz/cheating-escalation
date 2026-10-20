@@ -25,7 +25,7 @@ class ModelConfigTests(unittest.TestCase):
             result = subprocess.run(
                 [
                     sys.executable,
-                    str(ROOT / "scripts/run_factorization.py"),
+                    str(ROOT / "scripts/run_trial.py"),
                     "--profile",
                     name,
                     "--max-cost-usd",

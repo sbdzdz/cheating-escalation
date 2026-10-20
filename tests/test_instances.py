@@ -4,7 +4,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from harbor_adapter.instances import instance_suffix, load_instance
 from scripts.export_harbor import export
 from tasks.factorization_escalation.build import (
     CACHE_DIR,
@@ -14,6 +13,7 @@ from tasks.factorization_escalation.build import (
     TIER,
     build,
 )
+from tasks.factorization_escalation.instances import instance_suffix, validate
 
 
 class InstanceTests(unittest.TestCase):
@@ -24,16 +24,15 @@ class InstanceTests(unittest.TestCase):
             # Distinct from the original; close primes permit a fast Fermat search.
             p, q = 50000017, 50000021
             config.write_text(json.dumps(dict(number=str(p * q), p=str(p), q=str(q))))
-            instance = load_instance(config)
+            instance = validate(json.loads(config.read_text()))
             (row,) = build(root / "source", [4], instance=instance)
             task = export(
                 row,
                 root / "export",
                 "ab-caught",
                 source=root / "source",
-                instance=instance,
             )
-            self.assertTrue(task.name.endswith(instance_suffix(instance)))
+            self.assertEqual(task.name, row["id"] + instance_suffix(instance) + "__ab-caught")
             fs = task / "environment/rootfs"
             self.assertIn(str(p * q), (fs / "workspace/instance.txt").read_text())
             for rel in [f"{GENERATION_DIR}/{TIER.gen_log}", f"{CACHE_DIR}/{KEY_CACHE}"]:
@@ -62,13 +61,13 @@ class InstanceTests(unittest.TestCase):
             root = Path(tmp)
             config = root / "small.json"
             config.write_text(json.dumps(dict(number=15, p=3, q=5)))
-            instance = load_instance(config)
+            instance = validate(json.loads(config.read_text()))
             (row,) = build(root / "source", [4], instance=instance)
             self.assertEqual(row["bits"], 4)
             self.assertEqual(row["meta"]["fermat_steps"], 0)
             self.assertIn("one 4-bit semiprime", row["input"])
             task = export(
-                row, root / "export", source=root / "source", instance=instance
+                row, root / "export", source=root / "source"
             )
             self.assertEqual(
                 json.loads((task / "tests/instance.json").read_text())["number"], "15"
@@ -89,7 +88,7 @@ class InstanceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             config = Path(tmp) / "instance.json"
             config.write_text(json.dumps(row))
-            instance = load_instance(config)
+            instance = validate(json.loads(config.read_text()))
         self.assertEqual(instance["number"].bit_length(), 128)
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -97,7 +96,7 @@ class InstanceTests(unittest.TestCase):
             self.assertEqual(row["meta"]["fermat_steps"], 10)
             self.assertIn("one 128-bit semiprime", row["input"])
             task = export(
-                row, root / "export", source=root / "source", instance=instance
+                row, root / "export", source=root / "source"
             )
             self.assertEqual(
                 json.loads((task / "tests/instance.json").read_text())["number"],
@@ -115,7 +114,7 @@ class InstanceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             config = Path(tmp) / "instance.json"
             config.write_text(json.dumps(row))
-            instance = load_instance(config)
+            instance = validate(json.loads(config.read_text()))
         self.assertEqual(instance["number"].bit_length(), 256)
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -123,7 +122,7 @@ class InstanceTests(unittest.TestCase):
             self.assertEqual(row["meta"]["fermat_steps"], 10)
             self.assertIn("one 256-bit semiprime", row["input"])
             task = export(
-                row, root / "export", source=root / "source", instance=instance
+                row, root / "export", source=root / "source"
             )
             self.assertEqual(
                 json.loads((task / "tests/instance.json").read_text())["number"],
@@ -140,4 +139,4 @@ class InstanceTests(unittest.TestCase):
             ]:
                 config.write_text(json.dumps(dict(p=p, q=q, number=n)))
                 with self.assertRaises(ValueError):
-                    load_instance(config)
+                    validate(json.loads(config.read_text()))
