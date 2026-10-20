@@ -85,6 +85,20 @@ uv run scripts/export_harbor.py --instance configs/instances/original.json
 uv run scripts/run_trial.py --instance configs/instances/original.json --profile deepseek-v4-flash --max-cost-usd 10
 ```
 
+For an individual subset-sum run, select the task on both commands:
+
+```sh
+uv run scripts/export_harbor.py --task subset_sum
+uv run scripts/run_trial.py --task subset_sum --profile deepseek-v4-flash --max-cost-usd 10
+```
+
+These select the original Q4 fixture. For a custom instance, pass the same
+`--instance` JSON file to both commands, containing e.g.
+`{"bits": 16, "set_size": 8, "seed": 7}`. Custom subset-sum instances use Q4;
+original fixtures also support other questions via `--questions` on export
+and `--question` on the trial command. Explicit `--task-path` snapshots take
+precedence over instance selection.
+
 ## Build the runtime
 
 ```sh

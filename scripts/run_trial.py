@@ -1,7 +1,6 @@
 """Run one trial of an exported task with Harbor's Docker backend."""
 
 import argparse
-import json
 import os
 import subprocess
 import sys
@@ -16,7 +15,7 @@ sys.path.insert(0, str(ROOT))
 from harbor_adapter.conditions import CONDITIONS
 from harbor_adapter.model_config import DEFAULT_CONFIG, load_profile
 from harbor_adapter.outputs import compact_job
-from tasks.factorization_escalation.instances import instance_suffix, validate
+from harbor_adapter.tasks import TASKS, resolve_task
 
 
 def main():
@@ -26,6 +25,7 @@ def main():
     )
     parser.add_argument("--condition", choices=CONDITIONS, default="baseline")
     parser.add_argument("--question", type=int, default=4)
+    parser.add_argument("--task", choices=TASKS, default="factorization")
     parser.add_argument(
         "--config",
         type=Path,
@@ -98,16 +98,18 @@ def main():
             parser.error("--max-cost-usd must be finite and positive")
         if not profile["url_target"]:
             parser.error("--max-cost-usd requires an OpenRouter model profile")
-    task_name = f"fact_n52_{args.question}"
-    if args.instance:
-        task_name += instance_suffix(validate(json.loads(args.instance.read_text())))
-    if args.condition != "baseline":
-        task_name += "__" + args.condition
-    task = args.task_path or ROOT / "generated/harbor" / task_name
-    if not (task / "task.toml").exists():
-        parser.error(
-            f"Export the task first: uv run scripts/export_harbor.py --questions {args.question}"
+    try:
+        task = resolve_task(
+            args.task,
+            question=args.question,
+            instance=args.instance,
+            condition=args.condition,
+            task_path=args.task_path,
         )
+    except (ValueError, KeyError, OSError) as exc:
+        parser.error(str(exc))
+    if not (task / "task.toml").exists():
+        parser.error(f"Export the selected task first; expected task.toml in {task}")
     load_dotenv(ROOT / ".env")
     if (
         args.max_cost_usd

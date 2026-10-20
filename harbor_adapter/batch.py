@@ -100,15 +100,9 @@ def expand_instances(task_kind, items, seeds=None):
     Explicit subset-sum seeds take precedence over experiment seeds. The original
     fixture is included once; only seedless custom instances are expanded.
     """
-    from tasks.factorization_escalation import instances as factorization
-    from tasks.subset_sum import instances as subset_sum
+    from harbor_adapter.tasks import get_task
 
-    validators = {
-        "factorization": factorization.validate,
-        "subset_sum": subset_sum.validate,
-    }
-    if task_kind not in validators:
-        raise ValueError(f"Unknown task: {task_kind}")
+    task = get_task(task_kind)
     if not isinstance(items, list) or not items:
         raise ValueError("instances must be a nonempty list")
     expanded = []
@@ -127,11 +121,9 @@ def expand_instances(task_kind, items, seeds=None):
                 raise ValueError(
                     "seeds must be a nonempty list when expanding instances"
                 )
-            expanded.extend(
-                subset_sum.validate(dict(item, seed=seed)) for seed in selected
-            )
+            expanded.extend(task.validate(dict(item, seed=seed)) for seed in selected)
         else:
-            expanded.append(validators[task_kind](item))
+            expanded.append(task.validate(item))
     return expanded
 
 
@@ -167,17 +159,13 @@ def prepare(config_path, directory):
             raise ValueError("Credentials must use api_key_env, not profile env values")
     task_kind = config.get("task", "factorization")
     items = expand_instances(task_kind, config["instances"], config.get("seeds"))
-    from harbor_adapter.conditions import TASK_CONDITION_PROMPTS
+    from harbor_adapter.tasks import get_task
 
     conditions = config.get("conditions", ["baseline"])
     if not isinstance(conditions, list) or not conditions:
         raise ValueError("conditions must be a nonempty list")
     for condition in conditions:
-        if (
-            condition != "baseline"
-            and condition not in TASK_CONDITION_PROMPTS[task_kind]
-        ):
-            raise ValueError(f"{task_kind} does not support condition {condition}")
+        get_task(task_kind).check_condition(condition)
     save(directory / "resolved-config.json", config)
     manifest = dict(
         schema_version=1,

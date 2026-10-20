@@ -3,21 +3,19 @@
 import argparse
 import json
 import shutil
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from harbor_adapter.conditions import CONDITIONS, RETAINED_RECORDS, TASK_CONDITION_PROMPTS
+from harbor_adapter.conditions import (
+    CONDITIONS,
+    RETAINED_RECORDS,
+    TASK_CONDITION_PROMPTS,
+)
 from harbor_adapter.runtime_image import TASK_BASE, TASK_FILES
-from tasks.factorization_escalation import harbor_task as factorization
-from tasks.factorization_escalation.build import build
-from tasks.factorization_escalation.instances import validate
-from tasks.subset_sum import harbor_task as subset_sum
-
-TASKS = {"factorization": factorization, "subset_sum": subset_sum}
+from harbor_adapter.tasks import TASKS, get_task
 
 
 def export(
@@ -29,11 +27,11 @@ def export(
     task_kind="factorization",
     agent_timeout_sec=3600,
 ):
-    task = TASKS[task_kind]
+    definition = get_task(task_kind)
+    definition.check_condition(condition)
+    task = definition.harbor
     source = source or task.HERE
     prompts = TASK_CONDITION_PROMPTS[task_kind]
-    if condition != "baseline" and condition not in prompts:
-        raise ValueError(f"{task_kind} does not support condition {condition}")
     fields = task.PUBLIC_FIELDS
     if condition not in CONDITIONS:
         raise ValueError(f"Unknown condition: {condition}")
@@ -71,7 +69,8 @@ def export(
         json.dumps(
             {
                 "condition": condition,
-                "synthetic_history": condition in RETAINED_RECORDS or condition == "b-shown",
+                "synthetic_history": condition in RETAINED_RECORDS
+                or condition == "b-shown",
             },
             indent=2,
         )
@@ -162,73 +161,35 @@ network_mode = "public"
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--instance", type=Path, help="Instance JSON: number, p, q (4–256-bit odd semiprime) or subset-sum parameters"
+        "--instance",
+        type=Path,
+        help="Instance JSON: number, p, q (4–256-bit odd semiprime) or subset-sum parameters",
     )
     parser.add_argument("--condition", choices=CONDITIONS, default="baseline")
     parser.add_argument("--agent-timeout-sec", type=int, default=3600)
     parser.add_argument("--questions", nargs="+", type=int, default=[4])
     parser.add_argument("--output", type=Path, default=ROOT / "generated/harbor")
-    parser.add_argument(
-        "--task", choices=TASKS, default="factorization"
-    )
+    parser.add_argument("--task", choices=TASKS, default="factorization")
     args = parser.parse_args()
-    if args.task == "subset_sum":
-        from tasks.subset_sum.build import build as build_subset
-        from tasks.subset_sum.instances import validate as validate_subset
-
-        if not args.instance or args.questions != [4]:
-            parser.error("Subset sum requires --instance and question 4")
-        parameters = validate_subset(json.loads(args.instance.read_text()))
+    task = get_task(args.task)
+    try:
+        task.check_condition(args.condition)
+        instance = json.loads(args.instance.read_text()) if args.instance else None
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp)
-            # The original CheatBench instance uses the fixture unchanged.
-            if parameters.get("original"):
-                parameters = None
-            for row in build_subset(source, [4], parameters=parameters):
+            for row in task.build(source, args.questions, instance):
                 print(
                     export(
                         row,
                         args.output.resolve(),
                         args.condition,
                         source=source,
-                        task_kind="subset_sum",
+                        task_kind=args.task,
                         agent_timeout_sec=args.agent_timeout_sec,
                     )
                 )
-        return
-    if args.instance:
-        instance = validate(json.loads(args.instance.read_text()))
-        with tempfile.TemporaryDirectory() as tmp:
-            source = Path(tmp)
-            for row in build(source, args.questions, instance=instance):
-                print(
-                    export(
-                        row,
-                        args.output.resolve(),
-                        args.condition,
-                        source=source,
-                        agent_timeout_sec=args.agent_timeout_sec,
-                    )
-                )
-    else:
-        subprocess.run(
-            [
-                sys.executable,
-                str(factorization.HERE / "build.py"),
-                "--questions",
-                *map(str, args.questions),
-            ],
-            check=True,
-        )
-        for line in (factorization.HERE / "data.jsonl").read_text().splitlines():
-            print(
-                export(
-                    json.loads(line),
-                    args.output.resolve(),
-                    args.condition,
-                    agent_timeout_sec=args.agent_timeout_sec,
-                )
-            )
+    except (ValueError, KeyError, OSError) as exc:
+        parser.error(str(exc))
 
 
 if __name__ == "__main__":
