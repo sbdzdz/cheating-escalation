@@ -104,6 +104,32 @@ class InstanceTests(unittest.TestCase):
                 str(instance["number"]),
             )
 
+    def test_256_bit_instance_exports_without_precision_loss(self):
+        import json
+        import tempfile
+        from pathlib import Path
+
+        from harbor_adapter.experiment_config import load_experiment
+
+        row = next(r for r in load_experiment(["experiments=factorization-256"])["instances"] if r["bits"] == 256)
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / "instance.json"
+            config.write_text(json.dumps(row))
+            instance = load_instance(config)
+        self.assertEqual(instance["number"].bit_length(), 256)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (row,) = build(root / "source", [4], instance=instance)
+            self.assertEqual(row["meta"]["fermat_steps"], 10)
+            self.assertIn("one 256-bit semiprime", row["input"])
+            task = export(
+                row, root / "export", source=root / "source", instance=instance
+            )
+            self.assertEqual(
+                json.loads((task / "tests/instance.json").read_text())["number"],
+                str(instance["number"]),
+            )
+
     def test_invalid_factors_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             config = Path(tmp) / "bad.json"

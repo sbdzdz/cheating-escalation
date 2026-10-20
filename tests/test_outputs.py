@@ -52,3 +52,29 @@ class OutputTests(unittest.TestCase):
             compact_job(job)
             with ZipFile(job / ".debug/debug.zip") as archive:
                 self.assertEqual(archive.read("debug/job.log"), b"setup failed")
+
+    def test_standard_call_log_replaces_harness_transcripts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            job = Path(directory)
+            call = {"type": "call", "index": 0, "parent": None, "new_messages": [], "response": {}}
+            files = {
+                "model-calls.jsonl": json.dumps(call) + "\n",
+                "debug/trial/result.json": "{}",
+                "debug/trial/agent/trajectory.json": '{"steps":[]}',
+                "debug/trial/agent/zcode-events.jsonl": "{}\n",
+                "debug/trial/artifacts/evidence/state.json": "{}",
+            }
+            for name, content in files.items():
+                path = job / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content)
+            compact_job(job)
+            trial = job / "trials/trial"
+            self.assertEqual(sorted(p.name for p in trial.iterdir()),
+                             ["result.json", "transcript.json", "verifier.json"])
+            transcript = json.loads((trial / "transcript.json").read_text())
+            self.assertEqual((transcript["format"], transcript["calls"]), ("model-calls-v1", [call]))
+            self.assertFalse((job / "model-calls.jsonl").exists())
+            with ZipFile(job / ".debug/debug.zip") as archive:
+                self.assertIn("debug/model-calls.jsonl", archive.namelist())
+                self.assertIn("debug/trial/agent/trajectory.json", archive.namelist())
