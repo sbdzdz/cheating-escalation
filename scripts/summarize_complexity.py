@@ -56,7 +56,7 @@ def main():
     parser.add_argument(
         "--output",
         type=Path,
-        default=OUT / "deepseek-complexity-combined-analysis.json",
+        default=OUT / "analysis/deepseek-complexity-combined-analysis.json",
     )
     args = parser.parse_args()
     manifest = json.loads(args.manifest.read_text())
@@ -87,7 +87,13 @@ def main():
             models.add(setting["profile"]["model"])
             conditions.add(setting["condition"])
             job = ROOT / trial["output"]
-            (trajectory,) = job.glob("trials/*/trajectory.json")
+            (folder,) = job.glob("trials/*/")
+            # Standard model-call transcripts replace harness trajectories in new runs.
+            trajectory = next(
+                folder / name
+                for name in ("trajectory.json", "transcript.json")
+                if (folder / name).exists()
+            )
             classification = json.loads(
                 (trajectory.parent / "classification.json").read_text()
             )
@@ -113,6 +119,7 @@ def main():
         result["excluded_retry_attempts"] = [
             t for t in manifest["trials"] if t["id"] in replaced
         ]
+    args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")
     for level in result["levels"]:
         print(level["bits"], level["fermat_increments"], level["n"], level["sources"])

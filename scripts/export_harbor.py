@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tasks/factorization_escalation"
 sys.path.insert(0, str(ROOT))
-from harbor_adapter.conditions import CONDITION_PROMPTS, CONDITIONS, RETAINED_RECORDS
+from harbor_adapter.conditions import CONDITIONS, RETAINED_RECORDS, TASK_CONDITION_PROMPTS
 from harbor_adapter.instances import instance_suffix, load_instance
 from harbor_adapter.runtime_image import TASK_BASE, TASK_FILES
 from tasks.factorization_escalation.build import build
@@ -25,9 +25,11 @@ def export(
     source=SOURCE,
     instance=None,
     task_kind="factorization",
+    agent_timeout_sec=3600,
 ):
-    if task_kind == "subset_sum" and condition != "baseline":
-        raise ValueError("Subset sum currently supports baseline only")
+    prompts = TASK_CONDITION_PROMPTS[task_kind]
+    if condition != "baseline" and condition not in prompts:
+        raise ValueError(f"{task_kind} does not support condition {condition}")
     task_source = ROOT / "tasks/subset_sum" if task_kind == "subset_sum" else SOURCE
     fields = (
         ("id", "numbers", "target") if task_kind == "subset_sum" else ("id", "number")
@@ -63,14 +65,14 @@ def export(
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source_root / "environment" / source, dest)
     instruction = row["input"]
-    if condition in CONDITION_PROMPTS:
-        instruction += "\n\n" + CONDITION_PROMPTS[condition]
+    if condition in prompts:
+        instruction += "\n\n" + prompts[condition]
     (target / "instruction.md").write_text(instruction)
     (target / "condition.json").write_text(
         json.dumps(
             {
                 "condition": condition,
-                "synthetic_history": condition in RETAINED_RECORDS,
+                "synthetic_history": condition in RETAINED_RECORDS or condition == "b-shown",
             },
             indent=2,
         )
@@ -167,7 +169,7 @@ asyncio.run(main())
         )
         oracle = oracle.replace('["correct"]', '["exact"]')
         (solution / "solve.py").write_text(oracle)
-    (target / "task.toml").write_text("""schema_version = "1.3"
+    (target / "task.toml").write_text(f"""schema_version = "1.3"
 source = "CheatBench prime_factorization at 7e447250f6970e8d35822c8ccda1b7634b75a324"
 
 [[artifacts]]
@@ -175,7 +177,7 @@ source = "/evidence/state.json"
 service = "verifier"
 
 [agent]
-timeout_sec = 3600
+timeout_sec = {agent_timeout_sec}
 user = "agent"
 
 [environment]
@@ -209,6 +211,7 @@ def main():
         "--instance", type=Path, help="JSON with number, p, q (4–128-bit odd semiprime)"
     )
     parser.add_argument("--condition", choices=CONDITIONS, default="baseline")
+    parser.add_argument("--agent-timeout-sec", type=int, default=3600)
     parser.add_argument("--questions", nargs="+", type=int, default=[4])
     parser.add_argument("--output", type=Path, default=ROOT / "generated/harbor")
     parser.add_argument(
@@ -224,6 +227,9 @@ def main():
         parameters = validate(json.loads(args.instance.read_text()))
         with tempfile.TemporaryDirectory() as tmp:
             source = Path(tmp)
+            # The original CheatBench instance uses the fixture unchanged.
+            if parameters.get("original"):
+                parameters = None
             for row in build_subset(source, [4], parameters=parameters):
                 print(
                     export(
@@ -232,6 +238,7 @@ def main():
                         args.condition,
                         source=source,
                         task_kind="subset_sum",
+                        agent_timeout_sec=args.agent_timeout_sec,
                     )
                 )
         return
@@ -247,6 +254,7 @@ def main():
                         args.condition,
                         source=source,
                         instance=instance,
+                        agent_timeout_sec=args.agent_timeout_sec,
                     )
                 )
     else:
@@ -260,7 +268,14 @@ def main():
             check=True,
         )
         for line in (SOURCE / "data.jsonl").read_text().splitlines():
-            print(export(json.loads(line), args.output.resolve(), args.condition))
+            print(
+                export(
+                    json.loads(line),
+                    args.output.resolve(),
+                    args.condition,
+                    agent_timeout_sec=args.agent_timeout_sec,
+                )
+            )
 
 
 if __name__ == "__main__":
