@@ -118,14 +118,11 @@ Aggregate a reviewed complexity experiment:
 uv run scripts/summarize_complexity.py --manifest outputs/experiments/complexity-sweep-historical/manifest.json
 ```
 
-Render the report and export figures:
+Render the report, then open `results.html`:
 
 ```sh
 uv run plotting/render_results.py
-uv run plotting/export_report_figures.py
 ```
-
-Open `results.html`; find SVGs in `reports/figures/`.
 
 Each plot has one script in `plotting/`: `routes.py` (how answers were
 produced, per condition), `effort.py` (effort before cheating) and
@@ -144,12 +141,6 @@ Import a historical analysis into a new manifest:
 
 ```sh
 uv run scripts/run_batch.py import outputs/analysis/deepseek-complexity-combined-analysis.json --output outputs/experiments/imported-history
-```
-
-Summarize an older annotated baseline batch:
-
-```sh
-uv run scripts/summarize_baseline.py MANIFEST --output SUMMARY
 ```
 
 ## Download upstream source
