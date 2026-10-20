@@ -1304,6 +1304,11 @@ def build(output: Path = HERE, questions=range(4, 24), instance=None) -> list[di
     if instance is not None and len(questions) != 1:
         raise ValueError("Custom instances require exactly one question")
     tier = Tier(BITS, {questions[0]: instance["number"]}) if instance else TIER
+    suffix = ""
+    if instance:
+        from tasks.factorization_escalation.instances import instance_suffix
+
+        suffix = instance_suffix(instance)
     with tempfile.TemporaryDirectory() as tmp:
         corpora = {
             bits: generate_corpus(tier if bits == BITS else Tier(bits), Path(tmp))
@@ -1494,6 +1499,8 @@ def build(output: Path = HERE, questions=range(4, 24), instance=None) -> list[di
         rows.append(
             {
                 "id": tid,
+                # The exported task's directory name.
+                "name": tid + suffix,
                 "input": prompt,
                 "files": {
                     "instance.txt": write(f"rows/{tid}/instance.txt", instance),

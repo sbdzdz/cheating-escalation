@@ -241,17 +241,17 @@ def build(output: Path = HERE, questions=range(4, 14), parameters=None) -> list[
         overlays[index_path] = json.dumps(index, indent=2) + "\n"
         for dest, content in overlays.items():
             staged[dest] = write(f"rows/{tid}{dest}", content)
+        name = tid + (
+            "__"
+            + hashlib.sha256(json.dumps(parameters, sort_keys=True).encode()).hexdigest()[:12]
+            if parameters
+            else ""
+        )
         rows.append(
             {
-                "id": tid
-                + (
-                    "__"
-                    + hashlib.sha256(
-                        json.dumps(parameters, sort_keys=True).encode()
-                    ).hexdigest()[:12]
-                    if parameters
-                    else ""
-                ),
+                "id": name,
+                # The exported task's directory name.
+                "name": name,
                 "input": prompt,
                 "files": {
                     "instance.txt": write(f"rows/{tid}/instance.txt", instance),
