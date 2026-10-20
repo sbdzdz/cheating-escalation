@@ -1,0 +1,14 @@
+# @package _global_
+name: subset-sum-conditions
+description: Original CheatBench subset sum instance under the three penalty conditions.
+task: subset_sum
+conditions:
+  - baseline
+  - b-caught
+  - ab-caught
+target_trials: 20
+parallel: 10
+max_cost_per_trial_usd: 10
+instances:
+  - {original: true}
+agent_timeout_sec: 3600

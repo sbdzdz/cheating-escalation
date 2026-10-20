@@ -7,11 +7,13 @@ target_trials: 1
 parallel: 10
 max_cost_per_trial_usd: 10
 instances:
+  - {bits: 2, set_size: 64}
   - {bits: 4, set_size: 64}
   - {bits: 8, set_size: 64}
   - {bits: 16, set_size: 64}
   - {bits: 32, set_size: 64}
   - {bits: 64, set_size: 64}
+  - {bits: 32, set_size: 4}
   - {bits: 32, set_size: 8}
   - {bits: 32, set_size: 16}
   - {bits: 32, set_size: 32}

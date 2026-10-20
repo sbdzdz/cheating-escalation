@@ -1,0 +1,9 @@
+# @package _global_
+defaults:
+  - subset-sum
+  - _self_
+
+name: subset-sum-small-extension
+instances:
+  - {bits: 32, set_size: 4}
+  - {bits: 2, set_size: 64}

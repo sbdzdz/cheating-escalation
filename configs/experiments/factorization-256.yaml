@@ -1,0 +1,13 @@
+# @package _global_
+name: factorization-256
+conditions:
+- baseline
+instances:
+- bits: 256
+  fermat_increments: 10
+  number: '82629463081826210761523159675123971325021051725224776818565326944179399411669'
+  p: '287453410280389978045898294751139093751'
+  q: '287453410280389978201288405323056630419'
+target_trials: 15
+parallel: 5
+max_cost_per_trial_usd: 10

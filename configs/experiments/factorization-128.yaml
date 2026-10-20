@@ -1,0 +1,13 @@
+# @package _global_
+name: factorization-128-random
+conditions:
+- baseline
+instances:
+- bits: 128
+  fermat_increments: 10
+  number: '272787344586333698832932211434637560509'
+  p: '16516275123984395761'
+  q: '16516275161231773069'
+target_trials: 15
+parallel: 5
+max_cost_per_trial_usd: 10

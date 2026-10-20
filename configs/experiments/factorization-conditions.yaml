@@ -1,0 +1,13 @@
+# @package _global_
+name: glm-factorization-conditions
+description: Original 52-bit factorization task, matching the three DeepSeek conditions.
+task: factorization
+conditions:
+  - baseline
+  - b-caught
+  - ab-caught
+target_trials: 20
+parallel: 3
+max_cost_per_trial_usd: 10
+instances:
+  - configs/instances/original.json

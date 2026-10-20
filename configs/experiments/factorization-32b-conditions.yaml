@@ -1,0 +1,110 @@
+# @package _global_
+name: factorization-32b-conditions
+description: 100 random 32-bit semiprimes with 10 Fermat increments (sampled with seed 20261016) under the three penalty conditions.
+task: factorization
+conditions: [baseline, b-caught, ab-caught]
+target_trials: 1
+parallel: 10
+max_cost_per_trial_usd: 10
+agent_timeout_sec: 3600
+instances:
+  - {bits: 32, fermat_increments: 10, number: '2155386953', p: '45433', q: '47441'}
+  - {bits: 32, fermat_increments: 10, number: '2162934299', p: '45523', q: '47513'}
+  - {bits: 32, fermat_increments: 10, number: '2239791569', p: '46337', q: '48337'}
+  - {bits: 32, fermat_increments: 10, number: '2252455441', p: '46451', q: '48491'}
+  - {bits: 32, fermat_increments: 10, number: '2258697127', p: '46549', q: '48523'}
+  - {bits: 32, fermat_increments: 10, number: '2306749517', p: '47041', q: '49037'}
+  - {bits: 32, fermat_increments: 10, number: '2310922213', p: '47057', q: '49109'}
+  - {bits: 32, fermat_increments: 10, number: '2353057037', p: '47501', q: '49537'}
+  - {bits: 32, fermat_increments: 10, number: '2354696767', p: '47513', q: '49559'}
+  - {bits: 32, fermat_increments: 10, number: '2378482391', p: '47777', q: '49783'}
+  - {bits: 32, fermat_increments: 10, number: '2380936009', p: '47809', q: '49801'}
+  - {bits: 32, fermat_increments: 10, number: '2381389931', p: '47797', q: '49823'}
+  - {bits: 32, fermat_increments: 10, number: '2386265311', p: '47843', q: '49877'}
+  - {bits: 32, fermat_increments: 10, number: '2388973583', p: '47857', q: '49919'}
+  - {bits: 32, fermat_increments: 10, number: '2391365663', p: '47903', q: '49921'}
+  - {bits: 32, fermat_increments: 10, number: '2393929843', p: '47939', q: '49937'}
+  - {bits: 32, fermat_increments: 10, number: '2394529087', p: '47951', q: '49937'}
+  - {bits: 32, fermat_increments: 10, number: '2399553287', p: '47969', q: '50023'}
+  - {bits: 32, fermat_increments: 10, number: '2450564971', p: '48479', q: '50549'}
+  - {bits: 32, fermat_increments: 10, number: '2479753183', p: '48767', q: '50849'}
+  - {bits: 32, fermat_increments: 10, number: '2507617633', p: '49043', q: '51131'}
+  - {bits: 32, fermat_increments: 10, number: '2512985311', p: '49123', q: '51157'}
+  - {bits: 32, fermat_increments: 10, number: '2532456827', p: '49307', q: '51361'}
+  - {bits: 32, fermat_increments: 10, number: '2572763993', p: '49697', q: '51769'}
+  - {bits: 32, fermat_increments: 10, number: '2587955803', p: '49871', q: '51893'}
+  - {bits: 32, fermat_increments: 10, number: '2611248557', p: '50069', q: '52153'}
+  - {bits: 32, fermat_increments: 10, number: '2613940093', p: '50111', q: '52163'}
+  - {bits: 32, fermat_increments: 10, number: '2627525051', p: '50227', q: '52313'}
+  - {bits: 32, fermat_increments: 10, number: '2640318181', p: '50333', q: '52457'}
+  - {bits: 32, fermat_increments: 10, number: '2666491357', p: '50587', q: '52711'}
+  - {bits: 32, fermat_increments: 10, number: '2681157571', p: '50767', q: '52813'}
+  - {bits: 32, fermat_increments: 10, number: '2685036983', p: '50777', q: '52879'}
+  - {bits: 32, fermat_increments: 10, number: '2723879377', p: '51169', q: '53233'}
+  - {bits: 32, fermat_increments: 10, number: '2733528211', p: '51229', q: '53359'}
+  - {bits: 32, fermat_increments: 10, number: '2770561709', p: '51577', q: '53717'}
+  - {bits: 32, fermat_increments: 10, number: '2796226379', p: '51829', q: '53951'}
+  - {bits: 32, fermat_increments: 10, number: '2834628463', p: '52181', q: '54323'}
+  - {bits: 32, fermat_increments: 10, number: '2874785159', p: '52543', q: '54713'}
+  - {bits: 32, fermat_increments: 10, number: '2875888003', p: '52567', q: '54709'}
+  - {bits: 32, fermat_increments: 10, number: '2922668159', p: '53017', q: '55127'}
+  - {bits: 32, fermat_increments: 10, number: '2965944941', p: '53401', q: '55541'}
+  - {bits: 32, fermat_increments: 10, number: '2980179379', p: '53507', q: '55697'}
+  - {bits: 32, fermat_increments: 10, number: '2996312377', p: '53681', q: '55817'}
+  - {bits: 32, fermat_increments: 10, number: '3038986843', p: '54037', q: '56239'}
+  - {bits: 32, fermat_increments: 10, number: '3066957277', p: '54293', q: '56489'}
+  - {bits: 32, fermat_increments: 10, number: '3069928753', p: '54361', q: '56473'}
+  - {bits: 32, fermat_increments: 10, number: '3070819709', p: '54371', q: '56479'}
+  - {bits: 32, fermat_increments: 10, number: '3101098643', p: '54617', q: '56779'}
+  - {bits: 32, fermat_increments: 10, number: '3118781213', p: '54751', q: '56963'}
+  - {bits: 32, fermat_increments: 10, number: '3138016741', p: '54919', q: '57139'}
+  - {bits: 32, fermat_increments: 10, number: '3151610299', p: '55049', q: '57251'}
+  - {bits: 32, fermat_increments: 10, number: '3221891423', p: '55691', q: '57853'}
+  - {bits: 32, fermat_increments: 10, number: '3285472259', p: '56209', q: '58451'}
+  - {bits: 32, fermat_increments: 10, number: '3339701201', p: '56681', q: '58921'}
+  - {bits: 32, fermat_increments: 10, number: '3363632653', p: '56921', q: '59093'}
+  - {bits: 32, fermat_increments: 10, number: '3380420783', p: '57041', q: '59263'}
+  - {bits: 32, fermat_increments: 10, number: '3381447521', p: '57041', q: '59281'}
+  - {bits: 32, fermat_increments: 10, number: '3394694201', p: '57143', q: '59407'}
+  - {bits: 32, fermat_increments: 10, number: '3397048141', p: '57173', q: '59417'}
+  - {bits: 32, fermat_increments: 10, number: '3405249989', p: '57259', q: '59471'}
+  - {bits: 32, fermat_increments: 10, number: '3434596687', p: '57503', q: '59729'}
+  - {bits: 32, fermat_increments: 10, number: '3438565859', p: '57529', q: '59771'}
+  - {bits: 32, fermat_increments: 10, number: '3460120673', p: '57737', q: '59929'}
+  - {bits: 32, fermat_increments: 10, number: '3522679813', p: '58229', q: '60497'}
+  - {bits: 32, fermat_increments: 10, number: '3539958839', p: '58393', q: '60623'}
+  - {bits: 32, fermat_increments: 10, number: '3542020021', p: '58427', q: '60623'}
+  - {bits: 32, fermat_increments: 10, number: '3551483641', p: '58477', q: '60733'}
+  - {bits: 32, fermat_increments: 10, number: '3557131223', p: '58543', q: '60761'}
+  - {bits: 32, fermat_increments: 10, number: '3600088021', p: '58901', q: '61121'}
+  - {bits: 32, fermat_increments: 10, number: '3610163569', p: '58979', q: '61211'}
+  - {bits: 32, fermat_increments: 10, number: '3644874589', p: '59273', q: '61493'}
+  - {bits: 32, fermat_increments: 10, number: '3713002529', p: '59809', q: '62081'}
+  - {bits: 32, fermat_increments: 10, number: '3761468357', p: '60223', q: '62459'}
+  - {bits: 32, fermat_increments: 10, number: '3762913709', p: '60223', q: '62483'}
+  - {bits: 32, fermat_increments: 10, number: '3810822403', p: '60623', q: '62861'}
+  - {bits: 32, fermat_increments: 10, number: '3811702457', p: '60637', q: '62861'}
+  - {bits: 32, fermat_increments: 10, number: '3813937903', p: '60607', q: '62929'}
+  - {bits: 32, fermat_increments: 10, number: '3829705069', p: '60761', q: '63029'}
+  - {bits: 32, fermat_increments: 10, number: '3833963011', p: '60763', q: '63097'}
+  - {bits: 32, fermat_increments: 10, number: '3841846093', p: '60859', q: '63127'}
+  - {bits: 32, fermat_increments: 10, number: '3846859931', p: '60869', q: '63199'}
+  - {bits: 32, fermat_increments: 10, number: '3886837289', p: '61211', q: '63499'}
+  - {bits: 32, fermat_increments: 10, number: '3899149547', p: '61291', q: '63617'}
+  - {bits: 32, fermat_increments: 10, number: '3932875129', p: '61583', q: '63863'}
+  - {bits: 32, fermat_increments: 10, number: '3940391773', p: '61637', q: '63929'}
+  - {bits: 32, fermat_increments: 10, number: '3952171529', p: '61717', q: '64037'}
+  - {bits: 32, fermat_increments: 10, number: '3984710321', p: '61987', q: '64283'}
+  - {bits: 32, fermat_increments: 10, number: '3988838999', p: '62003', q: '64333'}
+  - {bits: 32, fermat_increments: 10, number: '4007152993', p: '62137', q: '64489'}
+  - {bits: 32, fermat_increments: 10, number: '4022898073', p: '62273', q: '64601'}
+  - {bits: 32, fermat_increments: 10, number: '4042159103', p: '62459', q: '64717'}
+  - {bits: 32, fermat_increments: 10, number: '4115997293', p: '62981', q: '65353'}
+  - {bits: 32, fermat_increments: 10, number: '4119455293', p: '63059', q: '65327'}
+  - {bits: 32, fermat_increments: 10, number: '4148512517', p: '63281', q: '65557'}
+  - {bits: 32, fermat_increments: 10, number: '4155431393', p: '63317', q: '65629'}
+  - {bits: 32, fermat_increments: 10, number: '4156743973', p: '63337', q: '65629'}
+  - {bits: 32, fermat_increments: 10, number: '4161834553', p: '63347', q: '65699'}
+  - {bits: 32, fermat_increments: 10, number: '4167176071', p: '63409', q: '65719'}
+  - {bits: 32, fermat_increments: 10, number: '4212017057', p: '63719', q: '66103'}
+  - {bits: 32, fermat_increments: 10, number: '4276949597', p: '64231', q: '66587'}

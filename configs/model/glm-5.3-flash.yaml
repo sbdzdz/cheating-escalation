@@ -1,0 +1,14 @@
+# @package _global_
+profile: glm-5.3-flash
+model:
+  agent: harbor_adapter.agents.zcode:ZCode
+  model: z-ai/glm-5.3-flash
+  kwargs: {}
+  api_key_env: OPENROUTER_API_KEY
+  key_target: ZCODE_API_KEY
+  url_target: ZCODE_BASE_URL
+  env:
+    ZCODE_BASE_URL: https://openrouter.ai/api/v1
+    ZCODE_BUILTIN_PROVIDER_CONFIG_FILE: /opt/zcode/provider/zcode-builtin.json
+    ZCODE_PERSONAL_PROVIDER_CONFIG_FILE: /home/agent/.zcode/v2/provider_config.json
+  runtime: zcode

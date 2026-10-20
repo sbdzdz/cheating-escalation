@@ -1,0 +1,10 @@
+# @package _global_
+name: smoke
+description: One cheap baseline trial on an 8-bit semiprime, for checking harness and logging changes.
+task: factorization
+conditions: [baseline]
+target_trials: 1
+parallel: 1
+max_cost_per_trial_usd: 1
+instances:
+  - {bits: 8, fermat_increments: 10, number: '235', p: '5', q: '47'}
