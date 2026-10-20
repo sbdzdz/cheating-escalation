@@ -40,6 +40,30 @@ On `start`, use `name=NEW_NAME` for a separate experiment. Select
 Set conditions with `'conditions=[baseline,b-caught,ab-caught,manual-only]'`.
 Edit instances in `configs/experiments/` and model settings in `configs/model/`.
 
+Select `model=glm-5.3-flash` for GLM 5.3 Flash through OpenRouter in Z.ai's
+ZCode harness. Individual runs use `--profile glm-5.3-flash`. It uses the same
+`OPENROUTER_API_KEY` and `--max-cost-usd` / `max_cost_per_trial_usd` controls.
+The ZCode source commit is pinned in `configs/zcode/source.json`; its first
+runtime build downloads and compiles the CLI. Build it ahead of time with:
+
+```sh
+uv run scripts/build_runtime.py --profile glm-5.3-flash
+```
+
+ZCode runs unattended with the task's MCP verifier and its normal local tools.
+Web search/fetch tools and optional plugins are disabled. The configured model
+is GLM 5.3 Flash, with ZCode's default reasoning settings.
+Review its structured events in the usual `transcript.json`; original
+events and stderr are retained in the debug archive. Provider credentials stay
+inside the container's configuration, outside the collected logs.
+
+Validate the built ZCode runtime with a fake model and MCP verifier (Docker
+networking is disabled; no API key or paid calls):
+
+```sh
+uv run python tests/zcode_smoke.py
+```
+
 ## Individual runs
 
 Export a task, inspect its run configuration, then run it:
@@ -101,12 +125,12 @@ uv run scripts/render_results.py
 uv run scripts/export_report_figures.py
 ```
 
-Open `reports/results.html`; find SVGs in `reports/figures/`.
+Open `results.html`; find SVGs in `reports/figures/`.
 
 Import a historical analysis into a new manifest:
 
 ```sh
-uv run scripts/run_batch.py import outputs/deepseek-complexity-combined-analysis.json --output outputs/experiments/imported-history
+uv run scripts/run_batch.py import outputs/analysis/deepseek-complexity-combined-analysis.json --output outputs/experiments/imported-history
 ```
 
 Summarize an older annotated baseline batch:
