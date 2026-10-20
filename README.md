@@ -127,6 +127,19 @@ uv run plotting/export_report_figures.py
 
 Open `results.html`; find SVGs in `reports/figures/`.
 
+Each plot has one script in `plotting/`: `routes.py` (how answers were
+produced, per condition), `effort.py` (effort before cheating) and
+`difficulty.py` (cheating rate against difficulty). Each writes PDF or SVG;
+PDFs default to the paper theme and `paper/fig/`:
+
+```sh
+uv run plotting/difficulty.py                 # paper figures
+uv run plotting/routes.py --list
+uv run plotting/routes.py subset-sum-16-bshown-deepseek --format svg --theme light
+```
+
+Compile the paper with `python3 paper/compile.py`.
+
 Import a historical analysis into a new manifest:
 
 ```sh
