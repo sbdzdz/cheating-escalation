@@ -94,12 +94,51 @@ def add_slots(manifest, target):
                 )
 
 
+def expand_instances(task_kind, items, seeds=None):
+    """Load and validate all instances before writing experiment artifacts.
+
+    Explicit subset-sum seeds take precedence over experiment seeds. The original
+    fixture is included once; only seedless custom instances are expanded.
+    """
+    from tasks.factorization_escalation import instances as factorization
+    from tasks.subset_sum import instances as subset_sum
+
+    validators = {
+        "factorization": factorization.validate,
+        "subset_sum": subset_sum.validate,
+    }
+    if task_kind not in validators:
+        raise ValueError(f"Unknown task: {task_kind}")
+    if not isinstance(items, list) or not items:
+        raise ValueError("instances must be a nonempty list")
+    expanded = []
+    for item in items:
+        if isinstance(item, (str, Path)):
+            item = read(ROOT / item)
+        if not isinstance(item, dict):
+            raise ValueError("Each instance must be a mapping or JSON file path")
+        if (
+            task_kind == "subset_sum"
+            and not item.get("original")
+            and "seed" not in item
+        ):
+            selected = [0] if seeds is None else seeds
+            if not isinstance(selected, list) or not selected:
+                raise ValueError(
+                    "seeds must be a nonempty list when expanding instances"
+                )
+            expanded.extend(
+                subset_sum.validate(dict(item, seed=seed)) for seed in selected
+            )
+        else:
+            expanded.append(validators[task_kind](item))
+    return expanded
+
+
 def prepare(config_path, directory):
-    from harbor_adapter.conditions import CONDITIONS
     from harbor_adapter.model_config import load_profile, normalize_profile
 
     config = config_path if isinstance(config_path, dict) else read(config_path)
-    save(directory / "resolved-config.json", config)
     parallel, target = config.get("parallel", 1), config.get("target_trials", 1)
     cap = config.get("max_cost_per_trial_usd", 10)
     agent_timeout = config.get("agent_timeout_sec", 3600)
@@ -126,6 +165,20 @@ def prepare(config_path, directory):
             word in key.upper() for word in ("API_KEY", "TOKEN", "SECRET", "PASSWORD")
         ):
             raise ValueError("Credentials must use api_key_env, not profile env values")
+    task_kind = config.get("task", "factorization")
+    items = expand_instances(task_kind, config["instances"], config.get("seeds"))
+    from harbor_adapter.conditions import TASK_CONDITION_PROMPTS
+
+    conditions = config.get("conditions", ["baseline"])
+    if not isinstance(conditions, list) or not conditions:
+        raise ValueError("conditions must be a nonempty list")
+    for condition in conditions:
+        if (
+            condition != "baseline"
+            and condition not in TASK_CONDITION_PROMPTS[task_kind]
+        ):
+            raise ValueError(f"{task_kind} does not support condition {condition}")
+    save(directory / "resolved-config.json", config)
     manifest = dict(
         schema_version=1,
         name=config["name"],
@@ -134,34 +187,10 @@ def prepare(config_path, directory):
         settings={},
         trials=[],
     )
-    from tasks.factorization_escalation import instances as factorization
-    from tasks.subset_sum import instances as subset_sum
-
-    task_kind = config.get("task", "factorization")
-    validators = {
-        "factorization": factorization.validate,
-        "subset_sum": subset_sum.validate,
-    }
-    if task_kind not in validators:
-        raise ValueError("Unknown task")
-    validate = validators[task_kind]
-    items = config["instances"]
-    if task_kind == "subset_sum":
-        # The original CheatBench instance has a fixed generator seed.
-        items = [
-            dict(item, seed=seed)
-            for item in items
-            if not item.get("original")
-            for seed in config.get("seeds", [0])
-        ] + [dict(item) for item in items if item.get("original")]
-    for item in items:
-        instance = item if isinstance(item, dict) else read(ROOT / item)
+    for instance in items:
         temporary = directory / "instance.json"
         save(temporary, instance)
-        instance = validate(instance)
-        for condition in config.get("conditions", ["baseline"]):
-            if condition not in CONDITIONS:
-                raise ValueError("Unknown condition: " + condition)
+        for condition in conditions:
             import tempfile
 
             with tempfile.TemporaryDirectory() as tmp:
