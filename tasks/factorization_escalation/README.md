@@ -11,7 +11,7 @@ Adapted from CheatBench; see [UPSTREAM.md](UPSTREAM.md) for provenance.
   already manually derived factors programmatically does not change their source.
 
 Use `scripts/run_batch.py` for experiments, or `scripts/export_harbor.py` and
-`scripts/run_factorization.py` for individual tasks. See the root README for commands.
+`scripts/run_trial.py` for individual tasks. See the root README for commands.
 No automatic LLM cheating judge or live agent-readable log observer runs here.
 
 `data.jsonl` and `environment/files/` are generated, ignored build artifacts.

@@ -1,6 +1,7 @@
-"""Run one exported factorization task with Harbor's Docker backend."""
+"""Run one trial of an exported task with Harbor's Docker backend."""
 
 import argparse
+import json
 import os
 import subprocess
 import sys
@@ -13,9 +14,9 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from harbor_adapter.conditions import CONDITIONS
-from harbor_adapter.instances import instance_suffix, load_instance
 from harbor_adapter.model_config import DEFAULT_CONFIG, load_profile
 from harbor_adapter.outputs import compact_job
+from tasks.factorization_escalation.instances import instance_suffix, validate
 
 
 def main():
@@ -34,14 +35,14 @@ def main():
     parser.add_argument("--profile", help="Profile name; otherwise uses config default")
     parser.add_argument(
         "--agent",
-        choices=["kimi-code", "codex", "oracle", "nop"],
-        help="Legacy harness override",
+        choices=["oracle", "nop"],
+        help="Docker plumbing check without a model: submit the planted answer, or do nothing",
     )
     parser.add_argument(
         "--model", help="Override the selected profile model identifier"
     )
     parser.add_argument(
-        "--agent-version", help="CLI version (Kimi: 0.43.0; Codex: 0.154.0)"
+        "--agent-version", help="Override the profile's harness version"
     )
     parser.add_argument(
         "--print-config",
@@ -68,27 +69,17 @@ def main():
         profile_name, profile = load_profile(args.config, args.profile)
         if args.agent and args.profile:
             parser.error("Use --profile or --agent, not both")
-        if args.agent == "kimi-code":
-            profile_name, profile = load_profile(args.config, "kimi-k3")
-        elif args.agent:
-            if args.agent == "codex" and not args.model:
-                parser.error("--model is required for codex")
+        if args.agent:
             profile_name = args.agent
             profile = {
                 "agent": args.agent,
-                "model": args.model,
+                "model": None,
                 "env": {},
                 "kwargs": {},
                 "api_key_env": None,
                 "key_target": None,
                 "url_target": None,
             }
-            if args.agent == "codex":
-                profile["kwargs"] = {
-                    "version": "0.154.0",
-                    "web_search": "disabled",
-                    "reasoning_effort": "high",
-                }
     except (ValueError, KeyError, OSError) as exc:
         parser.error(str(exc))
     if args.model:
@@ -108,10 +99,10 @@ def main():
         if not profile["url_target"]:
             parser.error("--max-cost-usd requires an OpenRouter model profile")
     task_name = f"fact_n52_{args.question}"
+    if args.instance:
+        task_name += instance_suffix(validate(json.loads(args.instance.read_text())))
     if args.condition != "baseline":
         task_name += "__" + args.condition
-    if args.instance:
-        task_name += instance_suffix(load_instance(args.instance))
     task = args.task_path or ROOT / "generated/harbor" / task_name
     if not (task / "task.toml").exists():
         parser.error(

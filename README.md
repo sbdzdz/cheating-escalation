@@ -70,8 +70,8 @@ Export a task, inspect its run configuration, then run it:
 
 ```sh
 uv run scripts/export_harbor.py --questions 4 --condition baseline
-uv run scripts/run_factorization.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10 --print-config
-uv run scripts/run_factorization.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10
+uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10 --print-config
+uv run scripts/run_trial.py --profile deepseek-v4-flash --condition baseline --max-cost-usd 10
 ```
 
 Use `--profile kimi-k3` for Kimi. Set the same `--condition` when exporting and
@@ -82,7 +82,7 @@ and `q` fields and pass it to both commands:
 
 ```sh
 uv run scripts/export_harbor.py --instance configs/instances/original.json
-uv run scripts/run_factorization.py --instance configs/instances/original.json --profile deepseek-v4-flash --max-cost-usd 10
+uv run scripts/run_trial.py --instance configs/instances/original.json --profile deepseek-v4-flash --max-cost-usd 10
 ```
 
 ## Build the runtime
@@ -101,8 +101,8 @@ uv run python -m unittest discover -s tests -v
 Run Docker checks without model calls:
 
 ```sh
-uv run scripts/run_factorization.py --agent oracle
-uv run scripts/run_factorization.py --agent nop
+uv run scripts/run_trial.py --agent oracle
+uv run scripts/run_trial.py --agent nop
 ```
 
 ## Review and reports
