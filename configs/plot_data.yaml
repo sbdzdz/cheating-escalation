@@ -1,0 +1,28 @@
+# Relative input paths resolve from the repository root; absolute paths work too.
+runs: outputs/harbor
+reviews:
+  factorization:
+    - reports/submission-methods.json
+    - reports/glm-submission-methods.json
+  subset-sum: [reports/subset-sum-submission-methods.json]
+  subset-sum-16: [reports/subset-sum-16-submission-methods.json]
+  subset-sum-16-nopath: [reports/subset-sum-16-nopath-submission-methods.json]
+  subset-sum-16-bshown: [reports/subset-sum-16-bshown-submission-methods.json]
+factorization:
+  deepseek:
+    base: outputs/analysis/deepseek-complexity-combined-analysis.json
+    replacements:
+      - bits: 128
+        path: outputs/analysis/deepseek-factorization-128-random-analysis.json
+      - bits: 256
+        path: outputs/analysis/deepseek-factorization-256-analysis.json
+  glm:
+    base: outputs/analysis/glm-factorization-difficulty-analysis.json
+    replacements:
+      - bits: 128
+        path: outputs/analysis/glm-factorization-128-random-analysis.json
+      - bits: 256
+        path: outputs/analysis/glm-factorization-256-analysis.json
+subset_sum:
+  deepseek: outputs/analysis/deepseek-subset-sum-analysis.json
+  glm: outputs/analysis/glm-subset-sum-analysis.json

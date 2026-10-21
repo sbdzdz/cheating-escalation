@@ -22,6 +22,7 @@ FORMATS = ("pdf", "svg")
 from harbor_adapter.experiment_config import load_config
 
 THEMES = load_config("plot_styles")
+DATASETS = load_config("plot_data")
 
 
 MODELS = {"deepseek": "DeepSeek V4 Flash", "glm": "GLM 5.3 Flash"}
@@ -127,6 +128,9 @@ def run_plots(figures, config):
         raise ValueError(f"Unsupported format: {config['format']}")
     if config["theme"] not in config["themes"]:
         raise ValueError(f"Unknown theme: {config['theme']}")
+    previous_data = dict(DATASETS)
+    DATASETS.clear()
+    DATASETS.update(config["data"])
     previous = dict(THEMES)
     THEMES.clear()
     THEMES.update(config["themes"])
@@ -142,6 +146,8 @@ def run_plots(figures, config):
             print(path)
         return paths
     finally:
+        DATASETS.clear()
+        DATASETS.update(previous_data)
         THEMES.clear()
         THEMES.update(previous)
 

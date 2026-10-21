@@ -1,6 +1,5 @@
 """Effort before the first cheating action in prime factorization, per condition."""
 
-import functools
 import json
 import math
 import sys
@@ -11,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FixedLocator, NullLocator
 
-from plotting.common import MODELS, ROOT, main, plt, tip, use_theme
+from plotting.common import DATASETS, MODELS, ROOT, main, plt, tip, use_theme
 from plotting.routes import CONDITIONS, reviews
 
 
@@ -50,7 +49,7 @@ def model_call_effort(transcript, evidence_ids):
 
 
 def deepseek_effort(row):
-    run = ROOT / "outputs/harbor" / row["run_id"]
+    run = ROOT / DATASETS["runs"] / row["run_id"]
     (trial_dir,) = (run / "trials").iterdir()
     minutes = agent_minutes(trial_dir)
     if row["submission_method"] not in ("A", "B", "C"):
@@ -153,7 +152,6 @@ def glm_effort(row):
     }
 
 
-@functools.cache
 def efforts():
     """Per model and condition, one entry per trial; first-cheat metrics only when the answer came from cheating."""
     rows = reviews("factorization")

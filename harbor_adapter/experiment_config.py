@@ -15,6 +15,7 @@ CONFIGS = Path(__file__).resolve().parents[1] / "configs"
 
 @dataclass
 class PlotConfig:
+    data: dict[str, Any] = MISSING
     themes: dict[str, Any] = MISSING
     names: list[str] = MISSING
     format: str = MISSING
