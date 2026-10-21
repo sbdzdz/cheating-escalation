@@ -10,6 +10,7 @@ from hydra.errors import ConfigCompositionException
 
 from harbor_adapter.batch import read, save, worker
 from harbor_adapter.experiment_config import load_config
+from harbor_adapter.export import export_tasks
 from harbor_adapter.model_config import load_profile, resolve_profile
 from harbor_adapter.trial import run_trial
 from scripts.build_runtime import main as build_runtime
@@ -37,12 +38,16 @@ class TrialConfigTests(unittest.TestCase):
                 load_config("trial", [override])
 
     def test_composed_model_settings_reach_harbor(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        (task,) = export_tasks("factorization", Path(directory.name))
         result = subprocess.run(
             [
                 sys.executable,
                 str(ROOT / "scripts/run_trial.py"),
                 "model=deepseek-v4-flash",
                 "model.env.DSH_REASONING_EFFORT=low",
+                "task_path=" + str(task),
                 "max_cost_usd=3",
                 "print_config=true",
             ],
@@ -56,6 +61,7 @@ class TrialConfigTests(unittest.TestCase):
 
     def test_saved_profile_takes_precedence_over_current_yaml(self):
         with tempfile.TemporaryDirectory() as tmp:
+            (task,) = export_tasks("factorization", Path(tmp) / "export")
             path = Path(tmp) / "model.json"
             _, profile = load_profile(name="kimi-k3")
             profile["model"] = "saved/provider-model"
@@ -66,6 +72,7 @@ class TrialConfigTests(unittest.TestCase):
                     str(ROOT / "scripts/run_trial.py"),
                     "model=deepseek-v4-flash",
                     "model_snapshot=" + str(path),
+                    "task_path=" + str(task),
                     "snapshot_profile=saved",
                     "print_config=true",
                 ],

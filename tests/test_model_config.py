@@ -11,12 +11,16 @@ from harbor.agents.installed.acp import AcpAgent
 from harbor.models.task.config import MCPServerConfig
 
 from harbor_adapter.agents.deepseek import FactorizationDeepSeek, provider_patch
+from harbor_adapter.export import export_tasks
 from harbor_adapter.model_config import DEFAULT_CONFIG, ROOT, load_profile
 from harbor_adapter.outputs import compact_job
 
 
 class ModelConfigTests(unittest.TestCase):
     def test_profiles_generate_harbor_jobs_without_credentials(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        (task,) = export_tasks("factorization", Path(directory.name))
         env = {k: v for k, v in os.environ.items() if "API_KEY" not in k}
         for name, target in [
             ("kimi-k3", "KIMI_MODEL"),
@@ -28,6 +32,7 @@ class ModelConfigTests(unittest.TestCase):
                     sys.executable,
                     str(ROOT / "scripts/run_trial.py"),
                     "model=" + name,
+                    "task_path=" + str(task),
                     "max_cost_usd=10",
                     "print_config=true",
                 ],

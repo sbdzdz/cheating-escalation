@@ -8,14 +8,15 @@ from unittest.mock import AsyncMock, patch
 from harbor.agents.installed.acp import AcpAgent
 
 from harbor_adapter.agents.deepseek import FactorizationDeepSeek
+from harbor_adapter.export import export_tasks
 from harbor_adapter.model_config import load_profile
-from harbor_adapter.runtime_image import ROOT, prepare_task, runtime_spec
+from harbor_adapter.runtime_image import prepare_task, runtime_spec
 
 
 class RuntimeImageTests(unittest.TestCase):
     def test_prepared_task_preserves_all_fixtures_and_prompt(self):
-        source = ROOT / "generated/harbor/fact_n52_4"
         with tempfile.TemporaryDirectory() as directory:
+            (source,) = export_tasks("factorization", Path(directory) / "export")
             task = prepare_task(source, "deepseek", Path(directory))
             self.assertEqual(task, prepare_task(source, "deepseek", Path(directory)))
             for path in source.rglob("*"):

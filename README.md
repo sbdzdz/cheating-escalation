@@ -129,14 +129,16 @@ uv run scripts/build_runtime.py model=deepseek-v4-flash
 
 ## Tests
 
+Tests create their own task fixtures in temporary directories.
+
 ```sh
-uv run scripts/export_harbor.py 'questions=[4]'
 uv run python -m unittest discover -s tests -v
 ```
 
 Run Docker checks without model calls:
 
 ```sh
+uv run scripts/export_harbor.py 'questions=[4]'
 uv run scripts/run_trial.py agent=oracle
 uv run scripts/run_trial.py agent=nop
 ```
