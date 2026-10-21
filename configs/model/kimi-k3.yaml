@@ -1,7 +1,7 @@
 # @package _global_
 profile: kimi-k3
 model:
-  agent: harbor_adapter.agents.kimi_code:FactorizationKimiCode
+  agent: harbor_adapter.agents.kimi_code:KimiCodeAgent
   model: moonshotai/kimi-k3
   kwargs:
     version: 0.43.0

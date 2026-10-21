@@ -88,10 +88,10 @@ class KimiTests(unittest.IsolatedAsyncioTestCase):
 
         from harbor.models.task.config import MCPServerConfig
 
-        from harbor_adapter.agents.kimi_code import FactorizationKimiCode
+        from harbor_adapter.agents.kimi_code import KimiCodeAgent
 
         with tempfile.TemporaryDirectory() as directory:
-            agent = FactorizationKimiCode(
+            agent = KimiCodeAgent(
                 logs_dir=Path(directory),
                 model_name="kimi-k3",
                 version="0.43.0",

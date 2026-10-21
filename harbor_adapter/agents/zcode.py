@@ -65,7 +65,7 @@ class ZCode(BaseInstalledAgent):
     async def install(self, environment):
         _, _, expected = runtime_spec("zcode")
         result = await self.exec_as_agent(
-            environment, command="cat /opt/factorization-runtime.json"
+            environment, command="cat /opt/experiment-runtime.json"
         )
         if json.loads(result.stdout) != expected:
             raise ValueError("ZCode runtime does not match the source pin; rebuild it")

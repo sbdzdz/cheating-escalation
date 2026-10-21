@@ -29,8 +29,8 @@ def provider_patch(model, effort):
     ]
 
 
-class FactorizationDeepSeek(AcpAgent):
-    _RUNTIME = "/tmp/factorization-dsh-runtime"
+class DeepSeekAgent(AcpAgent):
+    _RUNTIME = "/tmp/deepseek-runtime"
 
     async def exec_as_agent(self, environment, command, env=None, **kwargs):
         if env and "HARBOR_ACP_REQUESTED_MODEL" in env:
@@ -49,13 +49,15 @@ class FactorizationDeepSeek(AcpAgent):
         version = package["dependencies"]["@deepseek-ai/dsh"]
         if self._require_registry_entry().version != version:
             raise ValueError("DeepSeek registry version must match the locked runtime")
-        prebuilt = self._get_env("FACTORIZATION_PREBUILT_RUNTIME")
+        prebuilt = self._get_env("EXPERIMENT_PREBUILT_RUNTIME") or self._get_env(
+            "FACTORIZATION_PREBUILT_RUNTIME"
+        )
         if prebuilt:
             from harbor_adapter.runtime_image import runtime_spec
 
             _, _, expected = runtime_spec(prebuilt)
             result = await self.exec_as_agent(
-                environment, command="cat /opt/factorization-runtime.json"
+                environment, command="cat /opt/experiment-runtime.json"
             )
             if json.loads(result.stdout) != expected:
                 raise ValueError(
@@ -125,3 +127,7 @@ class FactorizationDeepSeek(AcpAgent):
             + ' > "$DSH_HOME/cordis.patch.yml"',
         )
         await super().run(instruction, environment, context)
+
+
+# Saved model snapshots may still refer to the original import path.
+FactorizationDeepSeek = DeepSeekAgent

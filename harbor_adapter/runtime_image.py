@@ -53,7 +53,7 @@ def ensure_runtime(runtime):
     if found.returncode == 0:
         return image
     # Only these allowlisted build inputs enter Docker's context: never .env or logs.
-    with tempfile.TemporaryDirectory(prefix="factorization-runtime-") as directory:
+    with tempfile.TemporaryDirectory(prefix="experiment-runtime-") as directory:
         context = Path(directory)
         for name, data in files.items():
             (context / name).write_bytes(data)

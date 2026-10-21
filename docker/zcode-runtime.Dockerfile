@@ -13,6 +13,6 @@ FROM harness-build AS node-runtime
 # TASK_BASE
 COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
 COPY --from=harness-build /src/apps/zcode-cli/packages/cli/dist /opt/zcode/
-COPY runtime.json /opt/factorization-runtime.json
+COPY runtime.json /opt/experiment-runtime.json
 RUN node /opt/zcode/zcode.cjs --version
 WORKDIR /workspace

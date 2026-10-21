@@ -9,7 +9,7 @@ from harbor.models.trial.paths import EnvironmentPaths
 TOOL_POLICY = '[tools]\ndisabled = ["FetchURL", "WebSearch"]\n'
 
 
-class FactorizationKimiCode(KimiCode):
+class KimiCodeAgent(KimiCode):
     async def run(self, instruction, environment, context):
         try:
             await super().run(instruction, environment, context)
@@ -33,3 +33,7 @@ class FactorizationKimiCode(KimiCode):
             + ' > "$KIMI_CODE_HOME/config.toml"',
             env=env,
         )
+
+
+# Saved model snapshots may still refer to the original import path.
+FactorizationKimiCode = KimiCodeAgent

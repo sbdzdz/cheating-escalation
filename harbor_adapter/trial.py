@@ -83,7 +83,7 @@ def run_trial(config):
         if not args.print_config:
             ensure_runtime(profile["runtime"])
         task = prepare_task(task, profile["runtime"])
-        profile["env"]["FACTORIZATION_PREBUILT_RUNTIME"] = profile["runtime"]
+        profile["env"]["EXPERIMENT_PREBUILT_RUNTIME"] = profile["runtime"]
     run_id = ("budget-" if args.max_cost_usd else "run-") + uuid4().hex
     if args.run_id:
         import re

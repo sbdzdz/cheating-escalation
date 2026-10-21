@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, patch
 
 from harbor.agents.installed.acp import AcpAgent
 
-from harbor_adapter.agents.deepseek import FactorizationDeepSeek
+from harbor_adapter.agents.deepseek import DeepSeekAgent
 from harbor_adapter.export import export_tasks
 from harbor_adapter.model_config import load_profile
 from harbor_adapter.runtime_image import prepare_task, runtime_spec
@@ -48,10 +48,10 @@ class PreinstalledAgentTests(unittest.IsolatedAsyncioTestCase):
         _, profile = load_profile(name="deepseek-v4-flash")
         _, _, metadata = runtime_spec("deepseek")
         with tempfile.TemporaryDirectory() as directory:
-            agent = FactorizationDeepSeek(
+            agent = DeepSeekAgent(
                 logs_dir=Path(directory),
                 model_name=profile["model"],
-                extra_env={"FACTORIZATION_PREBUILT_RUNTIME": "deepseek"},
+                extra_env={"EXPERIMENT_PREBUILT_RUNTIME": "deepseek"},
                 **profile["kwargs"],
             )
             agent.exec_as_agent = AsyncMock(

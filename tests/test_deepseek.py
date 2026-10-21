@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, patch
 from harbor.agents.installed.acp import AcpAgent
 from harbor.models.task.config import MCPServerConfig
 
-from harbor_adapter.agents.deepseek import FactorizationDeepSeek
+from harbor_adapter.agents.deepseek import DeepSeekAgent
 from harbor_adapter.model_config import ROOT, load_profile
 from harbor_adapter.outputs import compact_job
 
@@ -33,7 +33,7 @@ class DeepSeekAdapterTests(unittest.IsolatedAsyncioTestCase):
     async def test_acp_selector_verifier_and_locked_launcher(self):
         _, profile = load_profile(name="deepseek-v4-flash")
         with tempfile.TemporaryDirectory() as directory:
-            agent = FactorizationDeepSeek(
+            agent = DeepSeekAgent(
                 logs_dir=Path(directory),
                 model_name=profile["model"],
                 **profile["kwargs"],
