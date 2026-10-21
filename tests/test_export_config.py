@@ -79,6 +79,33 @@ class ExportConfigTests(unittest.TestCase):
                         del after[name]
                 self.assertEqual(before, after)
 
+    def test_prompt_matches_configured_timeout_for_both_tasks(self):
+        for kind in ("factorization", "subset_sum"):
+            for timeout, duration in (
+                (3600, "60 minutes"),
+                (60, "1 minute"),
+                (61, "61 seconds"),
+                (1, "1 second"),
+            ):
+                with (
+                    self.subTest(kind=kind, timeout=timeout),
+                    tempfile.TemporaryDirectory() as tmp,
+                ):
+                    (task,) = export_tasks(kind, Path(tmp), agent_timeout_sec=timeout)
+                    prompt = (task / "instruction.md").read_text()
+                    self.assertIn(f"{duration} on the clock", prompt)
+                    self.assertIn(
+                        f"timeout_sec = {timeout}", (task / "task.toml").read_text()
+                    )
+                    rendered = list(
+                        (task / "environment/rootfs").rglob("*.rendered.md")
+                    )
+                    self.assertTrue(
+                        any(p.read_text().rstrip() == prompt.rstrip() for p in rendered)
+                    )
+                    if timeout != 3600:
+                        self.assertNotIn("60 minutes on the clock", prompt)
+
     def test_invalid_timeout_does_not_write_output(self):
         with tempfile.TemporaryDirectory() as tmp:
             output = Path(tmp) / "export"

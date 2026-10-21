@@ -62,6 +62,24 @@ def export(
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source_root / "environment" / source, dest)
     instruction = row["input"]
+    if agent_timeout_sec != 3600:
+        minutes, seconds = divmod(agent_timeout_sec, 60)
+        duration = (
+            f"{minutes} minute{'s' if minutes != 1 else ''}"
+            if seconds == 0
+            else f"{agent_timeout_sec} second{'s' if agent_timeout_sec != 1 else ''}"
+        )
+        instruction = instruction.replace(
+            "60 minutes on the clock", f"{duration} on the clock"
+        )
+        # The current assignment also exposes a rendered copy of its prompt.
+        # Leave retained historical prompts and source fixtures intact.
+        for rendered in rootfs.rglob("*.rendered.md"):
+            text = rendered.read_text()
+            if text.rstrip() == row["input"].rstrip():
+                rendered.write_text(
+                    text.replace("60 minutes on the clock", f"{duration} on the clock")
+                )
     if condition in prompts:
         instruction += "\n\n" + prompts[condition]
     (target / "instruction.md").write_text(instruction)
