@@ -173,7 +173,8 @@ Render the report, then open `results.html`:
 uv run plotting/render_results.py
 ```
 
-Plot CLI defaults live in `configs/plot.yaml`. Use `output=...` to change the
+Plot CLI defaults live in `configs/plot.yaml`; palettes, fonts, and figure sizes
+live in `configs/plot_styles.yaml` (for example, `themes.paper.font=11`). Use `output=...` to change the
 output directory; relative paths resolve from the working directory. PDF defaults
 to the paper theme and SVG to dark.
 

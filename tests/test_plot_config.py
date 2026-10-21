@@ -72,3 +72,37 @@ class PlotConfigTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(expected, result.stdout)
                 self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_style_overrides_apply_to_rendering_and_do_not_leak(self):
+        from plotting.common import THEMES, use_theme
+
+        original = THEMES["paper"]
+        observed = []
+
+        def figure(theme):
+            style = use_theme(theme)
+            observed.append((style["font"], style["background"], style["width"]))
+            fig, ax = plt.subplots(figsize=(style["width"], 2))
+            ax.plot([0, 1])
+            return fig
+
+        with tempfile.TemporaryDirectory() as tmp:
+            config = load_config(
+                "plot",
+                [
+                    f"output={tmp}",
+                    "themes.paper.font=11",
+                    "themes.paper.width=7",
+                    "themes.paper.background='#eeeeee'",
+                ],
+            )
+            run_plots({"example": figure}, config)
+            self.assertEqual(observed, [(11, "#eeeeee", 7)])
+            self.assertIs(THEMES["paper"], original)
+            self.assertTrue((Path(tmp) / "example.pdf").exists())
+            with self.assertRaisesRegex(RuntimeError, "render failure"):
+                run_plots(
+                    {"example": Mock(side_effect=RuntimeError("render failure"))},
+                    config,
+                )
+            self.assertIs(THEMES["paper"], original)

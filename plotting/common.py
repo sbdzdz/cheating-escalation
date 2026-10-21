@@ -18,87 +18,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 FORMATS = ("pdf", "svg")
-SANS = ["Helvetica", "Arial", "DejaVu Sans"]
+# Keep direct figure rendering and the CLI on the same YAML defaults.
+from harbor_adapter.experiment_config import load_config
 
-THEMES = {
-    # Print figures: serif text sized for the paper's 5.5-inch text width.
-    "paper": dict(
-        width=5.5,
-        row=0.3,
-        chrome=1.0,
-        pad=0,
-        font=9.5,
-        rc={
-            "font.family": "serif",
-            "font.serif": ["STIXGeneral"],
-            "mathtext.fontset": "stix",
-            "font.size": 10 * 72 / 72.27,
-            "axes.labelsize": 10.5,
-            "axes.titlesize": 10,
-            "legend.fontsize": 9,
-            "pdf.fonttype": 42,
-            "svg.fonttype": "path",
-        },
-        background="#ffffff",
-        text="#000000",
-        muted="#000000",
-        grid="#dddddd",
-        axis="#000000",
-        used="#0072B2",
-        attempted="#b8c4cc",
-        flagged="#a3412f",
-        models={"deepseek": "#0072B2", "glm": "#D55E00"},
-    ),
-    # The report page: 11.25 inches fills its 1080-pixel column, so text shows at 14px.
-    "dark": dict(
-        width=11.25,
-        row=0.58,
-        chrome=1.6,
-        pad=0.1,
-        font=10.5,
-        rc={
-            "font.family": "sans-serif",
-            "font.sans-serif": SANS,
-            "font.size": 10.5,
-            "axes.titlesize": 10.5,
-            "legend.fontsize": 10,
-            "svg.fonttype": "none",
-        },
-        background="#10171f",
-        text="#dedbd3",
-        muted="#a1aebc",
-        grid="#303b45",
-        axis="#4b5864",
-        used="#287e85",
-        attempted="#4b5864",
-        flagged="#ce9990",
-        models={"deepseek": "#56b4e9", "glm": "#e69f00"},
-    ),
-    "light": dict(
-        width=11.25,
-        row=0.58,
-        chrome=1.6,
-        pad=0.1,
-        font=10.5,
-        rc={
-            "font.family": "sans-serif",
-            "font.sans-serif": SANS,
-            "font.size": 10.5,
-            "axes.titlesize": 10.5,
-            "legend.fontsize": 10,
-            "svg.fonttype": "none",
-        },
-        background="#ffffff",
-        text="#27343b",
-        muted="#64717b",
-        grid="#e2e7eb",
-        axis="#c3cbd0",
-        used="#287e85",
-        attempted="#d5dbde",
-        flagged="#a34f43",
-        models={"deepseek": "#0072B2", "glm": "#D55E00"},
-    ),
-}
+THEMES = load_config("plot_styles")
+
 
 MODELS = {"deepseek": "DeepSeek V4 Flash", "glm": "GLM 5.3 Flash"}
 
@@ -201,18 +125,25 @@ def run_plots(figures, config):
         )
     if config["format"] not in FORMATS:
         raise ValueError(f"Unsupported format: {config['format']}")
-    if config["theme"] not in THEMES:
+    if config["theme"] not in config["themes"]:
         raise ValueError(f"Unknown theme: {config['theme']}")
-    paths = export(
-        figures,
-        config["names"] or list(figures),
-        config["format"],
-        config["theme"],
-        config["output"],
-    )
-    for path in paths:
-        print(path)
-    return paths
+    previous = dict(THEMES)
+    THEMES.clear()
+    THEMES.update(config["themes"])
+    try:
+        paths = export(
+            figures,
+            config["names"] or list(figures),
+            config["format"],
+            config["theme"],
+            config["output"],
+        )
+        for path in paths:
+            print(path)
+        return paths
+    finally:
+        THEMES.clear()
+        THEMES.update(previous)
 
 
 def main(figures, description):
