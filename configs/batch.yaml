@@ -1,4 +1,13 @@
 defaults:
   - model: deepseek-v4-flash
-  - experiments: complexity-sweep
   - _self_
+  - experiments: complexity-sweep
+
+# Shared defaults; individual experiments may override them.
+task: factorization
+conditions: [baseline]
+parallel: 1
+target_trials: 1
+max_cost_per_trial_usd: 10
+agent_timeout_sec: 3600
+seeds: null

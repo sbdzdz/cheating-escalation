@@ -1,0 +1,8 @@
+# @package _global_
+path: null
+output: null
+trial: null
+dry_run: false
+# Null leaves saved settings unchanged when resuming or retrying.
+parallel: null
+target_trials: null

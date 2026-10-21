@@ -15,25 +15,31 @@ Set `OPENROUTER_API_KEY` in the project-root `.env`.
 Prepare an experiment without launching evaluations:
 
 ```sh
-uv run scripts/run_batch.py start \
+uv run scripts/run_batch.py action=start \
   experiments=complexity-sweep model=deepseek-v4-flash \
   parallel=10 target_trials=15 max_cost_per_trial_usd=10 \
-  --dry-run
+  dry_run=true
 ```
 
 Launch, inspect, or resume it:
 
 ```sh
-uv run scripts/run_batch.py resume outputs/experiments/complexity-sweep-v2
-uv run scripts/run_batch.py status outputs/experiments/complexity-sweep-v2
+uv run scripts/run_batch.py action=resume path=outputs/experiments/complexity-sweep-v2
+uv run scripts/run_batch.py action=status path=outputs/experiments/complexity-sweep-v2
 ```
 
 Increase the target or retry a failed trial:
 
 ```sh
-uv run scripts/run_batch.py resume outputs/experiments/complexity-sweep-v2 --target-trials 20 --parallel 10
-uv run scripts/run_batch.py retry outputs/experiments/complexity-sweep-v2 --trial TRIAL_ID
+uv run scripts/run_batch.py action=resume path=outputs/experiments/complexity-sweep-v2 target_trials=20 parallel=10
+uv run scripts/run_batch.py action=retry path=outputs/experiments/complexity-sweep-v2 trial=TRIAL_ID
 ```
+
+Batch actions are configured in `configs/action/`; shared experiment defaults
+are in `configs/batch.yaml`. Resume and retry load saved settings, with optional
+`parallel=...` and `target_trials=...` overrides. Model and experiment overrides
+are accepted only for new experiments. Use `--cfg job --resolve` to inspect an
+action’s configuration without changing files.
 
 On `start`, use `name=NEW_NAME` for a separate experiment. Select
 `experiments=archive/pilots` for the pilot instances or `model=kimi-k3` for Kimi.
@@ -170,7 +176,7 @@ Compile the paper with `python3 paper/compile.py`.
 Import a historical analysis into a new manifest:
 
 ```sh
-uv run scripts/run_batch.py import outputs/analysis/deepseek-complexity-combined-analysis.json --output outputs/experiments/imported-history
+uv run scripts/run_batch.py action=import path=outputs/analysis/deepseek-complexity-combined-analysis.json output=outputs/experiments/imported-history
 ```
 
 ## Download upstream source

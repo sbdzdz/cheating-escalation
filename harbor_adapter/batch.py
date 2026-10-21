@@ -268,10 +268,9 @@ def schedule(directory, manifest):
                         [
                             sys.executable,
                             str(ROOT / "scripts/run_batch.py"),
-                            "_worker",
-                            str(directory),
-                            "--trial",
-                            trial["id"],
+                            "action=_worker",
+                            "path=" + json.dumps(str(directory)),
+                            "trial=" + trial["id"],
                         ],
                         stdout=out,
                         stderr=subprocess.STDOUT,

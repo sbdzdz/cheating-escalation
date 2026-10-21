@@ -1,6 +1,6 @@
 # Subset sum
 
-Run `scripts/run_batch.py start experiments=subset-sum --dry-run`, then resume
+Run `scripts/run_batch.py action=start experiments=subset-sum dry_run=true`, then resume
 `outputs/experiments/subset-sum-sweep` to launch evaluations.
 
 Configure exact integer bit length, set size, seeds, and optional solution size

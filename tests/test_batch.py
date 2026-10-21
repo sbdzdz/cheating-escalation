@@ -132,7 +132,12 @@ class BatchTests(unittest.TestCase):
                     return 0
 
             def launch(command, **kwargs):
-                tid = command[-1]
+                from harbor_adapter.experiment_config import load_config
+
+                cfg = load_config("batch_cli", command[2:])
+                self.assertEqual(cfg["action"], "_worker")
+                self.assertEqual(Path(cfg["path"]), d)
+                tid = cfg["trial"]
                 launched.append(tid)
                 save(
                     d / "receipts" / f"{tid}.json",

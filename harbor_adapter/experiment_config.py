@@ -7,6 +7,7 @@ from typing import Any
 import hydra
 from hydra import compose, initialize_config_dir
 from hydra.core.config_store import ConfigStore
+from hydra.core.global_hydra import GlobalHydra
 from omegaconf import MISSING, OmegaConf
 
 CONFIGS = Path(__file__).resolve().parents[1] / "configs"
@@ -46,6 +47,33 @@ class TrialConfig(RuntimeConfig):
     output: str = MISSING
 
 
+@dataclass
+class BatchControllerConfig:
+    action: str = MISSING
+    path: str | None = None
+    output: str | None = None
+    trial: str | None = None
+    dry_run: bool = MISSING
+    parallel: int | None = None
+    target_trials: int | None = None
+
+
+@dataclass
+class BatchStartConfig(BatchControllerConfig):
+    profile: str = MISSING
+    model: dict[str, Any] = MISSING
+    name: str = MISSING
+    description: str | None = None
+    task: str = MISSING
+    conditions: list[str] = MISSING
+    instances: list[Any] = MISSING
+    seeds: list[int] | None = None
+    max_cost_per_trial_usd: str = MISSING
+    agent_timeout_sec: int = MISSING
+
+
+ConfigStore.instance().store(name="batch_controller_schema", node=BatchControllerConfig)
+ConfigStore.instance().store(name="batch_start_schema", node=BatchStartConfig)
 ConfigStore.instance().store(name="runtime_schema", node=RuntimeConfig)
 ConfigStore.instance().store(name="trial_schema", node=TrialConfig)
 
@@ -53,8 +81,11 @@ ConfigStore.instance().store(name="export_schema", node=ExportConfig)
 
 
 def load_config(name, overrides=()):
-    with initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)):
+    if GlobalHydra.instance().is_initialized():
         cfg = compose(config_name=name, overrides=list(overrides))
+    else:
+        with initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)):
+            cfg = compose(config_name=name, overrides=list(overrides))
     return OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
 
 
