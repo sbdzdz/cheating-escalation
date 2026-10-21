@@ -129,7 +129,10 @@ uv run scripts/build_runtime.py model=deepseek-v4-flash
 
 ## Tests
 
-Tests create their own task fixtures in temporary directories.
+Tests focus on experiment execution: task generation, grading, batch scheduling
+and recovery, budget enforcement, runtime setup, and saved evidence. They create
+their own task fixtures in temporary directories. Configuration plumbing, analysis,
+and plotting are outside the unit-test suite.
 
 ```sh
 uv run python -m unittest discover -s tests -v

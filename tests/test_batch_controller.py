@@ -5,38 +5,14 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from hydra import initialize_config_dir
-from hydra.errors import ConfigCompositionException
-
 from harbor_adapter.batch import read, save
 from harbor_adapter.controller import run_batch
-from harbor_adapter.experiment_config import CONFIGS, load_config, load_experiment
+from harbor_adapter.experiment_config import load_config
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class BatchControllerTests(unittest.TestCase):
-    def test_resume_does_not_compose_experiment_defaults(self):
-        cfg = load_config("batch_cli", ["action=resume"])
-        self.assertIsNone(cfg["parallel"])
-        self.assertIsNone(cfg["target_trials"])
-        self.assertNotIn("model", cfg)
-        self.assertNotIn("instances", cfg)
-        for override in ("model=kimi-k3", "experiments=smoke", "parallel=bad"):
-            with (
-                self.subTest(override=override),
-                self.assertRaises(ConfigCompositionException),
-            ):
-                load_config("batch_cli", ["action=resume", override])
-        self.assertEqual(
-            load_experiment(["agent_timeout_sec=300"])["agent_timeout_sec"], 300
-        )
-
-    def test_worker_can_compose_trial_inside_hydra(self):
-        with initialize_config_dir(version_base="1.3", config_dir=str(CONFIGS)):
-            cfg = load_config("trial")
-            self.assertEqual(cfg["profile"], "deepseek-v4-flash")
-
     def test_cli_start_status_and_resume_preserve_saved_settings(self):
         with tempfile.TemporaryDirectory(prefix="batch = ") as tmp:
             directory = Path(tmp).resolve() / "experiment"

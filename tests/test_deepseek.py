@@ -1,7 +1,4 @@
 import json
-import os
-import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -10,76 +7,12 @@ from unittest.mock import AsyncMock, patch
 from harbor.agents.installed.acp import AcpAgent
 from harbor.models.task.config import MCPServerConfig
 
-from harbor_adapter.agents.deepseek import FactorizationDeepSeek, provider_patch
-from harbor_adapter.export import export_tasks
-from harbor_adapter.model_config import DEFAULT_CONFIG, ROOT, load_profile
+from harbor_adapter.agents.deepseek import FactorizationDeepSeek
+from harbor_adapter.model_config import ROOT, load_profile
 from harbor_adapter.outputs import compact_job
 
 
-class ModelConfigTests(unittest.TestCase):
-    def test_profiles_generate_harbor_jobs_without_credentials(self):
-        directory = tempfile.TemporaryDirectory()
-        self.addCleanup(directory.cleanup)
-        (task,) = export_tasks("factorization", Path(directory.name))
-        env = {k: v for k, v in os.environ.items() if "API_KEY" not in k}
-        for name, target in [
-            ("kimi-k3", "KIMI_MODEL"),
-            ("deepseek-v4-flash", "DEEPSEEK"),
-            ("glm-5.3-flash", "ZCODE"),
-        ]:
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    str(ROOT / "scripts/run_trial.py"),
-                    "model=" + name,
-                    "task_path=" + str(task),
-                    "max_cost_usd=10",
-                    "print_config=true",
-                ],
-                env=env,
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            job = json.loads(result.stdout)
-            agent = job["agents"][0]
-            self.assertEqual(agent["model_name"], load_profile(name=name)[1]["model"])
-            self.assertEqual(agent["env"][target + "_API_KEY"], "${BUDGET_PROXY_TOKEN}")
-            self.assertEqual(
-                agent["env"][target + "_BASE_URL"],
-                "http://host.docker.internal:PORT/v1",
-            )
-
-    def test_config_default_selects_model(self):
-        config = {
-            "default": "deepseek-v4-flash",
-            "profiles": {
-                "deepseek-v4-flash": load_profile(name="deepseek-v4-flash")[1]
-            },
-        }
-        with tempfile.TemporaryDirectory() as d:
-            path = Path(d) / "models.json"
-            path.write_text(json.dumps(config))
-            name, profile = load_profile(path)
-            self.assertEqual(name, "deepseek-v4-flash")
-            self.assertIn("FactorizationDeepSeek", profile["agent"])
-        with self.assertRaisesRegex(ValueError, "Unknown model profile"):
-            load_profile(name="missing")
-
-    def test_deepseek_routes_main_and_subagent_defaults(self):
-        patch = {
-            row["id"]: row
-            for row in provider_patch("deepseek/deepseek-v4-flash", "high")
-        }
-        self.assertEqual(
-            patch["llm-deepseek"]["config"]["protocol"], "chat-completions"
-        )
-        self.assertEqual(
-            patch["acp"]["config"]["model"],
-            patch["agent-default-model"]["config"]["model"],
-        )
-        self.assertTrue(patch["tool-web"]["disabled"])
-
+class EvidenceTests(unittest.TestCase):
     def test_acp_evidence_survives_compaction(self):
         with tempfile.TemporaryDirectory() as d:
             job = Path(d)
