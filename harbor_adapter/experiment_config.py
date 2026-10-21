@@ -14,6 +14,12 @@ CONFIGS = Path(__file__).resolve().parents[1] / "configs"
 
 
 @dataclass
+class SummaryConfig:
+    manifest: str = MISSING
+    output: str = MISSING
+
+
+@dataclass
 class DigestConfig:
     experiment: str = MISSING
     output: str = MISSING
@@ -88,6 +94,7 @@ ConfigStore.instance().store(name="trial_schema", node=TrialConfig)
 
 ConfigStore.instance().store(name="export_schema", node=ExportConfig)
 ConfigStore.instance().store(name="digest_schema", node=DigestConfig)
+ConfigStore.instance().store(name="summary_schema", node=SummaryConfig)
 
 
 def load_config(name, overrides=()):

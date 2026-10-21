@@ -1,0 +1,15 @@
+defaults:
+  - summary_schema
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+
+manifest: outputs/experiments/complexity-sweep-historical/manifest.json
+output: outputs/analysis/deepseek-complexity-combined-analysis.json
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false

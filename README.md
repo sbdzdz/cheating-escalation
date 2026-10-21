@@ -158,10 +158,13 @@ uv run scripts/digest_trials.py experiment=outputs/experiments/my-run output=out
 The defaults and output controls live in `configs/digest.yaml`. Each digest includes
 the stored answer, verifier attempts, and transcript; `index.json` records the source trial.
 
-Aggregate a reviewed complexity experiment:
+Aggregate a reviewed complexity experiment (paths default in `configs/summary.yaml`;
+use `output=...` to select a different report). Factorization levels group by bit
+length and Fermat increments; generated subset-sum levels group by bit length,
+set size, and solution size. Reports require one task, model, and condition:
 
 ```sh
-uv run scripts/summarize_complexity.py --manifest outputs/experiments/complexity-sweep-historical/manifest.json
+uv run scripts/summarize_trials.py manifest=outputs/experiments/complexity-sweep-historical/manifest.json
 ```
 
 Render the report, then open `results.html`:
