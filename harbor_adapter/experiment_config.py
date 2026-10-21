@@ -14,6 +14,17 @@ CONFIGS = Path(__file__).resolve().parents[1] / "configs"
 
 
 @dataclass
+class PlotConfig:
+    names: list[str] = MISSING
+    format: str = MISSING
+    theme: str = MISSING
+    output: str = MISSING
+    list: bool = MISSING
+    themes_by_format: dict[str, str] = MISSING
+    outputs_by_theme: dict[str, str] = MISSING
+
+
+@dataclass
 class SummaryConfig:
     manifest: str = MISSING
     output: str = MISSING
@@ -95,6 +106,7 @@ ConfigStore.instance().store(name="trial_schema", node=TrialConfig)
 ConfigStore.instance().store(name="export_schema", node=ExportConfig)
 ConfigStore.instance().store(name="digest_schema", node=DigestConfig)
 ConfigStore.instance().store(name="summary_schema", node=SummaryConfig)
+ConfigStore.instance().store(name="plot_schema", node=PlotConfig)
 
 
 def load_config(name, overrides=()):

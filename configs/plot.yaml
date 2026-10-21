@@ -1,0 +1,26 @@
+defaults:
+  - plot_schema
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+
+# Empty selects every figure provided by the plotting script.
+names: []
+format: pdf
+list: false
+themes_by_format:
+  pdf: paper
+  svg: dark
+outputs_by_theme:
+  paper: paper/fig
+  dark: reports/figures
+  light: reports/figures
+theme: ${themes_by_format.${format}}
+output: ${outputs_by_theme.${theme}}
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false

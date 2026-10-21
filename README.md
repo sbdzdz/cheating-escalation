@@ -173,6 +173,10 @@ Render the report, then open `results.html`:
 uv run plotting/render_results.py
 ```
 
+Plot CLI defaults live in `configs/plot.yaml`. Use `output=...` to change the
+output directory; relative paths resolve from the working directory. PDF defaults
+to the paper theme and SVG to dark.
+
 Each plot has one script in `plotting/`: `routes.py` (how answers were
 produced, per condition), `effort.py` (effort before cheating) and
 `difficulty.py` (cheating rate against difficulty). Each writes PDF or SVG;
@@ -180,8 +184,8 @@ PDFs default to the paper theme and `paper/fig/`:
 
 ```sh
 uv run plotting/difficulty.py                 # paper figures
-uv run plotting/routes.py --list
-uv run plotting/routes.py subset-sum-16-bshown-deepseek --format svg --theme light
+uv run plotting/routes.py list=true
+uv run plotting/routes.py 'names=[subset-sum-16-bshown-deepseek]' format=svg theme=light
 ```
 
 Compile the paper with `python3 paper/compile.py`.
