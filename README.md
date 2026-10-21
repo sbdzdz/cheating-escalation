@@ -176,8 +176,9 @@ uv run plotting/render_results.py
 Plot CLI defaults live in `configs/plot.yaml`; palettes, fonts, and figure sizes
 live in `configs/plot_styles.yaml` (for example, `themes.paper.font=11`). Use `output=...` to change the
 output directory; relative output paths resolve from the working directory.
-Input datasets and optional difficulty-series replacements live in
-`configs/plot_data.yaml`. Relative input paths resolve from the repository root;
+Input dataset paths live in `configs/plot_data.yaml`. Factorization plotting
+datasets contain the final series, including the replacement 128-bit instance
+and the added 256-bit instance; original experiment reports remain separate. Relative input paths resolve from the repository root;
 absolute paths are supported. For example, override
 `data.subset_sum.deepseek=/tmp/my-analysis.json`. PDF defaults
 to the paper theme and SVG to dark.

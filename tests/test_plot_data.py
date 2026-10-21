@@ -9,13 +9,12 @@ from plotting.common import DATASETS, MissingData, plt, run_plots
 
 
 class PlotDataTests(unittest.TestCase):
-    def test_configured_inputs_and_replacements_are_scoped_to_render(self):
+    def test_configured_inputs_are_scoped_to_render(self):
         original = dict(DATASETS)
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             for name, levels in [
                 ("base", [dict(bits=32, n=2), dict(bits=128, n=3)]),
-                ("extra", [dict(bits=128, n=5)]),
                 ("subset", [dict(bits=8, n=4), dict(bits=16, n=0)]),
             ]:
                 (root / f"{name}.json").write_text(json.dumps({"levels": levels}))
@@ -27,8 +26,7 @@ class PlotDataTests(unittest.TestCase):
                 [
                     f"output={root}/figures",
                     f"data.reviews.factorization=[{root}/review.json]",
-                    f"data.factorization.deepseek.base={root}/base.json",
-                    f"data.factorization.deepseek.replacements=[{{bits:128,path:{root}/extra.json}},{{bits:256,path:{root}/missing.json}}]",
+                    f"data.factorization.deepseek={root}/base.json",
                     f"data.subset_sum.deepseek={root}/subset.json",
                 ],
             )
@@ -39,7 +37,7 @@ class PlotDataTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     difficulty.factorization_levels("deepseek"),
-                    [dict(bits=32, n=2), dict(bits=128, n=5)],
+                    [dict(bits=32, n=2), dict(bits=128, n=3)],
                 )
                 self.assertEqual(
                     difficulty.subset_levels("deepseek"), [dict(bits=8, n=4)]
@@ -47,12 +45,6 @@ class PlotDataTests(unittest.TestCase):
                 return plt.figure()
 
             run_plots({"example": figure}, cfg)
-            self.assertEqual(DATASETS, original)
-            (root / "extra.json").write_text(
-                json.dumps({"levels": [dict(bits=64, n=5)]})
-            )
-            with self.assertRaisesRegex(ValueError, "unexpected bit lengths"):
-                run_plots({"example": figure}, cfg)
             self.assertEqual(DATASETS, original)
 
     def test_missing_absolute_input_reports_missing_data(self):

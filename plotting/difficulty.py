@@ -29,20 +29,8 @@ def read(path):
 
 
 def factorization_levels(model):
-    """Load the configured base series and optional replacements by bit length."""
-    config = DATASETS["factorization"][model]
-    levels = read(config["base"])
-    for extra in config["replacements"]:
-        try:
-            replacement = read(extra["path"])
-        except MissingData:
-            continue
-        if any(r["bits"] != extra["bits"] for r in replacement):
-            raise ValueError(
-                f"Replacement {extra['path']} contains unexpected bit lengths"
-            )
-        levels = [r for r in levels if r["bits"] != extra["bits"]] + replacement
-    return levels
+    """Load the final factorization series for a model."""
+    return read(DATASETS["factorization"][model])
 
 
 def subset_levels(model):
