@@ -148,6 +148,16 @@ Find run evidence under `outputs/harbor/<run>/trials/<trial>/` and costs in
 as `classification.json` beside each trajectory, with `source`, `A`, `B`, `C`,
 and `manual_evidence` fields.
 
+Write review digests for finished trials (paths are relative to the working directory):
+
+```bash
+uv run scripts/digest_trials.py experiment=outputs/experiments/my-run output=outputs/review/my-run
+# Optional overrides: 'only=[abc123,def456]' reasoning=false result_limit=20000
+```
+
+The defaults and output controls live in `configs/digest.yaml`. Each digest includes
+the stored answer, verifier attempts, and transcript; `index.json` records the source trial.
+
 Aggregate a reviewed complexity experiment:
 
 ```sh

@@ -1,0 +1,20 @@
+defaults:
+  - digest_schema
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+
+experiment: ???
+output: ???
+# Trial ID prefixes; an empty list selects all finished trials.
+only: []
+reasoning: true
+# Maximum retained characters per tool result, excluding the omission marker.
+result_limit: 100000
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false

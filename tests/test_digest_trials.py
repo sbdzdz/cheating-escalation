@@ -179,3 +179,117 @@ class DigestTests(unittest.TestCase):
                 [label for label, _ in entries], ["SAY", "TOOL Read", "RESULT"]
             )
             self.assertEqual(entries[-1][1], "evidence")
+
+
+class DigestConfigTests(unittest.TestCase):
+    def test_cli_filters_finished_trials_and_applies_output_controls(self):
+        import subprocess
+        import sys
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            setting = root / "settings" / "setting1"
+            setting.mkdir(parents=True)
+            (setting / "setting.json").write_text(
+                json.dumps(
+                    {
+                        "task": "factorization",
+                        "condition": "baseline",
+                        "instance": {"p": 3, "q": 5},
+                    }
+                )
+            )
+            folder = root / "run" / "trials" / "trial1"
+            folder.mkdir(parents=True)
+            (folder / "trajectory.json").write_text(
+                json.dumps(
+                    {
+                        "steps": [
+                            {"message": "setup"},
+                            {
+                                "message": "visible",
+                                "tool_calls": [
+                                    {
+                                        "tool_call_id": "read1",
+                                        "function_name": "Read",
+                                        "arguments": {},
+                                    }
+                                ],
+                                "observation": {
+                                    "results": [
+                                        {
+                                            "source_call_id": "read1",
+                                            "content": "abcdefghij",
+                                        }
+                                    ]
+                                },
+                            },
+                        ]
+                    }
+                )
+            )
+            trials = [
+                dict(
+                    id=id_,
+                    status=status,
+                    setting="setting1",
+                    run_id="run",
+                    output=str(root / "run"),
+                )
+                for id_, status in [
+                    ("abc12345", "finished"),
+                    ("abc99999", "pending"),
+                    ("def12345", "finished"),
+                ]
+            ]
+            (root / "manifest.json").write_text(json.dumps({"trials": trials}))
+            output = root / "digests"
+            script = Path(__file__).resolve().parents[1] / "scripts/digest_trials.py"
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(script),
+                    f"experiment={root}",
+                    f"output={output}",
+                    "only=[abc]",
+                    "reasoning=false",
+                    "result_limit=3",
+                ],
+                cwd=root,
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            index = json.loads((output / "index.json").read_text())
+            self.assertEqual([entry["id"] for entry in index], ["abc12345"])
+            text = (output / "abc12345.md").read_text()
+            self.assertIn("Model reasoning omitted", text)
+            self.assertIn("abc\n[... 7 chars omitted ...]", text)
+            self.assertNotIn("abcdefghij", text)
+            self.assertFalse((root / ".hydra").exists())
+
+    def test_invalid_limit_fails_before_creating_output(self):
+        from harbor_adapter.digests import write_digests
+        from harbor_adapter.experiment_config import load_config
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "digests"
+            cfg = load_config(
+                "digest", ["experiment=missing", f"output={output}", "result_limit=0"]
+            )
+            with self.assertRaisesRegex(ValueError, "positive"):
+                write_digests(cfg)
+            self.assertFalse(output.exists())
+
+    def test_config_requires_paths_and_validates_types(self):
+        from hydra.errors import ConfigCompositionException
+        from omegaconf.errors import MissingMandatoryValue
+
+        from harbor_adapter.experiment_config import load_config
+
+        with self.assertRaises(MissingMandatoryValue):
+            load_config("digest")
+        with self.assertRaises(ConfigCompositionException):
+            load_config("digest", ["reasoning=maybe"])
+        with self.assertRaises(ConfigCompositionException):
+            load_config("digest", ["result_limit=abc"])

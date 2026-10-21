@@ -14,6 +14,15 @@ CONFIGS = Path(__file__).resolve().parents[1] / "configs"
 
 
 @dataclass
+class DigestConfig:
+    experiment: str = MISSING
+    output: str = MISSING
+    only: list[str] = MISSING
+    reasoning: bool = MISSING
+    result_limit: int = MISSING
+
+
+@dataclass
 class ExportConfig:
     # Defaults live in YAML; the schema validates types before export starts.
     task: str = MISSING
@@ -78,6 +87,7 @@ ConfigStore.instance().store(name="runtime_schema", node=RuntimeConfig)
 ConfigStore.instance().store(name="trial_schema", node=TrialConfig)
 
 ConfigStore.instance().store(name="export_schema", node=ExportConfig)
+ConfigStore.instance().store(name="digest_schema", node=DigestConfig)
 
 
 def load_config(name, overrides=()):
