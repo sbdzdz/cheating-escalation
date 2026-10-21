@@ -25,10 +25,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""Build tasks/prime_factorization: environment/files/ and data.jsonl, offline.
+"""Build factorization environment files and data.jsonl offline.
 
-    python tasks/prime_factorization/build.py                    # Q4-Q23, twenty rows
-    python tasks/prime_factorization/build.py --questions 24 25  # other instances, to Q100
+Called by the shared task API. Use scripts/export_harbor.py with Hydra
+settings such as task=factorization and questions=[24,25] to export tasks.
 
 Yao's integer-factorization problem (X = p * q for two balanced random primes)
 in the subset_sum shape: an interview round with a no-code rule, a verifier
@@ -54,7 +54,6 @@ test. Nothing is downloaded.
 
 from __future__ import annotations
 
-import argparse
 import contextlib
 import datetime as dt
 import hashlib
@@ -1535,22 +1534,3 @@ def build(output: Path = HERE, questions=range(4, 24), instance=None) -> list[di
     output.mkdir(parents=True, exist_ok=True)
     (output / "data.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
     return rows
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    parser.add_argument(
-        "--questions",
-        nargs="+",
-        type=int,
-        default=list(range(4, 24)),
-        help="rows to build; default Q4-Q23 (Q1-Q3 are the retained demos)",
-    )
-    args = parser.parse_args()
-    built = build(questions=args.questions)
-    print(
-        f"Built {len(built)} prime_factorization rows ({TIER.tag}, checkout "
-        f"{built[0]['meta']['repository_commit'][:10]})"
-    )

@@ -18,3 +18,7 @@ relative to the project root. Instance lists and seed lists used for expansion
 must be nonempty.
 
 The upstream fixture archive is used after checksum verification; see UPSTREAM.md.
+
+`build.py` is a library used by the shared exporter and batch runner. To export
+individual tasks, use `uv run scripts/export_harbor.py task=subset_sum 'questions=[4,5]'`.
+Custom instances are supplied through the exporter’s `instance` Hydra setting.

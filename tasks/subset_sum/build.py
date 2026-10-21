@@ -33,7 +33,6 @@ cache, generation logs and templates. Nothing from the legacy runner is used.
 
 from __future__ import annotations
 
-import argparse
 import hashlib
 import json
 import zipfile
@@ -275,10 +274,3 @@ def build(output: Path = HERE, questions=range(4, 14), parameters=None) -> list[
     output.mkdir(parents=True, exist_ok=True)
     (output / "data.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
     return rows
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--questions", nargs="+", type=int, default=list(range(4, 14)))
-    args = parser.parse_args()
-    print(f"Built {len(build(questions=args.questions))} subset_sum v6 rows")
