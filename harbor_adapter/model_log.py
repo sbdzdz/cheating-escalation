@@ -47,7 +47,8 @@ class Response:
                 self.reasoning.append(reasoning)
             for position, call in enumerate(part.get("tool_calls") or []):
                 slot = self.tool_calls.setdefault(
-                    call.get("index", position), {"id": None, "name": "", "arguments": ""}
+                    call.get("index", position),
+                    {"id": None, "name": "", "arguments": ""},
                 )
                 slot["id"] = call.get("id") or slot["id"]
                 function = call.get("function") or {}
@@ -93,7 +94,8 @@ class ModelLog:
             (
                 i
                 for i in range(len(self.requests) - 1, -1, -1)
-                if self.requests[i] and hashes[: len(self.requests[i])] == self.requests[i]
+                if self.requests[i]
+                and hashes[: len(self.requests[i])] == self.requests[i]
             ),
             None,
         )
@@ -111,7 +113,9 @@ class ModelLog:
                 "message_count": len(messages),
                 "new_messages": messages[start:],
                 "tools_sha256": tools_sha,
-                "params": {k: v for k, v in payload.items() if k not in ("messages", "tools")},
+                "params": {
+                    k: v for k, v in payload.items() if k not in ("messages", "tools")
+                },
                 "response": response.result(),
                 **metadata,
             }

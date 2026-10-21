@@ -113,37 +113,99 @@ class BudgetProxyTests(unittest.TestCase):
 
     def test_model_calls_logged_without_credentials(self):
         chunks = [
-            {"id": "gen-1", "model": "m", "choices": [{"index": 0, "delta": {"reasoning": "Think "}}]},
+            {
+                "id": "gen-1",
+                "model": "m",
+                "choices": [{"index": 0, "delta": {"reasoning": "Think "}}],
+            },
             {"id": "gen-1", "choices": [{"index": 0, "delta": {"reasoning": "more."}}]},
-            {"id": "gen-1", "choices": [{"index": 0, "delta": {"content": "Reading."}}]},
-            {"id": "gen-1", "choices": [{"index": 0, "delta": {"tool_calls": [
-                {"index": 0, "id": "call_1", "function": {"name": "read", "arguments": '{"path":'}}]}}]},
-            {"id": "gen-1", "choices": [{"index": 0, "delta": {"tool_calls": [
-                {"index": 0, "function": {"arguments": ' "a.txt"}'}}]}, "finish_reason": "tool_calls"}],
-             "usage": {"cost": 0.01, "completion_tokens": 9}},
+            {
+                "id": "gen-1",
+                "choices": [{"index": 0, "delta": {"content": "Reading."}}],
+            },
+            {
+                "id": "gen-1",
+                "choices": [
+                    {
+                        "index": 0,
+                        "delta": {
+                            "tool_calls": [
+                                {
+                                    "index": 0,
+                                    "id": "call_1",
+                                    "function": {
+                                        "name": "read",
+                                        "arguments": '{"path":',
+                                    },
+                                }
+                            ]
+                        },
+                    }
+                ],
+            },
+            {
+                "id": "gen-1",
+                "choices": [
+                    {
+                        "index": 0,
+                        "delta": {
+                            "tool_calls": [
+                                {"index": 0, "function": {"arguments": ' "a.txt"}'}}
+                            ]
+                        },
+                        "finish_reason": "tool_calls",
+                    }
+                ],
+                "usage": {"cost": 0.01, "completion_tokens": 9},
+            },
         ]
-        body = "".join(f"data: {json.dumps(c)}\n\n" for c in chunks) + "data: [DONE]\n\n"
+        body = (
+            "".join(f"data: {json.dumps(c)}\n\n" for c in chunks) + "data: [DONE]\n\n"
+        )
 
         def upstream(request):
-            return httpx.Response(200, headers={"content-type": "text/event-stream"}, content=body)
+            return httpx.Response(
+                200, headers={"content-type": "text/event-stream"}, content=body
+            )
 
         system = {"role": "system", "content": "sys"}
         user = {"role": "user", "content": "task"}
-        assistant = {"role": "assistant", "content": "Reading.", "tool_calls": [
-            {"id": "call_1", "type": "function", "function": {"name": "read", "arguments": '{"path": "a.txt"}'}}]}
+        assistant = {
+            "role": "assistant",
+            "content": "Reading.",
+            "tool_calls": [
+                {
+                    "id": "call_1",
+                    "type": "function",
+                    "function": {"name": "read", "arguments": '{"path": "a.txt"}'},
+                }
+            ],
+        }
         tool = {"role": "tool", "tool_call_id": "call_1", "content": "file text"}
         tools = [{"type": "function", "function": {"name": "read"}}]
         with tempfile.TemporaryDirectory() as directory:
             with BudgetProxy(
-                "real-key", "1", Path(directory) / "budget.json",
+                "real-key",
+                "1",
+                Path(directory) / "budget.json",
                 client=httpx.Client(transport=httpx.MockTransport(upstream)),
             ) as proxy:
-                for messages in ([system, user], [system, user, assistant, tool], [{"role": "user", "content": "title?"}]):
+                for messages in (
+                    [system, user],
+                    [system, user, assistant, tool],
+                    [{"role": "user", "content": "title?"}],
+                ):
                     httpx.post(
                         f"http://127.0.0.1:{proxy.server.server_port}/v1/chat/completions",
                         headers={"Authorization": f"Bearer {proxy.token}"},
-                        json={"model": "m", "stream": True, "messages": messages, "tools": tools},
-                        timeout=5, trust_env=False,
+                        json={
+                            "model": "m",
+                            "stream": True,
+                            "messages": messages,
+                            "tools": tools,
+                        },
+                        timeout=5,
+                        trust_env=False,
                     )
             text = (Path(directory) / "model-calls.jsonl").read_text()
             self.assertNotIn("real-key", text)
@@ -156,8 +218,12 @@ class BudgetProxyTests(unittest.TestCase):
             self.assertEqual(first["new_messages"], [system, user])
             self.assertEqual(first["response"]["reasoning"], "Think more.")
             self.assertEqual(first["response"]["content"], "Reading.")
-            self.assertEqual(first["response"]["tool_calls"],
-                             [{"id": "call_1", "name": "read", "arguments": '{"path": "a.txt"}'}])
+            self.assertEqual(
+                first["response"]["tool_calls"],
+                [{"id": "call_1", "name": "read", "arguments": '{"path": "a.txt"}'}],
+            )
             self.assertEqual(first["cost_usd"], "0.01")
-            self.assertEqual((second["parent"], second["new_messages"]), (0, [assistant, tool]))
+            self.assertEqual(
+                (second["parent"], second["new_messages"]), (0, [assistant, tool])
+            )
             self.assertEqual((side["parent"], side["message_count"]), (None, 1))

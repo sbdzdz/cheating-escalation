@@ -82,12 +82,22 @@ class SubsetTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             trees = {}
-            for name, params in (("original", None), ("custom", dict(bits=32, set_size=16, seed=7))):
+            for name, params in (
+                ("original", None),
+                ("custom", dict(bits=32, set_size=16, seed=7)),
+            ):
                 (row,) = build(root / name, [4], parameters=params)
-                task = export(row, root / (name + "-export"), source=root / name, task_kind="subset_sum")
+                task = export(
+                    row,
+                    root / (name + "-export"),
+                    source=root / name,
+                    task_kind="subset_sum",
+                )
                 fs = task / "environment/rootfs"
                 trees[name] = {
-                    p.relative_to(fs): p.read_bytes() for p in fs.rglob("*") if p.is_file()
+                    p.relative_to(fs): p.read_bytes()
+                    for p in fs.rglob("*")
+                    if p.is_file()
                 }
             for path, content in trees["original"].items():
                 try:
@@ -141,7 +151,9 @@ class SubsetConditionTests(unittest.TestCase):
                 task_kind="subset_sum",
                 agent_timeout_sec=300,
             )
-            self.assertIn("[agent]\ntimeout_sec = 300\n", (task / "task.toml").read_text())
+            self.assertIn(
+                "[agent]\ntimeout_sec = 300\n", (task / "task.toml").read_text()
+            )
             with self.assertRaises(ValueError):
                 export(
                     row,

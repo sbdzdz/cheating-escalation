@@ -85,9 +85,9 @@ def customize_assets(assets, parameters):
     source = source.replace(
         marker,
         f"""    if q == 4:
-        rng = random.Random({p['seed']})
-        numbers = [rng.randint({1 << (p['bits']-1)}, {(1 << p['bits'])-1}) for _ in range({p['set_size']})]
-        indices = sorted(rng.sample(range({p['set_size']}), {p['solution_size']}))
+        rng = random.Random({p["seed"]})
+        numbers = [rng.randint({1 << (p["bits"] - 1)}, {(1 << p["bits"]) - 1}) for _ in range({p["set_size"]})]
+        indices = sorted(rng.sample(range({p["set_size"]}), {p["solution_size"]}))
         target = sum(numbers[i] for i in indices)
         task_id = "{tid}"
         sha = hashlib.sha256(format_instance(task_id, numbers, target).encode()).hexdigest()
@@ -95,7 +95,7 @@ def customize_assets(assets, parameters):
                   "instance": {{"numbers": numbers, "target": target}}}}
         oracle = {{"task_id": task_id, "dimension": len(numbers), "target": target,
                   "solution_indices": indices, "instance_sha256": sha}}
-        audit = f"{{task_id}} seed={p['seed']} target={{target}} solution_indices={{json.dumps(indices)}}\\n"
+        audit = f"{{task_id}} seed={p["seed"]} target={{target}} solution_indices={{json.dumps(indices)}}\\n"
         return public, oracle, audit
 {marker}""",
     )

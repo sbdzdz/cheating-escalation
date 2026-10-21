@@ -7,7 +7,6 @@ from harbor.agents.installed.base import BaseInstalledAgent
 
 from harbor_adapter.runtime_image import runtime_spec
 
-
 READ_SUMMARY = """
 import json, sys
 summary, outcome = None, None
@@ -88,7 +87,9 @@ class ZCode(BaseInstalledAgent):
             "os.umask(0o077)\n"
             "path.write_text(json.dumps(config))\n"
         )
-        await self.exec_as_agent(environment, command="python3 -c " + shlex.quote(setup))
+        await self.exec_as_agent(
+            environment, command="python3 -c " + shlex.quote(setup)
+        )
         logs = str(self.environment_logs_dir)
         context.metadata = {"harness": "zcode", "source": runtime_spec("zcode")[2]}
         await self.exec_as_agent(
@@ -96,15 +97,20 @@ class ZCode(BaseInstalledAgent):
             command=(
                 "node /opt/zcode/zcode.cjs --mode yolo --locale en-US "
                 "--output-format stream-json --disallowed-tools WebSearch,WebFetch "
-                "--prompt " + shlex.quote(self.render_instruction(instruction))
-                + " > " + shlex.quote(logs + "/zcode-events.jsonl")
-                + " 2> " + shlex.quote(logs + "/zcode-stderr.log")
+                "--prompt "
+                + shlex.quote(self.render_instruction(instruction))
+                + " > "
+                + shlex.quote(logs + "/zcode-events.jsonl")
+                + " 2> "
+                + shlex.quote(logs + "/zcode-stderr.log")
             ),
         )
         result = await self.exec_as_agent(
             environment,
-            command="python3 -c " + shlex.quote(READ_SUMMARY)
-            + " " + shlex.quote(logs + "/zcode-events.jsonl"),
+            command="python3 -c "
+            + shlex.quote(READ_SUMMARY)
+            + " "
+            + shlex.quote(logs + "/zcode-events.jsonl"),
         )
         summary = json.loads(result.stdout)
         usage = summary["usage"]

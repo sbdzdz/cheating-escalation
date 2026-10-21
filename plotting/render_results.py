@@ -55,7 +55,11 @@ def main():
     def method_plot(batch, title):
         counts = routes.route_counts(rows, batch)
         heading = html.escape(f"{title} (n = {counts['n']})")
-        status = f'<p class="trial-status">{html.escape(counts["note"])}</p>' if counts["note"] else ""
+        status = (
+            f'<p class="trial-status">{html.escape(counts["note"])}</p>'
+            if counts["note"]
+            else ""
+        )
         return f"<section><h2>{heading}</h2>{status}{chart(routes, f'factorization-{batch}')}</section>"
 
     before = method_plot("kimi-baseline", "Kimi baseline")
@@ -65,9 +69,7 @@ def main():
     stricter_prompt = ""
     if any(r["batch"] == "deepseek-manual-only" for r in rows):
         stricter_prompt = (
-            "<section><pre>"
-            + html.escape(MANUAL_ONLY_RULE)
-            + "</pre></section>"
+            "<section><pre>" + html.escape(MANUAL_ONLY_RULE) + "</pre></section>"
         )
         stricter_prompt += method_plot(
             "deepseek-manual-only", "DeepSeek V4 Flash stricter prompt"
@@ -152,9 +154,9 @@ def main():
         for step_id, excerpt, highlight in excerpts:
             message = steps[step_id]["message"]
             excerpt = message.strip() if excerpt is None else excerpt
-            assert (
-                excerpt in message
-            ), f"Quote does not match trial {index}, step {step_id}"
+            assert excerpt in message, (
+                f"Quote does not match trial {index}, step {step_id}"
+            )
             block = html.escape(excerpt)
             if highlight:
                 block = f'<span class="computation-quote">{block}</span>'
@@ -259,7 +261,9 @@ def main():
     joint = comparisons("joint")
     comparison_html += subgroup(
         "Joint",
-        joint and '<p class="intro">Prime factorization and subset sum trials pooled per condition.</p>' + joint,
+        joint
+        and '<p class="intro">Prime factorization and subset sum trials pooled per condition.</p>'
+        + joint,
     )
     sections += (
         '<details class="result-group comparison"><summary class="group-heading">Condition comparison</summary>'
@@ -273,18 +277,29 @@ def main():
         if (figure := figure_or_none(routes, f"subset-sum-16-{model}"))
     }
     if small:
+
         def record_excerpt(experiment, condition, label, short=False, added=None):
             # Quote the lookup record exactly as the agents received it.
             specs = (
                 json.loads(path.read_text())
-                for path in (ROOT / "outputs/experiments" / experiment).glob("settings/*/setting.json")
+                for path in (ROOT / "outputs/experiments" / experiment).glob(
+                    "settings/*/setting.json"
+                )
             )
             spec = next(s for s in specs if s["condition"] == condition)
             if short:
                 # Only the lookup and the penalty, joined by ellipses.
-                record = " ".join(spec["instruction"].split("## Retained evaluation record")[1].split())
-                action = re.search(r"Previous agent action: (.*?exact match\.)", record)[1]
-                finding = re.search(r"(Reviewer finding:.*?credited score was 0\.)", record)
+                record = " ".join(
+                    spec["instruction"]
+                    .split("## Retained evaluation record")[1]
+                    .split()
+                )
+                action = re.search(
+                    r"Previous agent action: (.*?exact match\.)", record
+                )[1]
+                finding = re.search(
+                    r"(Reviewer finding:.*?credited score was 0\.)", record
+                )
                 # The path is the only difference between the two versions.
                 quote = html.escape(action).replace(
                     " under /home/runner/work/_temp/generation/",
@@ -310,21 +325,33 @@ def main():
                     text = f'<span class="diff-quote">{text}</span>'
                 quoted.append(text)
             # The task's no-code rule, as in the baseline excerpt, then the record.
-            rule = next(l for l in spec["instruction"].splitlines() if "computing with code is not allowed" in l)
+            rule = next(
+                l
+                for l in spec["instruction"].splitlines()
+                if "computing with code is not allowed" in l
+            )
             return (
                 f'<p class="record-label">{label}</p><blockquote class="record-excerpt">'
-                + html.escape(rule) + "\n\n"
-                + "\n\n".join(quoted) + "</blockquote>"
+                + html.escape(rule)
+                + "\n\n"
+                + "\n\n".join(quoted)
+                + "</blockquote>"
             )
 
         def task_excerpt(experiment, label):
             # The task's rule, shared by every condition; the baseline adds no record.
             spec = next(
                 json.loads(path.read_text())
-                for path in (ROOT / "outputs/experiments" / experiment).glob("settings/*/setting.json")
+                for path in (ROOT / "outputs/experiments" / experiment).glob(
+                    "settings/*/setting.json"
+                )
                 if json.loads(path.read_text())["condition"] == "baseline"
             )
-            rule = next(l for l in spec["instruction"].splitlines() if "computing with code is not allowed" in l)
+            rule = next(
+                l
+                for l in spec["instruction"].splitlines()
+                if "computing with code is not allowed" in l
+            )
             return (
                 f'<p class="record-label">{label}</p><blockquote class="record-excerpt">{html.escape(rule)}'
                 '\n\n<span class="record-note">No retained record follows.</span></blockquote>'
@@ -333,7 +360,12 @@ def main():
         nopath = figure_or_none(routes, "subset-sum-16-nopath-deepseek")
         # Both record versions sit together above the charts they label.
         path_excerpts = "".join(
-            record_excerpt(f"{model}-subset-sum-16-conditions", "b-caught", "With the log path", short=True)
+            record_excerpt(
+                f"{model}-subset-sum-16-conditions",
+                "b-caught",
+                "With the log path",
+                short=True,
+            )
             for model in small
         )
         path_charts = "".join(
@@ -342,21 +374,42 @@ def main():
         )
         if nopath:
             path_excerpts += record_excerpt(
-                "deepseek-subset-sum-16-nopath", "b-caught", "Without the log path", short=True
+                "deepseek-subset-sum-16-nopath",
+                "b-caught",
+                "Without the log path",
+                short=True,
             )
             path_charts += comparison("Without the log path", nopath)
         path_html = path_excerpts + path_charts
         shown_html = ""
-        shown = figure_or_none(routes, "subset-sum-16-bshown-deepseek") if nopath else None
+        shown = (
+            figure_or_none(routes, "subset-sum-16-bshown-deepseek") if nopath else None
+        )
         if shown:
             # Control: the lookup record without the penalty, beside both ends.
             shown_html = comparison(
                 "DeepSeek V4 Flash, answer lookup shown without a penalty",
                 shown,
                 '<div class="excerpt-grid">'
-                + "<div>" + task_excerpt("deepseek-subset-sum-16-conditions", "Baseline") + "</div>"
-                + "<div>" + record_excerpt("deepseek-subset-sum-16-bshown", "b-shown", "Answer lookup shown", added="Previous agent action") + "</div>"
-                + "<div>" + record_excerpt("deepseek-subset-sum-16-nopath", "b-caught", "Answer lookup penalised", added="Reviewer finding") + "</div>"
+                + "<div>"
+                + task_excerpt("deepseek-subset-sum-16-conditions", "Baseline")
+                + "</div>"
+                + "<div>"
+                + record_excerpt(
+                    "deepseek-subset-sum-16-bshown",
+                    "b-shown",
+                    "Answer lookup shown",
+                    added="Previous agent action",
+                )
+                + "</div>"
+                + "<div>"
+                + record_excerpt(
+                    "deepseek-subset-sum-16-nopath",
+                    "b-caught",
+                    "Answer lookup penalised",
+                    added="Reviewer finding",
+                )
+                + "</div>"
                 + "</div>",
             )
         small_html = subgroup("Hiding the log path", path_html) + subgroup(
@@ -394,7 +447,7 @@ def main():
 
     difficulty_html = (
         '<details class="result-group difficulty"><summary class="group-heading">Task difficulty</summary>'
-        '<section><h2>Prime factorization</h2>'
+        "<section><h2>Prime factorization</h2>"
         '<div class="base-equation"><p class="base-label">Base case</p>'
         '<div class="equation-layout">'
         '<div class="equation-term bits-axis"><span class="equation-value">2,888,966,521,498,049</span>'
@@ -434,7 +487,7 @@ def main():
     if subset:
         from tasks.subset_sum.instances import generate
 
-        difficulty_html += '<section><h2>Subset sum</h2>'
+        difficulty_html += "<section><h2>Subset sum</h2>"
         tables = []
         for key, title, fixed, css in (
             ("bits", "Integer bit length", {"set_size": 64}, "bits-axis"),
@@ -445,18 +498,20 @@ def main():
                 key=lambda r: r[key],
             )
             table_rows = "".join(
-                f'<tr><td>{r["bits"]}</td><td>{r["set_size"]}</td><td>{table_number(generate(dict(bits=r["bits"], set_size=r["set_size"], seed=0))[2], r["bits"])}</td></tr>'
+                f"<tr><td>{r['bits']}</td><td>{r['set_size']}</td><td>{table_number(generate(dict(bits=r['bits'], set_size=r['set_size'], seed=0))[2], r['bits'])}</td></tr>"
                 for r in selected
             )
             tables.append(
                 f'<div class="difficulty-table {css}"><h3>{title}</h3>'
                 '<table><thead><tr><th>Bits</th><th>Integers</th><th title="Target sum for seed 0">Number</th></tr></thead>'
-                f'<tbody>{table_rows}</tbody></table></div>'
+                f"<tbody>{table_rows}</tbody></table></div>"
             )
         difficulty_html += (
-            '<div class="difficulty-grid">' + "".join(tables)
-            + '</div><div class="difficulty-rates">' + chart(difficulty, "subset-sum-difficulty")
-            + '</div></section>'
+            '<div class="difficulty-grid">'
+            + "".join(tables)
+            + '</div><div class="difficulty-rates">'
+            + chart(difficulty, "subset-sum-difficulty")
+            + "</div></section>"
         )
 
     difficulty_html += "</details>"

@@ -56,7 +56,13 @@ class OutputTests(unittest.TestCase):
     def test_standard_call_log_replaces_harness_transcripts(self):
         with tempfile.TemporaryDirectory() as directory:
             job = Path(directory)
-            call = {"type": "call", "index": 0, "parent": None, "new_messages": [], "response": {}}
+            call = {
+                "type": "call",
+                "index": 0,
+                "parent": None,
+                "new_messages": [],
+                "response": {},
+            }
             files = {
                 "model-calls.jsonl": json.dumps(call) + "\n",
                 "debug/trial/result.json": "{}",
@@ -70,10 +76,14 @@ class OutputTests(unittest.TestCase):
                 path.write_text(content)
             compact_job(job)
             trial = job / "trials/trial"
-            self.assertEqual(sorted(p.name for p in trial.iterdir()),
-                             ["result.json", "transcript.json", "verifier.json"])
+            self.assertEqual(
+                sorted(p.name for p in trial.iterdir()),
+                ["result.json", "transcript.json", "verifier.json"],
+            )
             transcript = json.loads((trial / "transcript.json").read_text())
-            self.assertEqual((transcript["format"], transcript["calls"]), ("model-calls-v1", [call]))
+            self.assertEqual(
+                (transcript["format"], transcript["calls"]), ("model-calls-v1", [call])
+            )
             self.assertFalse((job / "model-calls.jsonl").exists())
             with ZipFile(job / ".debug/debug.zip") as archive:
                 self.assertIn("debug/model-calls.jsonl", archive.namelist())

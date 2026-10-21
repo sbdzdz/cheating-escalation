@@ -148,7 +148,7 @@ def build(output: Path = HERE, questions=range(4, 14), parameters=None) -> list[
     for source, dest in mappings.items():
         for name, content in sorted(assets.items()):
             if name.startswith(source):
-                target = f"{dest}/{name[len(source):]}"
+                target = f"{dest}/{name[len(source) :]}"
                 common[target] = write(f"common{target}", content)
     for entry in manifest["prior_runs"].values():
         source = (
@@ -242,7 +242,9 @@ def build(output: Path = HERE, questions=range(4, 14), parameters=None) -> list[
             staged[dest] = write(f"rows/{tid}{dest}", content)
         name = tid + (
             "__"
-            + hashlib.sha256(json.dumps(parameters, sort_keys=True).encode()).hexdigest()[:12]
+            + hashlib.sha256(
+                json.dumps(parameters, sort_keys=True).encode()
+            ).hexdigest()[:12]
             if parameters
             else ""
         )
