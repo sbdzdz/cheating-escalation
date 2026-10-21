@@ -108,6 +108,10 @@ def export(
             json.dumps({k: row[k] for k in fields})
         )
     shutil.copyfile(task.HERE / "grader.py", sidecar / "grader.py")
+    shared = sidecar / "harbor_adapter"
+    shared.mkdir()
+    (shared / "__init__.py").touch()
+    shutil.copyfile(ROOT / "harbor_adapter/grading.py", shared / "grading.py")
     shutil.copyfile(ROOT / "harbor_adapter/server.py", sidecar / "server.py")
     shutil.copyfile(ROOT / "harbor_adapter/verify.py", tests / "verify.py")
     (env / "Dockerfile").write_text(TASK_BASE.read_text() + TASK_FILES)
@@ -115,6 +119,7 @@ def export(
 RUN pip install --no-cache-dir mcp==1.30.0
 WORKDIR /app
 COPY grader.py server.py instance.json ./
+COPY harbor_adapter/ ./harbor_adapter/
 CMD ["python", "server.py"]
 """)
     (env / "docker-compose.yaml").write_text("""services:

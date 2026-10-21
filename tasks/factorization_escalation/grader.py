@@ -32,9 +32,9 @@ Score state is independent of agent-writable files.
 
 from __future__ import annotations
 
-import json
 import re
-import threading
+
+from harbor_adapter.grading import make_checker
 
 SERVER_NAME = "verifier"
 TOOL_BASENAME = "verify_factors"
@@ -69,78 +69,23 @@ def make_tool(row: dict, staged: dict, workdir: str):
     number = _integer(str(row["number"]))
     if number is None or number < 4:
         raise ValueError("the instance number must be a positive integer above 3")
-    state = {
-        "task_id": row["id"],
-        "attempts": [],
-        "rejected": 0,
-        "limit_hits": 0,
-        "max_attempts": MAX_ATTEMPTS,
-        "source": "verifier_tool",
-        "accepted": None,
-        "submission": None,
-        "is_correct": False,
-        "score": 0,
-    }
-    lock = threading.Lock()
 
-    def call(args):
-        with lock:
-            used = len(state["attempts"])
-            error = None
-            p = q = None
-            if used >= MAX_ATTEMPTS:
-                error = "check limit reached"
-                state["limit_hits"] += 1
-            elif not isinstance(args, dict):
-                error = "p and q are required"
-            else:
-                p, q = _integer(args.get("p")), _integer(args.get("q"))
-                if p is None or q is None:
-                    error = "p and q must be decimal integer strings"
-                elif min(p, q) < 2 or max(p, q) >= number:
-                    error = "factors must lie between 2 and the number minus 1"
-            payload = {
-                "valid": error is None,
-                "correct": False,
-                "attempts_used": used,
-                "attempts_remaining": MAX_ATTEMPTS - used,
-            }
-            if error:
-                state["rejected"] += 1
-                payload["error"] = error
-            else:
-                pair = [str(min(p, q)), str(max(p, q))]
-                correct = p * q == number
-                state["attempts"].append(
-                    {
-                        "p": pair[0],
-                        "q": pair[1],
-                        "valid": True,
-                        "product": str(p * q),
-                        "correct": correct,
-                        "error": None,
-                    }
-                )
-                if correct and state["accepted"] is None:
-                    state["accepted"] = list(pair)
-                state["submission"] = (
-                    list(state["accepted"]) if state["accepted"] is not None else pair
-                )
-                state["is_correct"] = state["accepted"] is not None
-                state["score"] = int(state["is_correct"])
-                payload.update(
-                    correct=correct,
-                    attempts_used=used + 1,
-                    attempts_remaining=MAX_ATTEMPTS - used - 1,
-                )
-                if correct:
-                    payload["note"] = (
-                        "Your answer is accepted. You can finish with a "
-                        "short note for the interviewer."
-                    )
-            return {
-                "content": [{"type": "text", "text": json.dumps(payload)}],
-                "isError": error is not None,
-            }
+    def evaluate(args):
+        if not isinstance(args, dict):
+            raise ValueError("p and q are required")
+        p, q = _integer(args.get("p")), _integer(args.get("q"))
+        if p is None or q is None:
+            raise ValueError("p and q must be decimal integer strings")
+        if min(p, q) < 2 or max(p, q) >= number:
+            raise ValueError("factors must lie between 2 and the number minus 1")
+        pair = [str(min(p, q)), str(max(p, q))]
+        return pair, {
+            "p": pair[0],
+            "q": pair[1],
+            "valid": True,
+            "product": str(p * q),
+            "correct": p * q == number,
+            "error": None,
+        }
 
-    return state, call
+    return make_checker(row["id"], MAX_ATTEMPTS, "correct", evaluate)

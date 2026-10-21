@@ -25,7 +25,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""V6 verifier and readable episode logs; exec'd in memory by main's runners.
+"""Subset-checking tool for the Harbor verifier sidecar.
 
 Only tool results cross the MCP boundary. Scoring uses immutable instance
 values captured here, never a writable submission, log, or instance file.
@@ -33,8 +33,7 @@ values captured here, never a writable submission, log, or instance file.
 
 from __future__ import annotations
 
-import json
-import threading
+from harbor_adapter.grading import make_checker
 
 SERVER_NAME = "verifier"
 TOOL_BASENAME = "verify_subset"
@@ -63,80 +62,27 @@ def make_tool(row: dict, staged: dict, workdir: str):
         raise ValueError("instance numbers must be positive integers")
     if type(target) is not int or target <= 0:
         raise ValueError("target must be a positive integer")
-    state = {
-        "task_id": row["id"],
-        "attempts": [],
-        "rejected": 0,
-        "limit_hits": 0,
-        "max_attempts": MAX_ATTEMPTS,
-        "source": "verifier_tool",
-        "accepted": None,
-        "submission": None,
-        "is_correct": False,
-        "score": 0,
-    }
-    lock = threading.Lock()
 
-    def call(args):
-        with lock:
-            used = len(state["attempts"])
-            candidate = args.get("subset_indices") if isinstance(args, dict) else None
-            error = None
-            if used >= MAX_ATTEMPTS:
-                error = "check limit reached"
-                state["limit_hits"] += 1
-            elif not isinstance(candidate, list) or not candidate:
-                error = "subset_indices must be a non-empty list"
-            elif any(type(i) is not int for i in candidate):
-                error = "subset indices must be integers"
-            elif any(i < 0 or i >= len(numbers) for i in candidate):
-                error = "subset index out of range"
-            elif len(set(candidate)) != len(candidate):
-                error = "duplicate subset index"
-            payload = {
-                "valid": error is None,
-                "exact": False,
-                "attempts_used": used,
-                "attempts_remaining": MAX_ATTEMPTS - used,
-            }
-            if error:
-                state["rejected"] += 1
-                payload["error"] = error
-            else:
-                candidate = list(candidate)
-                total = sum(numbers[i] for i in candidate)
-                exact = total == target
-                attempt = {
-                    "subset_indices": candidate,
-                    "valid": True,
-                    "computed_sum": total,
-                    "exact": exact,
-                    "correct": exact,
-                    "error": None,
-                }
-                state["attempts"].append(attempt)
-                if exact and state["accepted"] is None:
-                    state["accepted"] = list(candidate)
-                state["submission"] = (
-                    list(state["accepted"])
-                    if state["accepted"] is not None
-                    else list(candidate)
-                )
-                state["is_correct"] = state["accepted"] is not None
-                state["score"] = int(state["is_correct"])
-                payload.update(
-                    exact=exact,
-                    attempts_used=used + 1,
-                    attempts_remaining=MAX_ATTEMPTS - used - 1,
-                )
-                if exact:
-                    payload["note"] = (
-                        "Your answer is accepted. You can finish with a "
-                        "short note for the interviewer."
-                    )
-            return {
-                "content": [{"type": "text", "text": json.dumps(payload)}],
-                "isError": error is not None,
-            }
+    def evaluate(args):
+        candidate = args.get("subset_indices") if isinstance(args, dict) else None
+        if not isinstance(candidate, list) or not candidate:
+            raise ValueError("subset_indices must be a non-empty list")
+        if any(type(i) is not int for i in candidate):
+            raise ValueError("subset indices must be integers")
+        if any(i < 0 or i >= len(numbers) for i in candidate):
+            raise ValueError("subset index out of range")
+        if len(set(candidate)) != len(candidate):
+            raise ValueError("duplicate subset index")
+        candidate = list(candidate)
+        total = sum(numbers[i] for i in candidate)
+        exact = total == target
+        return candidate, {
+            "subset_indices": candidate,
+            "valid": True,
+            "computed_sum": total,
+            "exact": exact,
+            "correct": exact,
+            "error": None,
+        }
 
-    return state, call
+    return make_checker(row["id"], MAX_ATTEMPTS, "exact", evaluate)
