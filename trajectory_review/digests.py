@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from harbor_adapter.transcripts import entries_for_trial
+from environment.transcripts import entries_for_trial
 
 ROOT = Path(__file__).resolve().parents[1]
 

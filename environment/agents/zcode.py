@@ -5,7 +5,7 @@ import shlex
 
 from harbor.agents.installed.base import BaseInstalledAgent
 
-from harbor_adapter.runtime_image import runtime_spec
+from environment.runtime_image import runtime_spec
 
 READ_SUMMARY = """
 import json, sys

@@ -33,7 +33,7 @@ values captured here, never a writable submission, log, or instance file.
 
 from __future__ import annotations
 
-from harbor_adapter.grading import make_checker
+from environment.grading import make_checker
 
 SERVER_NAME = "verifier"
 TOOL_BASENAME = "verify_subset"

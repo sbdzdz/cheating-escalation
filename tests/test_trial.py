@@ -3,10 +3,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from harbor_adapter.batch import read, save, worker
-from harbor_adapter.experiment_config import load_config
-from harbor_adapter.model_config import load_profile, resolve_profile
-from harbor_adapter.trial import run_trial
+from environment.batch import read, save, worker
+from environment.experiment_config import load_config
+from environment.model_config import load_profile, resolve_profile
+from environment.trial import run_trial
 
 
 class TrialTests(unittest.TestCase):
@@ -14,7 +14,7 @@ class TrialTests(unittest.TestCase):
         for value in ("0", "-1", "NaN", "Infinity"):
             with (
                 self.subTest(value=value),
-                patch("harbor_adapter.trial.subprocess.run") as run,
+                patch("environment.trial.subprocess.run") as run,
             ):
                 cfg = load_config("trial", ["max_cost_usd=" + value])
                 with self.assertRaisesRegex(ValueError, "finite and positive"):
@@ -48,9 +48,9 @@ class TrialTests(unittest.TestCase):
             save(job / "trials/t/result.json", {"exception_info": None})
             save(job / "budget.json", {"spent_usd": "0.1", "status": "available"})
             with (
-                patch("harbor_adapter.batch.ROOT", root),
-                patch("harbor_adapter.batch.check_settings"),
-                patch("harbor_adapter.trial.run_trial", return_value=0) as run,
+                patch("environment.batch.ROOT", root),
+                patch("environment.batch.check_settings"),
+                patch("environment.trial.run_trial", return_value=0) as run,
             ):
                 worker(directory, "trial")
             cfg = run.call_args.args[0]

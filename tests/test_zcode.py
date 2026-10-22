@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock
 
 from harbor.models.task.config import MCPServerConfig
 
-from harbor_adapter.agents.zcode import READ_SUMMARY, ZCode, zcode_config
-from harbor_adapter.outputs import compact_job
+from environment.agents.zcode import READ_SUMMARY, ZCode, zcode_config
+from environment.outputs import compact_job
 
 
 class ZCodeTests(unittest.TestCase):

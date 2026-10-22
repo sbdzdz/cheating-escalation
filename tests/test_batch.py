@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from harbor_adapter.batch import (
+from environment.batch import (
     add_slots,
     check_settings,
     digest,
@@ -29,7 +29,7 @@ class BatchTests(unittest.TestCase):
             task.mkdir(parents=True)
             (task / "task.toml").write_text('schema_version = "1.3"\n')
             profile = {"runtime": "zcode"}
-            with patch("harbor_adapter.batch.ROOT", root):
+            with patch("environment.batch.ROOT", root):
                 spec = {
                     "implementation": implementation(),
                     "task_files": files_hash(task.rglob("*"), task),
@@ -81,7 +81,7 @@ class BatchTests(unittest.TestCase):
                 {"status": "finished", "outcome": "budget_exhausted"},
             )
             m = {"trials": [dict(id=i, status="running", pid=123) for i in ("a", "b")]}
-            with patch("harbor_adapter.batch.alive", return_value=False):
+            with patch("environment.batch.alive", return_value=False):
                 reconcile(d, m)
             self.assertEqual(
                 [t["status"] for t in m["trials"]], ["finished", "interrupted"]
@@ -117,7 +117,7 @@ class BatchTests(unittest.TestCase):
             self.assertEqual(len(m["trials"]), 1)
 
     def test_scheduler_limits_concurrency_and_resumes_without_duplicates(self):
-        from harbor_adapter.batch import schedule
+        from environment.batch import schedule
 
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp)
@@ -132,7 +132,7 @@ class BatchTests(unittest.TestCase):
                     return 0
 
             def launch(command, **kwargs):
-                from harbor_adapter.experiment_config import load_config
+                from environment.experiment_config import load_config
 
                 cfg = load_config("batch_cli", command[2:])
                 self.assertEqual(cfg["action"], "_worker")
@@ -151,9 +151,9 @@ class BatchTests(unittest.TestCase):
                 rounds.append(len(launched))
 
             with (
-                patch("harbor_adapter.batch.check_settings"),
-                patch("harbor_adapter.batch.subprocess.Popen", side_effect=launch),
-                patch("harbor_adapter.batch.time.sleep", side_effect=tick),
+                patch("environment.batch.check_settings"),
+                patch("environment.batch.subprocess.Popen", side_effect=launch),
+                patch("environment.batch.time.sleep", side_effect=tick),
             ):
                 schedule(d, m)
                 schedule(d, m)

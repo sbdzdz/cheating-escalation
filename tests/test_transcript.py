@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from harbor_adapter.agents.transcript import export_transcript
+from environment.agents.transcript import export_transcript
 
 
 class TranscriptTests(unittest.TestCase):

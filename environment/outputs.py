@@ -5,7 +5,7 @@ import shutil
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
-from harbor_adapter import model_log
+from environment import model_log
 
 
 def compact_job(job: Path, *, keep_debug: bool = False) -> None:

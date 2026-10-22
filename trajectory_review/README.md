@@ -14,7 +14,7 @@ classification summaries. It does not run an automatic judge during experiments.
 
 Hydra settings remain centralized in `configs/digest.yaml` and
 `configs/summary.yaml`. Transcript decoding stays in
-`harbor_adapter/transcripts.py`, shared with experiment evidence handling.
+`environment/transcripts.py`, shared with experiment evidence handling.
 Task builders, graders, and experiment condition prompts remain with the runtime.
 
 ## Prepare and record a review

@@ -7,10 +7,10 @@ from unittest.mock import AsyncMock, patch
 
 from harbor.agents.installed.acp import AcpAgent
 
-from harbor_adapter.agents.deepseek import DeepSeekAgent
-from harbor_adapter.export import export_tasks
-from harbor_adapter.model_config import load_profile
-from harbor_adapter.runtime_image import prepare_task, runtime_spec
+from environment.agents.deepseek import DeepSeekAgent
+from environment.export import export_tasks
+from environment.model_config import load_profile
+from environment.runtime_image import prepare_task, runtime_spec
 
 
 class RuntimeImageTests(unittest.TestCase):

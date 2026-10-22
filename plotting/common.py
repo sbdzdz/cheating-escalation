@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 
 FORMATS = ("pdf", "svg")
 # Keep direct figure rendering and the CLI on the same YAML defaults.
-from harbor_adapter.experiment_config import load_config
+from environment.experiment_config import load_config
 
 THEMES = load_config("plot_styles")
 DATASETS = load_config("plot_data")
@@ -153,6 +153,6 @@ def run_plots(figures, config):
 
 
 def main(figures, description):
-    from harbor_adapter.experiment_config import cli
+    from environment.experiment_config import cli
 
     cli("plot", lambda config: run_plots(figures, config))

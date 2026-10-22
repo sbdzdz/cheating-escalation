@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from harbor_adapter.tasks import get_task, resolve_task
+from environment.tasks import get_task, resolve_task
 from scripts.export_harbor import export
 
 ROOT = Path(__file__).resolve().parents[1]

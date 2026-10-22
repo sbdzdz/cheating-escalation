@@ -1,7 +1,7 @@
 # @package _global_
 profile: glm-5.3-flash
 model:
-  agent: harbor_adapter.agents.zcode:ZCode
+  agent: environment.agents.zcode:ZCode
   model: z-ai/glm-5.3-flash
   kwargs: {}
   api_key_env: OPENROUTER_API_KEY

@@ -5,9 +5,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from harbor_adapter.batch import read, save
-from harbor_adapter.controller import run_batch
-from harbor_adapter.experiment_config import load_config
+from environment.batch import read, save
+from environment.controller import run_batch
+from environment.experiment_config import load_config
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -82,8 +82,8 @@ class BatchControllerTests(unittest.TestCase):
                 ],
             )
             with (
-                patch("harbor_adapter.controller.check_settings"),
-                patch("harbor_adapter.controller.schedule") as schedule,
+                patch("environment.controller.check_settings"),
+                patch("environment.controller.schedule") as schedule,
             ):
                 run_batch(cfg)
                 schedule.assert_not_called()

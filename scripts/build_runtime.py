@@ -4,9 +4,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from harbor_adapter.experiment_config import cli
-from harbor_adapter.model_config import resolve_profile
-from harbor_adapter.runtime_image import ensure_runtime
+from environment.experiment_config import cli
+from environment.model_config import resolve_profile
+from environment.runtime_image import ensure_runtime
 
 
 def main(config):

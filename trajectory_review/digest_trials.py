@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT))
 
 from trajectory_review.digests import digest as digest
 from trajectory_review.digests import write_digests
-from harbor_adapter.experiment_config import cli
+from environment.experiment_config import cli
 
 if __name__ == "__main__":
     cli("digest", write_digests)

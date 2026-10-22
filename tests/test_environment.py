@@ -10,8 +10,8 @@ sys.path.insert(0, str(ROOT / "tasks/factorization_escalation"))
 sys.path.insert(0, str(ROOT))
 from harbor.models.task.task import Task
 
-from harbor_adapter.server import create_server
-from harbor_adapter.verify import score
+from environment.server import create_server
+from environment.verify import score
 from scripts.export_harbor import export
 from tasks.factorization_escalation.build import build
 
@@ -88,7 +88,7 @@ class KimiTests(unittest.IsolatedAsyncioTestCase):
 
         from harbor.models.task.config import MCPServerConfig
 
-        from harbor_adapter.agents.kimi_code import KimiCodeAgent
+        from environment.agents.kimi_code import KimiCodeAgent
 
         with tempfile.TemporaryDirectory() as directory:
             agent = KimiCodeAgent(
@@ -117,7 +117,7 @@ class KimiTests(unittest.IsolatedAsyncioTestCase):
 
 class ConditionTests(unittest.TestCase):
     def test_conditions_only_change_prompt_and_metadata(self):
-        from harbor_adapter.conditions import CONDITION_PROMPTS, RETAINED_RECORDS
+        from environment.conditions import CONDITION_PROMPTS, RETAINED_RECORDS
 
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "source"

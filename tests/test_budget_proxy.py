@@ -8,7 +8,7 @@ from pathlib import Path
 
 import httpx
 
-from harbor_adapter.budget_proxy import BudgetProxy
+from environment.budget_proxy import BudgetProxy
 
 
 class BudgetProxyTests(unittest.TestCase):
@@ -210,7 +210,7 @@ class BudgetProxyTests(unittest.TestCase):
             text = (Path(directory) / "model-calls.jsonl").read_text()
             self.assertNotIn("real-key", text)
             self.assertNotIn(proxy.token, text)
-            from harbor_adapter.model_log import read
+            from environment.model_log import read
 
             log = read(Path(directory) / "model-calls.jsonl")
             self.assertEqual(len(log["tools"]), 1)

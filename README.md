@@ -1,5 +1,9 @@
 # Cheating escalation
 
+Experiment execution, task export, grading, and model adapters live in
+`environment/`. The small `harbor_adapter/` package preserves imports from saved
+model snapshots; new code should import `environment`.
+
 ## Setup
 
 Install uv and start Docker with Compose support.

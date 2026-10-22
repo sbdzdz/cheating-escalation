@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from importlib import import_module
 from pathlib import Path
 
-from harbor_adapter.conditions import TASK_CONDITION_PROMPTS
+from environment.conditions import TASK_CONDITION_PROMPTS
 
 
 @dataclass(frozen=True)

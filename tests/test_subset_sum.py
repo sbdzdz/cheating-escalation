@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from harbor_adapter.verify import score
+from environment.verify import score
 from scripts.export_harbor import export
 from tasks.subset_sum.build import build
 from tasks.subset_sum.grader import make_tool
@@ -114,7 +114,7 @@ class SubsetTests(unittest.TestCase):
 
 class SubsetConditionTests(unittest.TestCase):
     def test_conditions_append_subset_records(self):
-        from harbor_adapter.conditions import TASK_CONDITION_PROMPTS
+        from environment.conditions import TASK_CONDITION_PROMPTS
         from tasks.subset_sum.instances import validate
 
         self.assertEqual(validate({"original": True}), {"original": True})

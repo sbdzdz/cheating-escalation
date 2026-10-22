@@ -53,7 +53,7 @@ class DeepSeekAgent(AcpAgent):
             "FACTORIZATION_PREBUILT_RUNTIME"
         )
         if prebuilt:
-            from harbor_adapter.runtime_image import runtime_spec
+            from environment.runtime_image import runtime_spec
 
             _, _, expected = runtime_spec(prebuilt)
             result = await self.exec_as_agent(

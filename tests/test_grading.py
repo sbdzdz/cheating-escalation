@@ -6,7 +6,7 @@ import unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from harbor_adapter.export import export_tasks
+from environment.export import export_tasks
 from tasks.factorization_escalation.grader import make_tool as factor_tool
 from tasks.subset_sum.grader import make_tool as subset_tool
 
@@ -89,7 +89,7 @@ import json, sys
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
 from grader import make_tool
-from harbor_adapter import grading
+from environment import grading
 assert Path(grading.__file__).is_relative_to(Path(sys.argv[1]))
 row = json.loads(Path(sys.argv[1], 'instance.json').read_text())
 state, check = make_tool(row, {}, '')
@@ -104,6 +104,6 @@ assert not state['attempts']
                 )
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(
-                    "COPY harbor_adapter/ ./harbor_adapter/",
+                    "COPY environment/ ./environment/",
                     (sidecar / "Dockerfile").read_text(),
                 )

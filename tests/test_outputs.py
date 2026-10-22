@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from zipfile import ZipFile
 
-from harbor_adapter.outputs import compact_job
+from environment.outputs import compact_job
 
 
 class OutputTests(unittest.TestCase):

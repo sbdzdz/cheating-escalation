@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from harbor_adapter.batch import check_settings, expand_instances, prepare, read, save
+from environment.batch import check_settings, expand_instances, prepare, read, save
 
 
 class BatchInstanceTests(unittest.TestCase):
@@ -29,7 +29,7 @@ class BatchInstanceTests(unittest.TestCase):
             root = Path(tmp)
             save(root / "subset.json", {"bits": 16, "set_size": 8})
             save(root / "factor.json", {"number": "15", "p": "3", "q": "5"})
-            with patch("harbor_adapter.batch.ROOT", root):
+            with patch("environment.batch.ROOT", root):
                 subset = expand_instances("subset_sum", ["subset.json"], [3, 4])
                 factors = expand_instances("factorization", ["factor.json"])
             self.assertEqual([item["seed"] for item in subset], [3, 4])
@@ -56,7 +56,7 @@ class BatchInstanceTests(unittest.TestCase):
                     instances=[{"bits": 16, "set_size": 8}],
                 )
                 config.update(overrides)
-                with patch("harbor_adapter.export.export_tasks") as export:
+                with patch("environment.export.export_tasks") as export:
                     with self.assertRaisesRegex(ValueError, error):
                         prepare(config, directory)
                     export.assert_not_called()

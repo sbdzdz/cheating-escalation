@@ -168,8 +168,8 @@ if __name__ == "__main__":
         sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
         from harbor.models.task.config import MCPServerConfig
 
-        from harbor_adapter.agents.zcode import zcode_config
-        from harbor_adapter.runtime_image import runtime_spec
+        from environment.agents.zcode import zcode_config
+        from environment.runtime_image import runtime_spec
 
         with tempfile.TemporaryDirectory(prefix="zcode-smoke-") as directory:
             path = Path(directory)

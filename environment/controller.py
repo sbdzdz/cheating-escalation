@@ -5,7 +5,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from uuid import uuid4
 
-from harbor_adapter.batch import (
+from environment.batch import (
     add_slots,
     check_settings,
     import_analysis,

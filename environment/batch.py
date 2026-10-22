@@ -43,7 +43,7 @@ def files_hash(paths, base=ROOT):
 
 def implementation():
     paths = []
-    for directory in ("harbor_adapter", "docker", "configs/acp", "configs/zcode"):
+    for directory in ("environment", "docker", "configs/acp", "configs/zcode"):
         paths.extend((ROOT / directory).rglob("*"))
     paths += [ROOT / "scripts/run_trial.py", ROOT / "uv.lock"]
     return files_hash(paths, base=ROOT)
@@ -100,7 +100,7 @@ def expand_instances(task_kind, items, seeds=None):
     Explicit subset-sum seeds take precedence over experiment seeds. The original
     fixture is included once; only seedless custom instances are expanded.
     """
-    from harbor_adapter.tasks import get_task
+    from environment.tasks import get_task
 
     task = get_task(task_kind)
     if not isinstance(items, list) or not items:
@@ -128,8 +128,8 @@ def expand_instances(task_kind, items, seeds=None):
 
 
 def prepare(config_path, directory):
-    from harbor_adapter.export import export_tasks
-    from harbor_adapter.model_config import load_profile, normalize_profile
+    from environment.export import export_tasks
+    from environment.model_config import load_profile, normalize_profile
 
     config = config_path if isinstance(config_path, dict) else read(config_path)
     parallel, target = config.get("parallel", 1), config.get("target_trials", 1)
@@ -160,7 +160,7 @@ def prepare(config_path, directory):
             raise ValueError("Credentials must use api_key_env, not profile env values")
     task_kind = config.get("task", "factorization")
     items = expand_instances(task_kind, config["instances"], config.get("seeds"))
-    from harbor_adapter.tasks import get_task
+    from environment.tasks import get_task
 
     conditions = config.get("conditions", ["baseline"])
     if not isinstance(conditions, list) or not conditions:
@@ -299,8 +299,8 @@ def worker(directory, trial_id):
     result = dict(status="infrastructure_error")
     try:
         check_settings(directory, manifest)
-        from harbor_adapter.experiment_config import load_config
-        from harbor_adapter.trial import run_trial
+        from environment.experiment_config import load_config
+        from environment.trial import run_trial
 
         config = load_config("trial")
         config.update(

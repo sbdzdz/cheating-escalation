@@ -7,9 +7,9 @@ from unittest.mock import AsyncMock, patch
 from harbor.agents.installed.acp import AcpAgent
 from harbor.models.task.config import MCPServerConfig
 
-from harbor_adapter.agents.deepseek import DeepSeekAgent
-from harbor_adapter.model_config import ROOT, load_profile
-from harbor_adapter.outputs import compact_job
+from environment.agents.deepseek import DeepSeekAgent
+from environment.model_config import ROOT, load_profile
+from environment.outputs import compact_job
 
 
 class EvidenceTests(unittest.TestCase):

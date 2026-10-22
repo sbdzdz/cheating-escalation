@@ -5,8 +5,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from harbor_adapter.experiment_config import cli
-from harbor_adapter.export import export, export_tasks
+from environment.experiment_config import cli
+from environment.export import export, export_tasks
 
 # Preserve imports used by external scripts; reusable implementation lives in the adapter.
 __all__ = ["export", "export_tasks"]

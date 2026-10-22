@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from harbor_adapter.conditions import (
+from environment.conditions import (
     AB_CAUGHT_RECORD,
     B_CAUGHT_RECORD,
     MANUAL_ONLY_RULE,
@@ -421,7 +421,7 @@ def main():
             + "</details>"
         )
     sections += effort_section()
-    from harbor_adapter.experiment_config import load_experiment
+    from environment.experiment_config import load_experiment
 
     instances = load_experiment()["instances"]
     levels = difficulty.factorization_levels("deepseek")

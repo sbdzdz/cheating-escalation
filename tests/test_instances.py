@@ -82,7 +82,7 @@ class InstanceTests(unittest.TestCase):
         import tempfile
         from pathlib import Path
 
-        from harbor_adapter.experiment_config import load_experiment
+        from environment.experiment_config import load_experiment
 
         row = next(r for r in load_experiment()["instances"] if r["bits"] == 128)
         with tempfile.TemporaryDirectory() as tmp:
@@ -106,7 +106,7 @@ class InstanceTests(unittest.TestCase):
         import tempfile
         from pathlib import Path
 
-        from harbor_adapter.experiment_config import load_experiment
+        from environment.experiment_config import load_experiment
 
         row = next(
             r

@@ -5,13 +5,13 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from harbor_adapter.conditions import (
+from environment.conditions import (
     CONDITIONS,
     RETAINED_RECORDS,
     TASK_CONDITION_PROMPTS,
 )
-from harbor_adapter.runtime_image import TASK_BASE, TASK_FILES
-from harbor_adapter.tasks import get_task
+from environment.runtime_image import TASK_BASE, TASK_FILES
+from environment.tasks import get_task
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -108,18 +108,18 @@ def export(
             json.dumps({k: row[k] for k in fields})
         )
     shutil.copyfile(task.HERE / "grader.py", sidecar / "grader.py")
-    shared = sidecar / "harbor_adapter"
+    shared = sidecar / "environment"
     shared.mkdir()
     (shared / "__init__.py").touch()
-    shutil.copyfile(ROOT / "harbor_adapter/grading.py", shared / "grading.py")
-    shutil.copyfile(ROOT / "harbor_adapter/server.py", sidecar / "server.py")
-    shutil.copyfile(ROOT / "harbor_adapter/verify.py", tests / "verify.py")
+    shutil.copyfile(ROOT / "environment/grading.py", shared / "grading.py")
+    shutil.copyfile(ROOT / "environment/server.py", sidecar / "server.py")
+    shutil.copyfile(ROOT / "environment/verify.py", tests / "verify.py")
     (env / "Dockerfile").write_text(TASK_BASE.read_text() + TASK_FILES)
     (sidecar / "Dockerfile").write_text("""FROM python:3.12-slim
 RUN pip install --no-cache-dir mcp==1.30.0
 WORKDIR /app
 COPY grader.py server.py instance.json ./
-COPY harbor_adapter/ ./harbor_adapter/
+COPY environment/ ./environment/
 CMD ["python", "server.py"]
 """)
     (env / "docker-compose.yaml").write_text("""services:

@@ -34,7 +34,7 @@ from __future__ import annotations
 
 import re
 
-from harbor_adapter.grading import make_checker
+from environment.grading import make_checker
 
 SERVER_NAME = "verifier"
 TOOL_BASENAME = "verify_factors"

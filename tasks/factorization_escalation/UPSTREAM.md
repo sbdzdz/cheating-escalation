@@ -10,7 +10,7 @@ Local adaptations:
 
 - The builder supports custom semiprimes and records Fermat increments.
 - Prompt conditions are added by the Harbor exporter from
-  `harbor_adapter/conditions.py`.
+  `environment/conditions.py`.
 - The grader retains the factor-checking tool. The unused Claude SDK wrapper
   and live-log observer were removed; Harbor supplies transport and records
   trajectories separately. Agent-readable current-run logs remain static fixtures.

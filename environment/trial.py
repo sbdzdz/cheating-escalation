@@ -10,9 +10,9 @@ from uuid import uuid4
 
 from dotenv import load_dotenv
 
-from harbor_adapter.model_config import resolve_profile
-from harbor_adapter.outputs import compact_job
-from harbor_adapter.tasks import resolve_task
+from environment.model_config import resolve_profile
+from environment.outputs import compact_job
+from environment.tasks import resolve_task
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -78,7 +78,7 @@ def run_trial(config):
                 "Docker is unavailable. Start Docker Desktop or another Docker-compatible daemon, then retry."
             )
     if profile.get("runtime"):
-        from harbor_adapter.runtime_image import ensure_runtime, prepare_task
+        from environment.runtime_image import ensure_runtime, prepare_task
 
         if not args.print_config:
             ensure_runtime(profile["runtime"])
@@ -149,7 +149,7 @@ def run_trial(config):
                 file=sys.stderr,
             )
         else:
-            from harbor_adapter.budget_proxy import BudgetProxy
+            from environment.budget_proxy import BudgetProxy
 
             ledger = job / "budget.json"
             with BudgetProxy(os.environ[key_env], cap, ledger) as proxy:

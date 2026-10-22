@@ -10,7 +10,7 @@ from pathlib import Path
 
 import httpx
 
-from harbor_adapter.model_log import ModelLog, Response
+from environment.model_log import ModelLog, Response
 
 
 class Budget:

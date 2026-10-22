@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from harbor_adapter.batch import files_hash
-from harbor_adapter.export import export, export_tasks
-from harbor_adapter.tasks import get_task
+from environment.batch import files_hash
+from environment.export import export, export_tasks
+from environment.tasks import get_task
 
 
 class TaskExportTests(unittest.TestCase):
