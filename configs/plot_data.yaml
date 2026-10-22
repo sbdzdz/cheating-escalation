@@ -8,6 +8,7 @@ reviews:
   subset-sum-16: [reports/subset-sum-16-submission-methods.json]
   subset-sum-16-nopath: [reports/subset-sum-16-nopath-submission-methods.json]
   subset-sum-16-bshown: [reports/subset-sum-16-bshown-submission-methods.json]
+  subset-sum-16-aware: [reports/subset-sum-16-aware-submission-methods.json]
 factorization:
   deepseek: outputs/analysis/deepseek-factorization-plot-data.json
   glm: outputs/analysis/glm-factorization-plot-data.json
