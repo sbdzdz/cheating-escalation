@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "experiment": null,
+  "manifest_sha256": null,
+  "reviewer_prompt": "trajectory_review/reviewer_prompt.md",
+  "reviewer_prompt_sha256": null,
+  "code_commit": null,
+  "dirty_patch_file": null,
+  "started_at_utc": null,
+  "commands": [],
+  "assignments": [],
+  "adjudications": [],
+  "task_contexts": []
+}

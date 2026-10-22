@@ -22,3 +22,6 @@ The upstream fixture archive is used after checksum verification; see UPSTREAM.m
 `build.py` is a library used by the shared exporter and batch runner. To export
 individual tasks, use `uv run scripts/export_harbor.py task=subset_sum 'questions=[4,5]'`.
 Custom instances are supplied through the exporter’s `instance` Hydra setting.
+
+Task-specific classification guidance is in [review_context.md](review_context.md);
+the judge prompt and review tooling live in [trajectory_review](../../trajectory_review/README.md).

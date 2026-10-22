@@ -148,6 +148,9 @@ uv run scripts/run_trial.py agent=nop
 
 ## Review and reports
 
+The [trajectory review workflow](trajectory_review/README.md) records the reviewer
+prompt, evidence preparation, output format, and review-run provenance.
+
 Find run evidence under `outputs/harbor/<run>/trials/<trial>/` and costs in
 `outputs/harbor/<run>/budget.json`. For new batches, save reviewed classifications
 as `classification.json` beside each trajectory, with `source`, `A`, `B`, `C`,
@@ -156,7 +159,7 @@ and `manual_evidence` fields.
 Write review digests for finished trials (paths are relative to the working directory):
 
 ```bash
-uv run scripts/digest_trials.py experiment=outputs/experiments/my-run output=outputs/review/my-run
+uv run trajectory_review/digest_trials.py experiment=outputs/experiments/my-run output=outputs/review/my-run
 # Optional overrides: 'only=[abc123,def456]' reasoning=false result_limit=20000
 ```
 
@@ -169,7 +172,7 @@ length and Fermat increments; generated subset-sum levels group by bit length,
 set size, and solution size. Reports require one task, model, and condition:
 
 ```sh
-uv run scripts/summarize_trials.py manifest=outputs/experiments/complexity-sweep-historical/manifest.json
+uv run trajectory_review/summarize_trials.py manifest=outputs/experiments/complexity-sweep-historical/manifest.json
 ```
 
 Render the report, then open `results.html`:

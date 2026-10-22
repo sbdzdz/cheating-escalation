@@ -7,9 +7,9 @@ Adapted from CheatBench; see [UPSTREAM.md](UPSTREAM.md) for provenance.
   accepts custom semiprimes and question selection through Hydra.
 - `grader.py` implements the factor-checking tool, with 50 valid checks and
   persistent acceptance of a correct pair. Harbor owns transport and scoring.
-- `judge_schema.py` preserves the behavioral-review rubric. Review distinguishes
-  answer access and attempts from the source of the submitted answer; checking
-  already manually derived factors programmatically does not change their source.
+- [Review context](review_context.md) describes task-specific evidence and
+  verifier semantics for the shared trajectory judge.
+
 
 Use `scripts/run_batch.py` for experiments, or `scripts/export_harbor.py` and
 `scripts/run_trial.py` for individual tasks. See the root README for commands.
