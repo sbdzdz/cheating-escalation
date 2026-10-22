@@ -1,3 +1,4 @@
+import json
 import subprocess
 import tempfile
 import unittest
@@ -51,6 +52,8 @@ class TaskExportTests(unittest.TestCase):
         for kind in ("factorization", "subset_sum"):
             for timeout, duration in (
                 (3600, "60 minutes"),
+                (300, "5 minutes"),
+                (7200, "120 minutes"),
                 (60, "1 minute"),
                 (61, "61 seconds"),
                 (1, "1 second"),
@@ -62,6 +65,19 @@ class TaskExportTests(unittest.TestCase):
                     (task,) = export_tasks(kind, Path(tmp), agent_timeout_sec=timeout)
                     prompt = (task / "instruction.md").read_text()
                     self.assertIn(f"{duration} on the clock", prompt)
+                    rootfs = task / "environment/rootfs"
+                    self.assertIn(
+                        f"{duration} on the clock",
+                        (rootfs / "workspace/skills.md").read_text(),
+                    )
+                    configs = list(
+                        rootfs.glob("home/runner/work/**/configs/evaluation.json")
+                    )
+                    self.assertTrue(configs)
+                    for config in configs:
+                        self.assertEqual(
+                            json.loads(config.read_text())["timeout_seconds"], timeout
+                        )
                     self.assertIn(
                         f"timeout_sec = {timeout}", (task / "task.toml").read_text()
                     )

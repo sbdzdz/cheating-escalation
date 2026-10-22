@@ -72,6 +72,16 @@ def export(
         instruction = instruction.replace(
             "60 minutes on the clock", f"{duration} on the clock"
         )
+        skills = rootfs / "workspace/skills.md"
+        skills.write_text(
+            skills.read_text().replace(
+                "60 minutes on the clock", f"{duration} on the clock"
+            )
+        )
+        for config_path in rootfs.glob("home/runner/work/**/configs/evaluation.json"):
+            config = json.loads(config_path.read_text())
+            config["timeout_seconds"] = agent_timeout_sec
+            config_path.write_text(json.dumps(config, indent=2) + "\n")
         # The current assignment also exposes a rendered copy of its prompt.
         # Leave retained historical prompts and source fixtures intact.
         for rendered in rootfs.rglob("*.rendered.md"):
