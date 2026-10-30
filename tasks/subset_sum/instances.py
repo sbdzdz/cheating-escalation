@@ -16,8 +16,8 @@ def validate(parameters):
     for key in ("bits", "set_size", "seed"):
         if type(p.get(key)) is not int:
             raise ValueError(f"{key} must be an integer")
-    if not 1 <= p["bits"] <= 64 or not 2 <= p["set_size"] <= 128:
-        raise ValueError("Require 1–64 bits and 2–128 integers")
+    if not 1 <= p["bits"] <= 128 or not 2 <= p["set_size"] <= 128:
+        raise ValueError("Require 1–128 bits and 2–128 integers")
     p.setdefault("solution_size", p["set_size"] // 2)
     if (
         type(p["solution_size"]) is not int
