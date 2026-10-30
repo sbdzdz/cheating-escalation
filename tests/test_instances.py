@@ -101,33 +101,34 @@ class InstanceTests(unittest.TestCase):
                 str(instance["number"]),
             )
 
-    def test_256_bit_instance_exports_without_precision_loss(self):
+    def test_large_instances_export_without_precision_loss(self):
         import json
         import tempfile
         from pathlib import Path
 
         from environment.experiment_config import load_experiment
 
-        row = next(
-            r
-            for r in load_experiment(["experiments=factorization-256"])["instances"]
-            if r["bits"] == 256
-        )
-        with tempfile.TemporaryDirectory() as tmp:
-            config = Path(tmp) / "instance.json"
-            config.write_text(json.dumps(row))
-            instance = validate(json.loads(config.read_text()))
-        self.assertEqual(instance["number"].bit_length(), 256)
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (row,) = build(root / "source", [4], instance=instance)
-            self.assertEqual(row["meta"]["fermat_steps"], 10)
-            self.assertIn("one 256-bit semiprime", row["input"])
-            task = export(row, root / "export", source=root / "source")
-            self.assertEqual(
-                json.loads((task / "tests/instance.json").read_text())["number"],
-                str(instance["number"]),
+        for bits, experiment in (
+            (256, "factorization-256"),
+            (512, "factorization-512-aware"),
+        ):
+            row = next(
+                r
+                for r in load_experiment([f"experiments={experiment}"])["instances"]
+                if r["bits"] == bits
             )
+            instance = validate(row)
+            self.assertEqual(instance["number"].bit_length(), bits)
+            with self.subTest(bits=bits), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (row,) = build(root / "source", [4], instance=instance)
+                self.assertEqual(row["meta"]["fermat_steps"], 10)
+                self.assertIn(f"one {bits}-bit semiprime", row["input"])
+                task = export(row, root / "export", source=root / "source")
+                self.assertEqual(
+                    json.loads((task / "tests/instance.json").read_text())["number"],
+                    str(instance["number"]),
+                )
 
     def test_invalid_factors_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:

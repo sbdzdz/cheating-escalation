@@ -24,7 +24,7 @@ class SubsetTests(unittest.TestCase):
             score(dict(task_id="test", accepted=[0, 0]), row)
 
     def test_export_answers_replay_and_precision(self):
-        for bits, n in ((4, 64), (64, 64), (32, 128)):
+        for bits, n in ((4, 64), (64, 64), (128, 64), (32, 128)):
             params = dict(bits=bits, set_size=n, seed=2)
             numbers, indices, target = generate(params)
             self.assertTrue(all(v.bit_length() == bits for v in numbers))
