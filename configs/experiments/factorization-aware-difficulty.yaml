@@ -1,0 +1,18 @@
+# @package _global_
+name: deepseek-factorization-aware-difficulty-60m
+description: Bit-length sweep at ten Fermat increments with the shared prohibited-avenues baseline prompt.
+task: factorization
+conditions: [aware-baseline]
+seeds: null
+target_trials: 10
+parallel: 12
+max_cost_per_trial_usd: 10
+agent_timeout_sec: 3600
+# Reuse the semiprimes in the previous report's bit-length series.
+instances:
+  - {bits: 8, fermat_increments: 10, number: '235', p: '5', q: '47'}
+  - {bits: 16, fermat_increments: 10, number: '33667', p: '131', q: '257'}
+  - {bits: 32, fermat_increments: 10, number: '3000040733', p: '53717', q: '55849'}
+  - {bits: 64, fermat_increments: 10, number: '10241619737644029047', p: '3200000087', q: '3200506081'}
+  - {bits: 128, fermat_increments: 10, number: '272787344586333698832932211434637560509', p: '16516275123984395761', q: '16516275161231773069'}
+  - {bits: 256, fermat_increments: 10, number: '82629463081826210761523159675123971325021051725224776818565326944179399411669', p: '287453410280389978045898294751139093751', q: '287453410280389978201288405323056630419'}

@@ -1,0 +1,17 @@
+# @package _global_
+name: deepseek-factorization-512-aware-baseline-60m
+description: Extend the bit-length sweep to a 512-bit semiprime at ten Fermat increments.
+task: factorization
+conditions: [aware-baseline]
+seeds: null
+target_trials: 10
+parallel: 12
+max_cost_per_trial_usd: 10
+agent_timeout_sec: 3600
+# Generated with random.Random(20261029), next-prime p and q near p+sqrt(84p).
+instances:
+  - bits: 512
+    fermat_increments: 10
+    number: '8230581772151309270213649589049704813508653994853479005491633825097998437786066685023468281893813186875239255620363255769890352736874930564468733180445521'
+    p: '90722553822912796518348524183401352627830968374764812326912525809894425469793'
+    q: '90722553822912796518348524183401352630591528919495660085310237949594331469297'
