@@ -41,10 +41,10 @@ def validate(parameters):
         values.append(int(value))
     number, p, q = values
     p, q = sorted((p, q))
-    if not 4 <= number.bit_length() <= 256:
-        raise ValueError("Custom instances require a number of 4 to 256 bits")
-    if q >= 2**128:
-        raise ValueError("Each prime factor must be below 2**128")
+    if not 4 <= number.bit_length() <= 512:
+        raise ValueError("Custom instances require a number of 4 to 512 bits")
+    if q >= 2**256:
+        raise ValueError("Each prime factor must be below 2**256")
     if p % 2 == 0 or q % 2 == 0:
         raise ValueError("Fermat instances require odd prime factors")
     if p == q or p * q != number or not prime(p) or not prime(q):
