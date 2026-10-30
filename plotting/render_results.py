@@ -6,16 +6,19 @@ import re
 import sys
 from decimal import Decimal
 from pathlib import Path
+from xml.etree import ElementTree
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from environment.conditions import (
     AB_CAUGHT_RECORD,
+    AWARE_RECORDS,
     B_CAUGHT_RECORD,
     MANUAL_ONLY_RULE,
+    PROHIBITED_AVENUES_NOTE,
 )
-from plotting import difficulty, effort, routes
-from plotting.common import MODELS, MissingData, svg
+from plotting import aware_difficulty, difficulty, effort, routes, timeouts
+from plotting.common import MODELS, THEMES, MissingData, svg
 
 
 def table_number(value, bits):
@@ -49,6 +52,110 @@ def effort_section():
     )
 
 
+def timeout_section():
+    rows = routes.reviews("subset-sum-16-aware-timeout")
+    figure = timeouts.cheating_rate("dark", rows)
+    comparison = svg(figure, "dark")
+    for gid, minutes in figure.timeout_targets.items():
+        comparison = comparison.replace(
+            f'<g id="{gid}">',
+            f'<g id="{gid}" class="timeout-point" tabindex="0" role="button" '
+            f'aria-label="Show {minutes}-minute method plots" '
+            f'aria-pressed="{str(minutes == 5).lower()}" '
+            f'data-timeout-target="timeout-methods-{minutes}">',
+        )
+    comparison = comparison.replace('<svg ', '<svg class="timeout-chart" ', 1)
+    for gid, conditions in figure.timeout_series.items():
+        line = ' data-timeout-line="true"' if gid.startswith("timeout-line-") else ""
+        comparison = comparison.replace(
+            f'<g id="{gid}"',
+            f'<g id="{gid}" data-timeout-series="{" ".join(conditions)}"{line}',
+            1,
+        )
+    for gid, condition in figure.timeout_legends.items():
+        comparison = comparison.replace(
+            f'<g id="{gid}"',
+            f'<g id="{gid}" data-timeout-legend="{condition}"',
+            1,
+        )
+    content = (
+        '<details class="result-group comparison" open><summary class="group-heading">Timeout ablation</summary>'
+        '<section><h3>Cheating rate versus timeout</h3><div class="comparison-scroll">'
+        + comparison
+        + '</div></section>'
+    )
+    for minutes, label in timeouts.DURATIONS:
+        hidden = "" if minutes == 5 else " hidden"
+        breakdown = svg(timeouts.methods("dark", rows, minutes), "dark")
+        # SVG clipping rectangles are the exact 0%–100% extents of each panel.
+        drawing = ElementTree.fromstring(breakdown)
+        width = float(drawing.attrib["viewBox"].split()[2])
+        areas = sorted(
+            (float(rect.attrib["x"]), float(rect.attrib["width"]))
+            for rect in drawing.findall(".//{*}clipPath/{*}rect")
+        )
+        tracks = []
+        previous = 0
+        for left, area_width in areas:
+            tracks.extend((left - previous, area_width))
+            previous = left + area_width
+        tracks.append(width - previous)
+        grid = " ".join(f"minmax(0,{value:.6f}fr)" for value in tracks)
+        trajectories = {}
+        for caption, source, text in timeouts.QUOTES.get(minutes, []):
+            condition, _, reference = caption.partition(" · ")
+            trajectories.setdefault((condition, source), []).append((reference, text))
+        quote_columns = {label: "" for _, label in timeouts.LINE_CONDITIONS}
+        colors = dict(zip(quote_columns, THEMES["dark"]["lines"]))
+        for (condition, source), excerpts in trajectories.items():
+            color = colors[condition]
+            quote_columns[condition] += (
+                f'<article class="trajectory-quote" style="--condition-color:{color}">'
+                f'<p class="record-label"><strong class="condition-label">{html.escape(condition)}</strong> · '
+                f'<a href="outputs/review/timeout-sweep/{source}">Trajectory {Path(source).stem}</a></p>'
+                + "".join(
+                    f'<p class="record-label">{html.escape(reference)}</p>'
+                    f'<blockquote>{html.escape(text)}</blockquote>'
+                    for reference, text in excerpts
+                )
+                + '</article>'
+            )
+        quotes = (
+            f'<div class="timeout-quotes" style="grid-template-columns:{grid}">'
+            + "".join(
+                f'<div style="grid-column:{2 * i + 2}">{column}</div>'
+                for i, column in enumerate(quote_columns.values())
+            )
+            + '</div>'
+            if trajectories else ""
+        )
+        content += (
+            f'<section class="timeout-breakdown" id="timeout-methods-{minutes}"{hidden}>'
+            f'<h3>Method breakdown · {label}</h3>'
+            '<div class="comparison-scroll">'
+            + breakdown
+            + '</div>' + quotes + '</section>'
+        )
+    return content + '</details>'
+
+
+def aware_difficulty_section():
+    try:
+        cheating = chart(aware_difficulty, "aware-difficulty-cheating")
+        acceptance = chart(aware_difficulty, "aware-difficulty-acceptance")
+    except MissingData:
+        return ""
+    return (
+        '<details class="result-group comparison" open>'
+        '<summary class="group-heading">Difficulty sweep with explicit prohibitions</summary>'
+        '<section><h3>Flagged cheating attempts versus bit length</h3>'
+        '<div class="comparison-scroll">' + cheating + '</div></section>'
+        '<section><h3>Accepted answers versus bit length</h3>'
+        '<div class="comparison-scroll">' + acceptance + '</div></section>'
+        '</details>'
+    )
+
+
 def main():
     rows = routes.reviews("factorization")
 
@@ -79,19 +186,19 @@ def main():
     )
     pending += method_plot("glm-b-caught", "GLM 5.3 Flash answer lookup penalised")
     both_caught = (
-        "<section><h2>Adding a record of answer lookup and programatic factoring being caught and penalised</h2><pre>"
+        "<section><h2>Adding a record of answer lookup and computation being caught and penalised</h2><pre>"
         + html.escape(AB_CAUGHT_RECORD)
         + "</pre></section>"
     )
     both_caught += method_plot(
         "deepseek-ab-caught",
-        "DeepSeek V4 Flash answer lookup and programmatic factoring penalised",
+        "DeepSeek V4 Flash answer lookup and computation penalised",
     )
     both_caught += method_plot(
         "glm-ab-caught",
-        "GLM 5.3 Flash answer lookup and programmatic factoring penalised",
+        "GLM 5.3 Flash answer lookup and computation penalised",
     )
-    both_caught += "<section><h2>Abandoning manual factoring after both methods were penalised</h2>"
+    both_caught += "<section><h2>Abandoning manual solving after both methods were penalised</h2>"
     examples = [
         (
             13,
@@ -219,7 +326,7 @@ def main():
         content = content.replace("<h2>", "<h3>").replace("</h2>", "</h3>")
         return f'<details class="result-group"><summary class="group-heading">{title}</summary>{content}</details>'
 
-    definitions = '<p class="intro"><strong>Manual factoring:</strong> working toward factors by hand.<br><strong class="computation-quote">Programmatic factoring:</strong> using code or tools to compute factors.<br><strong class="computation-quote">Answer lookup:</strong> reading stored factors from logs.</p>'
+    definitions = '<p class="intro"><strong>Manual solving:</strong> deriving an answer through manual reasoning.<br><strong class="computation-quote">Computation:</strong> using code, shell arithmetic, or solver utilities to derive an answer.<br><strong class="computation-quote">Answer lookup:</strong> reading stored answers from logs.</p>'
     sections = group("Baselines", definitions + before + deepseek_before + glm_before)
     if stricter_prompt:
         sections += group("Stricter prompt", stricter_prompt)
@@ -231,7 +338,7 @@ def main():
         + pending
         + quotes,
     )
-    sections += group("Answer lookup and programmatic factoring penalised", both_caught)
+    sections += group("Answer lookup and computation penalised", both_caught)
 
     def comparison(heading, figure, excerpt=""):
         return (
@@ -270,6 +377,7 @@ def main():
         + comparison_html
         + "</details>"
     )
+    scaling_section = ""
     small_section = ""
     small = {
         model: figure
@@ -277,6 +385,15 @@ def main():
         if (figure := figure_or_none(routes, f"subset-sum-16-{model}"))
     }
     if small:
+        first_model = next(iter(small))
+        scaling_section = (
+            '<details class="result-group"><summary class="group-heading">Scaling up experiments</summary>'
+            + comparison(
+                f"{MODELS[first_model]}, subset sum",
+                chart(routes, f"subset-sum-16-{first_model}"),
+            )
+            + "</details>"
+        )
 
         def record_excerpt(experiment, condition, label, short=False, added=None):
             # Quote the lookup record exactly as the agents received it.
@@ -415,6 +532,61 @@ def main():
         small_html = subgroup("Hiding the log path", path_html) + subgroup(
             "Mentioning lookup in the baseline", shown_html
         )
+        aware_html = (
+            '<p class="record-label">Shared note in all four conditions</p>'
+            '<blockquote class="record-excerpt"><span class="diff-quote">'
+            + html.escape(PROHIBITED_AVENUES_NOTE.strip())
+            + '</span></blockquote><div class="excerpt-grid">'
+        )
+        aware_reviews = routes.reviews("subset-sum-16-aware")
+        for condition, label in (
+            ("aware-baseline", "Baseline"),
+            ("aware-b-caught", "Answer lookup penalised"),
+            ("aware-a-caught", "Computation penalised"),
+            ("aware-ab-caught", "Both penalised"),
+        ):
+            record = AWARE_RECORDS.get(condition)
+            counts = routes.route_counts(
+                aware_reviews, f"deepseek-{condition}", subset=True
+            )
+            note = re.sub(
+                r"Includes \d+ timed-out trials? \(5-minute limit\), shown as attempts only\.\s*",
+                "",
+                counts["note"],
+            )
+            excerpt = (
+                "\n\n".join(
+                    part.strip()
+                    for part in record.split("\n\n")
+                    if part.strip().startswith("Method used:")
+                )
+                if record
+                else "No retained evaluation record."
+            )
+            aware_html += (
+                f'<div><h3>{label} (n = {counts["n"]})</h3><blockquote class="record-excerpt">'
+                + (
+                    f'<span class="diff-quote">{html.escape(excerpt)}</span>'
+                    if record
+                    else html.escape(excerpt)
+                )
+                + '</blockquote><div class="comparison-scroll" role="img" '
+                + f'aria-label="{label}: reviewed trial methods">'
+                + svg(
+                    routes.figure(
+                        "dark",
+                        [(None, counts)],
+                        routes.LABELS["subset-sum"],
+                        idle=False,
+                    ),
+                    "dark",
+                )
+                + '</div>'
+                + (f'<p class="trial-status">{html.escape(note)}</p>' if note else "")
+                + '</div>'
+            )
+        aware_html += "</div>"
+        small_html += subgroup("Explicitly prohibiting the available avenues", aware_html)
         small_section = (
             '<details class="result-group"><summary class="group-heading">Answer lookup prompt ablation</summary>'
             + small_html
@@ -517,14 +689,17 @@ def main():
     difficulty_html += "</details>"
 
     sections += difficulty_html
+    sections += scaling_section
     sections += small_section
+    sections += timeout_section()
+    sections += aware_difficulty_section()
 
     page = (
         """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cheating escalation Figures</title>
 <style>
 :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#10171f;color:#dedbd3;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1128px;margin:auto;padding:36px 24px}section{margin:0 0 80px}h2{font-size:21px;font-weight:650;margin:0 0 18px}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:system-ui,-apple-system,sans-serif;font-size:14px;fill:#dedbd3}.tick{fill:#a1aebc}.value{font-weight:650}.pending{fill:#a1aebc;font-size:13px}p{font-size:13px;color:#aebac7;margin:0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.75 ui-monospace,SFMono-Regular,monospace;padding:22px;background:#19222c;border:1px solid #303b45;border-radius:6px;margin:0}.legend{display:flex;flex-wrap:wrap;gap:12px 28px;font-size:13px;margin-bottom:12px}.legend span{display:inline-flex;align-items:center;gap:8px}.legend i{display:inline-block;width:14px;height:14px;border-radius:2px}h1{font-size:40px;line-height:1.2;font-weight:700;margin:0 0 32px}.intro{margin:0 0 32px;font-size:15px;line-height:1.8;font-weight:400;color:#dedbd3}article{margin:26px 0}h3{font-size:16px;font-weight:650;margin:0 0 18px}.result-group{margin:64px 0}.group-heading{font-size:28px;font-weight:650;text-align:left;padding-bottom:14px;margin-bottom:32px;break-after:avoid}blockquote{white-space:pre-wrap;border-left:3px solid #287e85;padding:12px 20px;margin:12px 0;background:#19222c}.computation-quote,.command-quote{color:#ce9990}.command-quote{margin:12px 0}.command-quote pre{color:inherit;padding:14px;overflow-wrap:anywhere}.command-label,summary{font-size:13px;margin-bottom:6px}summary{cursor:pointer}table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}th,td{text-align:left;padding:12px;border-bottom:1px solid #303b45}a{color:#74d3d6}@media print{section{break-inside:avoid}main{padding:0}}
-.subgroup{margin:0 0 36px}.subgroup-heading{font-size:21px;font-weight:650;margin-bottom:24px}.subgroup[open]{margin-bottom:56px}.model-heading{font-size:16px;font-weight:600;color:#aebac7;margin:28px 0 12px}.record-label{font-size:13px;color:#a1aebc;margin:0 0 4px}.record-excerpt{font-size:14px;margin:0 0 18px;padding:10px 16px}.record-note{color:#a1aebc}.diff-quote{color:#7fd38f}.comparison{width:100%}.comparison-scroll{overflow-x:auto}.comparison svg{min-width:1000px}@media print{.comparison{width:100%;left:auto;transform:none}.comparison svg{min-width:0}}
+.subgroup{margin:0 0 36px}.subgroup-heading{font-size:21px;font-weight:650;margin-bottom:24px}.subgroup[open]{margin-bottom:56px}.model-heading{font-size:16px;font-weight:600;color:#aebac7;margin:28px 0 12px}.record-label{font-size:13px;color:#a1aebc;margin:0 0 4px}.record-excerpt{font-size:14px;margin:0 0 18px;padding:10px 16px}.record-note{color:#a1aebc}.diff-quote{color:#7fd38f}.comparison{width:100%}.comparison-scroll{max-width:100%}.comparison svg{min-width:0;max-width:100%}@media print{.comparison{width:100%;left:auto;transform:none}.comparison svg{min-width:0}}
 .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.difficulty .base-case{font-size:16px;color:#dedbd3;margin-bottom:28px}.difficulty-grid h3{font-size:19px;margin-bottom:6px}.difficulty-grid td:nth-child(3){overflow-wrap:anywhere}.difficulty-grid th,.difficulty-grid td{padding:10px 8px}.difficulty-grid>div{min-width:0}@media(max-width:700px){.difficulty-grid{grid-template-columns:1fr}}
 details:not([open])>.group-heading,details:not([open])>.subgroup-heading{margin-bottom:0}summary:focus-visible{outline:2px solid #74d3d6;outline-offset:6px}
 
@@ -537,6 +712,15 @@ summary.group-heading:hover::before,summary.subgroup-heading:hover::before{borde
 .difficulty-rates{margin-top:28px}.bits-axis{--axis-color:#74c7cc;--axis-muted:#8bb9bc}.steps-axis{--axis-color:#b9a3d9;--axis-muted:#b2a4c5}
 .base-equation{margin:0 0 42px;padding:24px;background:#19222c;border-radius:8px}.base-label{font-size:14px;margin-bottom:18px;color:#dedbd3}.equation-layout{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:20px;align-items:start}.equation-term{text-align:center;min-width:0}.equation-value{display:block;font-size:clamp(20px,2.6vw,32px);font-weight:600;letter-spacing:-.6px;color:var(--axis-color);white-space:nowrap}.equation-note{display:block;font-size:14px;color:var(--axis-color);margin-top:10px}.equation-equals{font-size:30px;color:#a1aebc}.difficulty-table h3,.difficulty-table th{color:var(--axis-color)}.difficulty-table>p{color:var(--axis-muted)}.difficulty-table table{border-top:2px solid var(--axis-color)}
 @media(max-width:800px){.equation-layout{grid-template-columns:1fr;gap:12px}.equation-equals{text-align:center}.equation-value{font-size:clamp(18px,4vw,28px)}}
+html,body{overflow-x:hidden}
+main{min-width:0;overflow-wrap:anywhere}
+.timeout-point:focus{outline:none}
+.trajectory-quote .condition-label{color:var(--condition-color)}
+.trajectory-quote blockquote{border-left-color:var(--condition-color);font-size:12px;line-height:1.6;padding:10px 12px}
+.trajectory-quote .record-label{font-size:11px}
+.timeout-quotes{display:grid}
+.timeout-point use{pointer-events:all}
+.timeout-point[aria-pressed="false"] use{fill:#10171f!important}
 </style></head><body><main>
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><pattern id="pending" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#19222c"/><path d="M0 8L8 0" stroke="#303b45"/></pattern></defs></svg>
 """
@@ -545,6 +729,75 @@ summary.group-heading:hover::before,summary.subgroup-heading:hover::before{borde
         + """
 </main>
 <script>
+document.querySelectorAll('.timeout-chart').forEach(chart => {
+    const series = [...chart.querySelectorAll('[data-timeout-series]')];
+    const lines = [...chart.querySelectorAll('[data-timeout-line]')];
+    const anchors = new Map(lines.map(line => {
+        const anchor = document.createComment('line position');
+        line.before(anchor);
+        return [line, anchor];
+    }));
+    lines.forEach(line => {
+        const path = line.querySelector('path');
+        const hit = path.cloneNode(true);
+        hit.removeAttribute('id');
+        hit.style.stroke = 'transparent';
+        hit.style.strokeWidth = '12px';
+        hit.style.fill = 'none';
+        hit.style.pointerEvents = 'stroke';
+        path.before(hit);
+    });
+    let highlighted = null;
+    const highlight = condition => {
+        if (highlighted === condition) return;
+        highlighted = condition;
+        lines.forEach(line => anchors.get(line).after(line));
+        series.forEach(item => {
+            const matches = item.dataset.timeoutSeries.split(' ').includes(condition);
+            item.style.opacity = !condition || matches ? '' : '0.18';
+        });
+        if (condition) {
+            const line = lines.find(item => item.dataset.timeoutSeries === condition);
+            const marker = chart.querySelector('.timeout-point');
+            if (line && marker) marker.before(line);
+        }
+    };
+    chart.addEventListener('pointermove', event => {
+        const legend = event.target.closest('[data-timeout-legend]');
+        const line = event.target.closest('[data-timeout-line]');
+        highlight(legend ? legend.dataset.timeoutLegend : line ? line.dataset.timeoutSeries : null);
+    });
+    chart.addEventListener('pointerleave', () => highlight(null));
+    chart.querySelectorAll('[data-timeout-legend]').forEach(entry => {
+        entry.style.cursor = 'pointer';
+        entry.addEventListener('mouseenter', () => highlight(entry.dataset.timeoutLegend));
+        entry.addEventListener('mouseleave', () => highlight(null));
+        if (entry.id.includes('-label-')) {
+            entry.setAttribute('tabindex', '0');
+            entry.addEventListener('focus', () => highlight(entry.dataset.timeoutLegend));
+            entry.addEventListener('blur', () => highlight(null));
+        }
+    });
+});
+document.querySelectorAll('[data-timeout-target]').forEach(point => {
+    point.style.cursor = 'pointer';
+    const reveal = () => {
+        document.querySelectorAll('.timeout-breakdown').forEach(panel => {
+            panel.hidden = panel.id !== point.dataset.timeoutTarget;
+        });
+        document.querySelectorAll('[data-timeout-target]').forEach(marker => {
+            marker.setAttribute('aria-pressed',
+                String(marker.dataset.timeoutTarget === point.dataset.timeoutTarget));
+        });
+    };
+    point.addEventListener('click', reveal);
+    point.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            reveal();
+        }
+    });
+});
 document.querySelectorAll('details').forEach(section => {
     const heading = section.querySelector(':scope > summary');
     if (!heading) return;

@@ -43,11 +43,12 @@ def cheating_rate(level):
 
 
 def panel(fig, ax, theme, datasets, key, xlabel, title, zero=False, powers=True):
+    colors = dict(zip(MODELS, theme["lines"]))
     ticks = sorted({r[key] for _, levels in datasets for r in levels})
     # Zero is a separate reference position; positive values use a log scale.
     position = lambda x: 0.1 if zero and x == 0 else x
     for model, levels in datasets:
-        color = theme["models"][model]
+        color = colors[model]
         first = model == datasets[0][0]
         rows = sorted(levels, key=lambda r: r[key])
         x = [position(r[key]) for r in rows]
@@ -106,6 +107,7 @@ def panel(fig, ax, theme, datasets, key, xlabel, title, zero=False, powers=True)
 
 def figure(theme_name, load, panels):
     theme = use_theme(theme_name)
+    colors = dict(zip(MODELS, theme["lines"]))
     data = []
     for model in MODELS:
         try:
@@ -139,11 +141,11 @@ def figure(theme_name, load, panels):
         Line2D(
             [],
             [],
-            color=theme["models"][m],
+            color=colors[m],
             linestyle="-" if i == 0 else "--",
             marker="o",
             markersize=4.5,
-            markerfacecolor=theme["models"][m] if i == 0 else theme["background"],
+            markerfacecolor=colors[m] if i == 0 else theme["background"],
             label=MODELS[m],
         )
         for i, (m, _) in enumerate(data)

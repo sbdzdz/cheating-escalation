@@ -20,9 +20,9 @@ from plotting.common import (
 )
 
 LABELS = {
-    "factorization": ["Manual factoring", "Programmatic factoring", "Answer lookup"],
-    "subset-sum": ["Manual search", "Programmatic search", "Answer lookup"],
-    "joint": ["Manual work", "Programmatic solving", "Answer lookup"],
+    "factorization": ["Manual solving", "Computation", "Answer lookup"],
+    "subset-sum": ["Manual solving", "Computation", "Answer lookup"],
+    "joint": ["Manual solving", "Computation", "Answer lookup"],
 }
 CONDITIONS = [
     ("baseline", "Baseline"),
@@ -46,8 +46,8 @@ def reviews(name):
 def route_counts(rows, batch, subset=False):
     """Trials per method that produced the answer, and that only tried it.
 
-    Subset-sum reviews record manual work as `manual_attempt` and count a timed-out
-    trial's methods as attempts only.
+    Subset-sum reviews record manual work as `manual_attempt`. A timed-out trial's
+    methods count as attempts unless an accepted submission is explicitly recorded.
     """
     manual_key = "manual_attempt" if subset else "manual_factoring_attempt"
     selected = [r for r in rows if r["batch"] == batch]
@@ -62,7 +62,12 @@ def route_counts(rows, batch, subset=False):
         )
         for r in selected
     ]
-    timed_out = [subset and a["termination"] == "timeout" for a in annotations]
+    timed_out = [
+        subset
+        and a["termination"] == "timeout"
+        and not r.get("accepted_submission", False)
+        for r, a in zip(selected, annotations)
+    ]
     methods = [
         "none" if t else r["submission_method"] for r, t in zip(selected, timed_out)
     ]
@@ -128,27 +133,29 @@ def pooled(*counts):
     )
 
 
-def figure(theme_name, panels, labels, idle=True):
+def figure(theme_name, panels, labels, idle=True, columns=None):
     """One panel per (title, counts); one row per method, plus trials that attempted none."""
     theme = use_theme(theme_name)
     show_idle = idle and any(c["idle"] for _, c in panels)
     rows = labels + ["No method attempted"] * show_idle
     titled = any(title for title, _ in panels)
+    columns = columns or len(panels)
+    panel_rows = (len(panels) + columns - 1) // columns
     fig, axes = plt.subplots(
-        1,
-        len(panels),
+        panel_rows,
+        columns,
         sharey=True,
         squeeze=False,
         layout="constrained",
         figsize=(
             theme["width"],
-            theme["chrome"] + titled * 0.3 + len(rows) * theme["row"],
+            theme["chrome"] + panel_rows * (titled * 0.3 + len(rows) * theme["row"]),
         ),
     )
     fig.get_layout_engine().set(wspace=0.12)
     # A paper column fits fewer tick labels and only short title lines.
     steps = 2 if theme_name == "paper" else 5
-    for ax, (title, counts) in zip(axes[0], panels):
+    for ax, (title, counts) in zip(axes.flat, panels):
         n = counts["n"]
         for i, label in enumerate(labels):
             assert 0 <= counts["used"][i] + counts["attempted"][i] <= n
@@ -209,14 +216,17 @@ def figure(theme_name, panels, labels, idle=True):
             )
     axes[0][0].set_yticks(range(len(rows)), rows)
     # The first method is the intended one; the rest are prohibited.
-    for i, text in enumerate(axes[0][0].get_yticklabels()):
-        text.set_color(
-            theme["text"]
-            if i == 0
-            else theme["muted"]
-            if i >= len(labels)
-            else theme["flagged"]
-        )
+    for ax in axes[:, 0]:
+        for i, text in enumerate(ax.get_yticklabels()):
+            text.set_color(
+                theme["text"]
+                if i == 0
+                else theme["muted"]
+                if i >= len(labels)
+                else theme["flagged"]
+            )
+    for ax in list(axes.flat)[len(panels):]:
+        ax.set_visible(False)
     fig.supxlabel("Percentage of trials", color=theme["muted"], fontsize=theme["font"])
     fig.legend(
         handles=[
