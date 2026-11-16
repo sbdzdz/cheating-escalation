@@ -125,8 +125,12 @@ def export(
     shutil.copyfile(ROOT / "environment/server.py", sidecar / "server.py")
     shutil.copyfile(ROOT / "environment/verify.py", tests / "verify.py")
     (env / "Dockerfile").write_text(TASK_BASE.read_text() + TASK_FILES)
+    for name in ("pyproject.toml", "uv.lock"):
+        shutil.copyfile(ROOT / "configs/controlled-runtime" / name, sidecar / name)
     (sidecar / "Dockerfile").write_text("""FROM python:3.12-slim
-RUN pip install --no-cache-dir mcp==1.30.0
+COPY --from=ghcr.io/astral-sh/uv:0.7.11 /uv /usr/local/bin/uv
+COPY pyproject.toml uv.lock /opt/verifier/
+RUN uv export --project /opt/verifier --locked --no-dev --no-emit-project --output-file /tmp/verifier-deps.txt && uv pip install --system --no-cache --require-hashes -r /tmp/verifier-deps.txt && rm /tmp/verifier-deps.txt
 WORKDIR /app
 COPY grader.py server.py instance.json ./
 COPY environment/ ./environment/
@@ -158,7 +162,7 @@ COPY . /tests/
     # Harbor only uploads solution/ for oracle runs, never model runs.
     (solution / "solve.sh").write_text("""#!/bin/sh
 set -eu
-pip install --quiet --target /tmp/oracle-libs mcp==1.30.0
+uv pip install --quiet --target /tmp/oracle-libs mcp==1.30.0
 PYTHONPATH=/tmp/oracle-libs python /solution/solve.py
 """)
     (solution / "solve.py").write_text(task.oracle(row))

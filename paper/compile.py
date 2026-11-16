@@ -1,6 +1,6 @@
 """Compile the paper and remove intermediate files, keeping the PDF.
 
-Run with: python3 paper/compile.py
+Run with: uv run paper/compile.py
 On failure, keep the build logs for diagnosis.
 """
 

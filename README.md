@@ -248,7 +248,7 @@ uv run plotting/routes.py list=true
 uv run plotting/routes.py 'names=[subset-sum-16-bshown-deepseek]' format=svg theme=light
 ```
 
-Compile the paper with `python3 paper/compile.py`.
+Compile the paper with `uv run paper/compile.py`.
 
 Import a historical analysis into a new manifest:
 
