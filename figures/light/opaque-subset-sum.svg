@@ -1,0 +1,494 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="818.39952pt" height="345.291056pt" viewBox="0 0 818.39952 345.291056" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 345.291056 
+L 818.39952 345.291056 
+L 818.39952 -0 
+L 0 -0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 53.752355 300.227607 
+L 811.19952 300.227607 
+L 811.19952 69.68324 
+L 53.752355 69.68324 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="98.029365" y="311.602607" transform="rotate(-0 98.029365 311.602607)">None</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="135.190095" y="311.602607" transform="rotate(-0 135.190095 311.602607)">R1</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="172.350826" y="311.602607" transform="rotate(-0 172.350826 311.602607)">R2</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="209.511556" y="311.602607" transform="rotate(-0 209.511556 311.602607)">R3</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="283.833016" y="311.602607" transform="rotate(-0 283.833016 311.602607)">None</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6"/>
+     <g id="text_6">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="320.993747" y="311.602607" transform="rotate(-0 320.993747 311.602607)">R1</text>
+     </g>
+    </g>
+    <g id="xtick_7">
+     <g id="line2d_7"/>
+     <g id="text_7">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="358.154477" y="311.602607" transform="rotate(-0 358.154477 311.602607)">R2</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_8"/>
+     <g id="text_8">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="395.315207" y="311.602607" transform="rotate(-0 395.315207 311.602607)">R3</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_9"/>
+     <g id="text_9">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="469.636668" y="311.602607" transform="rotate(-0 469.636668 311.602607)">None</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_10"/>
+     <g id="text_10">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="506.797398" y="311.602607" transform="rotate(-0 506.797398 311.602607)">R1</text>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_11"/>
+     <g id="text_11">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="543.958128" y="311.602607" transform="rotate(-0 543.958128 311.602607)">R2</text>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_12"/>
+     <g id="text_12">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="581.118859" y="311.602607" transform="rotate(-0 581.118859 311.602607)">R3</text>
+     </g>
+    </g>
+    <g id="xtick_13">
+     <g id="line2d_13"/>
+     <g id="text_13">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="655.440319" y="311.602607" transform="rotate(-0 655.440319 311.602607)">None</text>
+     </g>
+    </g>
+    <g id="xtick_14">
+     <g id="line2d_14"/>
+     <g id="text_14">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="692.601049" y="311.602607" transform="rotate(-0 692.601049 311.602607)">R1</text>
+     </g>
+    </g>
+    <g id="xtick_15">
+     <g id="line2d_15"/>
+     <g id="text_15">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="729.76178" y="311.602607" transform="rotate(-0 729.76178 311.602607)">R2</text>
+     </g>
+    </g>
+    <g id="xtick_16">
+     <g id="line2d_16"/>
+     <g id="text_16">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #a34f43" x="766.92251" y="311.602607" transform="rotate(-0 766.92251 311.602607)">R3</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_17">
+      <path d="M 53.752355 300.227607 
+L 811.19952 300.227607 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18"/>
+     <g id="text_17">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="304.165107" transform="rotate(-0 50.252355 304.165107)">0%</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_19">
+      <path d="M 53.752355 254.118733 
+L 811.19952 254.118733 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_20"/>
+     <g id="text_18">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="258.056233" transform="rotate(-0 50.252355 258.056233)">20%</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_21">
+      <path d="M 53.752355 208.00986 
+L 811.19952 208.00986 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_22"/>
+     <g id="text_19">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="211.94736" transform="rotate(-0 50.252355 211.94736)">40%</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_23">
+      <path d="M 53.752355 161.900987 
+L 811.19952 161.900987 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_24"/>
+     <g id="text_20">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="165.838487" transform="rotate(-0 50.252355 165.838487)">60%</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_25">
+      <path d="M 53.752355 115.792113 
+L 811.19952 115.792113 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_26"/>
+     <g id="text_21">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="119.729613" transform="rotate(-0 50.252355 119.729613)">80%</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_27">
+      <path d="M 53.752355 69.68324 
+L 811.19952 69.68324 
+" clip-path="url(#p008733fbdf)" style="fill: none; stroke: #e2e7eb; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_28"/>
+     <g id="text_22">
+      <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #27343b" x="50.252355" y="73.62074" transform="rotate(-0 50.252355 73.62074)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="tip96"><title>Baseline. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 88.181772 300.227607 
+L 107.876959 300.227607 
+L 107.876959 300.227607 
+L 88.181772 300.227607 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip97"><title>Baseline. None — No accepted answer: 9/30 runs (30%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 88.181772 300.227607 
+L 107.876959 300.227607 
+L 107.876959 231.064297 
+L 88.181772 231.064297 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip98"><title>Baseline. R1 — Accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 125.342502 300.227607 
+L 145.037689 300.227607 
+L 145.037689 261.803546 
+L 125.342502 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip99"><title>Baseline. R1 — No accepted answer: 7/30 runs (23%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 125.342502 261.803546 
+L 145.037689 261.803546 
+L 145.037689 208.00986 
+L 125.342502 208.00986 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip100"><title>Baseline. R2 — Accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 162.503232 300.227607 
+L 182.198419 300.227607 
+L 182.198419 261.803546 
+L 162.503232 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip101"><title>Baseline. R2 — No accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 162.503232 261.803546 
+L 182.198419 261.803546 
+L 182.198419 215.694672 
+L 162.503232 215.694672 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip102"><title>Baseline. R3 — Accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 199.663962 300.227607 
+L 219.359149 300.227607 
+L 219.359149 261.803546 
+L 199.663962 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip103"><title>Baseline. R3 — No accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 199.663962 261.803546 
+L 219.359149 261.803546 
+L 219.359149 223.379485 
+L 199.663962 223.379485 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip104"><title>Ineffective. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 273.985423 300.227607 
+L 293.68061 300.227607 
+L 293.68061 300.227607 
+L 273.985423 300.227607 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip105"><title>Ineffective. None — No accepted answer: 20/30 runs (67%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 273.985423 300.227607 
+L 293.68061 300.227607 
+L 293.68061 146.531362 
+L 273.985423 146.531362 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip106"><title>Ineffective. R1 — Accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 311.146153 300.227607 
+L 330.84134 300.227607 
+L 330.84134 277.17317 
+L 311.146153 277.17317 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip107"><title>Ineffective. R1 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 311.146153 277.17317 
+L 330.84134 277.17317 
+L 330.84134 269.488358 
+L 311.146153 269.488358 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip108"><title>Ineffective. R2 — Accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 348.306883 300.227607 
+L 368.00207 300.227607 
+L 368.00207 261.803546 
+L 348.306883 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip109"><title>Ineffective. R2 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 348.306883 261.803546 
+L 368.00207 261.803546 
+L 368.00207 254.118733 
+L 348.306883 254.118733 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip110"><title>Ineffective. R3 — Accepted answer: 4/30 runs (13%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 385.467614 300.227607 
+L 405.162801 300.227607 
+L 405.162801 269.488358 
+L 385.467614 269.488358 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip111"><title>Ineffective. R3 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 385.467614 269.488358 
+L 405.162801 269.488358 
+L 405.162801 261.803546 
+L 385.467614 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip112"><title>Effective, not caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 459.789074 300.227607 
+L 479.484261 300.227607 
+L 479.484261 300.227607 
+L 459.789074 300.227607 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip113"><title>Effective, not caught. None — No accepted answer: 2/30 runs (7%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 459.789074 300.227607 
+L 479.484261 300.227607 
+L 479.484261 284.857982 
+L 459.789074 284.857982 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip114"><title>Effective, not caught. R1 — Accepted answer: 17/30 runs (57%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 496.949805 300.227607 
+L 516.644992 300.227607 
+L 516.644992 169.585799 
+L 496.949805 169.585799 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip115"><title>Effective, not caught. R1 — No accepted answer: 4/30 runs (13%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 496.949805 169.585799 
+L 516.644992 169.585799 
+L 516.644992 138.84655 
+L 496.949805 138.84655 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip116"><title>Effective, not caught. R2 — Accepted answer: 4/30 runs (13%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 534.110535 300.227607 
+L 553.805722 300.227607 
+L 553.805722 269.488358 
+L 534.110535 269.488358 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip117"><title>Effective, not caught. R2 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 534.110535 269.488358 
+L 553.805722 269.488358 
+L 553.805722 246.433921 
+L 534.110535 246.433921 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip118"><title>Effective, not caught. R3 — Accepted answer: 5/30 runs (17%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 571.271265 300.227607 
+L 590.966452 300.227607 
+L 590.966452 261.803546 
+L 571.271265 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip119"><title>Effective, not caught. R3 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 571.271265 261.803546 
+L 590.966452 261.803546 
+L 590.966452 238.749109 
+L 571.271265 238.749109 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip120"><title>Effective, caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 645.592726 300.227607 
+L 665.287913 300.227607 
+L 665.287913 300.227607 
+L 645.592726 300.227607 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip121"><title>Effective, caught. None — No accepted answer: 24/30 runs (80%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 645.592726 300.227607 
+L 665.287913 300.227607 
+L 665.287913 115.792113 
+L 645.592726 115.792113 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip122"><title>Effective, caught. R1 — Accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 682.753456 300.227607 
+L 702.448643 300.227607 
+L 702.448643 277.17317 
+L 682.753456 277.17317 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip123"><title>Effective, caught. R1 — No accepted answer: 2/30 runs (7%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 682.753456 277.17317 
+L 702.448643 277.17317 
+L 702.448643 261.803546 
+L 682.753456 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip124"><title>Effective, caught. R2 — Accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 719.914186 300.227607 
+L 739.609373 300.227607 
+L 739.609373 277.17317 
+L 719.914186 277.17317 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip125"><title>Effective, caught. R2 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 719.914186 277.17317 
+L 739.609373 277.17317 
+L 739.609373 269.488358 
+L 719.914186 269.488358 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="tip126"><title>Effective, caught. R3 — Accepted answer: 4/30 runs (13%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 757.074916 300.227607 
+L 776.770103 300.227607 
+L 776.770103 269.488358 
+L 757.074916 269.488358 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
+   </g>
+   <g id="tip127"><title>Effective, caught. R3 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+    <path d="M 757.074916 269.488358 
+L 776.770103 269.488358 
+L 776.770103 261.803546 
+L 757.074916 261.803546 
+z
+" clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="153.770461" y="335.767931" transform="rotate(-0 153.770461 335.767931)">Baseline</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="339.574112" y="335.767931" transform="rotate(-0 339.574112 335.767931)">Ineffective</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="525.377763" y="335.767931" transform="rotate(-0 525.377763 335.767931)">Effective, not caught</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="711.181414" y="335.767931" transform="rotate(-0 711.181414 335.767931)">Effective, caught</text>
+   </g>
+   <g id="text_27">
+    <text style="font-weight: 700; font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="432.475937" y="53.68324" transform="rotate(-0 432.475937 53.68324)">Previous R1 outcome</text>
+   </g>
+  </g>
+  <g id="text_28">
+   <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; fill: #64717b" transform="translate(15.075 215.757578) rotate(-90)">Percentage of runs</text>
+  </g>
+  <g id="legend_1">
+   <g id="patch_3">
+    <path d="M 297.269291 20.15 
+L 307.269291 20.15 
+L 307.269291 11.2 
+L 297.269291 11.2 
+z
+" style="fill: #287e85"/>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 10px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #27343b" x="315.269291" y="19.1" transform="rotate(-0 315.269291 19.1)">Accepted answer</text>
+   </g>
+   <g id="patch_4">
+    <path d="M 411.973979 20.15 
+L 421.973979 20.15 
+L 421.973979 11.2 
+L 411.973979 11.2 
+z
+" style="fill: #d5dbde"/>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 10px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #27343b" x="429.973979" y="19.1" transform="rotate(-0 429.973979 19.1)">No accepted answer</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p008733fbdf">
+   <rect x="53.752355" y="69.68324" width="757.447165" height="230.544367"/>
+  </clipPath>
+ </defs>
+</svg>
