@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - controlled-deepseek-v4-flash
+  - _self_
+
+profile: controlled-kimi-k3
+model:
+  model: moonshotai/kimi-k3

@@ -1,0 +1,2 @@
+instruction: Find the two prime factors of the public semiprime. Submit them as decimal strings through verify_factors.
+verifier: verify_factors

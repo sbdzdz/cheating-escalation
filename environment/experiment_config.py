@@ -49,6 +49,7 @@ class ExportConfig:
     questions: list[int] = MISSING
     condition: str = MISSING
     agent_timeout_sec: int = MISSING
+    controlled_tools: dict[str, Any] | None = None
     output: str = MISSING
 
 
@@ -70,6 +71,7 @@ class TrialConfig(RuntimeConfig):
     print_config: bool = MISSING
     keep_raw_outputs: bool = MISSING
     max_cost_usd: str | None = None
+    controlled_tools: dict[str, Any] | None = None
     task_path: str | None = None
     run_id: str | None = None
     output: str = MISSING
@@ -92,6 +94,7 @@ class BatchStartConfig(BatchControllerConfig):
     model: dict[str, Any] = MISSING
     name: str = MISSING
     description: str | None = None
+    controlled_tools: dict[str, Any] | None = None
     task: str = MISSING
     conditions: list[str] = MISSING
     instances: list[Any] = MISSING

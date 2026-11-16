@@ -14,7 +14,7 @@ TASK_FILES = "COPY rootfs/ /\nRUN chown -R agent:agent /workspace /home/runner\n
 
 
 def runtime_spec(runtime):
-    if runtime not in {"deepseek", "zcode"}:
+    if runtime not in {"deepseek", "zcode", "controlled"}:
         raise ValueError(f"Unknown prebuilt runtime: {runtime}")
     if runtime == "deepseek":
         package = ROOT / "configs/acp/deepseek-runtime"
@@ -22,11 +22,20 @@ def runtime_spec(runtime):
         version = json.loads((package / "package.json").read_text())["dependencies"][
             "@deepseek-ai/dsh"
         ]
-    else:
+    elif runtime == "zcode":
         package = ROOT / "configs/zcode"
         names = ("source.json",)
         version = json.loads((package / "source.json").read_text())["commit"]
+    else:
+        package = ROOT / "configs/controlled-runtime"
+        names = ("pyproject.toml", "uv.lock")
+        version = "controlled-tools-v1"
     files = {name: (package / name).read_bytes() for name in names}
+    if runtime == "controlled":
+        files["controlled_runner.py"] = (
+            ROOT / "environment/controlled_runner.py"
+        ).read_bytes()
+        files["model_log.py"] = (ROOT / "environment/model_log.py").read_bytes()
     recipe = (ROOT / f"docker/{runtime}-runtime.Dockerfile").read_text()
     files["Dockerfile"] = recipe.replace(
         "# TASK_BASE", TASK_BASE.read_text().rstrip()

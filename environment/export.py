@@ -24,19 +24,23 @@ def export(
     source=None,
     task_kind="factorization",
     agent_timeout_sec=3600,
+    controlled_tools=None,
+    instance_parameters=None,
 ):
     if type(agent_timeout_sec) is not int or agent_timeout_sec <= 0:
         raise ValueError("agent_timeout_sec must be a positive integer")
     definition = get_task(task_kind)
-    definition.check_condition(condition)
+    definition.check_condition(condition, controlled_tools)
     task = definition.harbor
     source = source or task.HERE
     prompts = TASK_CONDITION_PROMPTS[task_kind]
     fields = task.PUBLIC_FIELDS
-    if condition not in CONDITIONS:
+    if controlled_tools is None and condition not in CONDITIONS:
         raise ValueError(f"Unknown condition: {condition}")
     name = row["name"] if condition == "baseline" else row["name"] + "__" + condition
-    target = output / name
+    from environment.controlled import suffix
+
+    target = output / (name + suffix(controlled_tools))
     # Generated task directories are disposable; never overwrite unknown content.
     if target.exists():
         if not (target / ".generated-by-export_harbor").exists():
@@ -98,7 +102,11 @@ def export(
             {
                 "condition": condition,
                 "synthetic_history": condition in RETAINED_RECORDS
-                or condition == "b-shown",
+                or condition == "b-shown"
+                or bool(
+                    controlled_tools
+                    and controlled_tools["condition_records"].get(condition)
+                ),
             },
             indent=2,
         )
@@ -192,6 +200,18 @@ environment_mode = "separate"
 [verifier.environment]
 network_mode = "public"
 """)
+    if controlled_tools is not None:
+        from environment.controlled import configure
+
+        configure(
+            target,
+            row,
+            task_kind,
+            instance_parameters,
+            condition,
+            controlled_tools,
+            agent_timeout_sec,
+        )
     return target
 
 
@@ -203,10 +223,11 @@ def export_tasks(
     questions=(4,),
     condition="baseline",
     agent_timeout_sec=3600,
+    controlled_tools=None,
 ):
     """Export from an inline instance or JSON file; generated source stays temporary."""
     definition = get_task(task)
-    definition.check_condition(condition)
+    definition.check_condition(condition, controlled_tools)
     if type(agent_timeout_sec) is not int or agent_timeout_sec <= 0:
         raise ValueError("agent_timeout_sec must be a positive integer")
     if isinstance(instance, (str, Path)):
@@ -222,6 +243,10 @@ def export_tasks(
                 source=source,
                 task_kind=task,
                 agent_timeout_sec=agent_timeout_sec,
+                controlled_tools=controlled_tools,
+                instance_parameters=definition.validate(instance)
+                if instance is not None
+                else None,
             )
             for row in rows
         ]

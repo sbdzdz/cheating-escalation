@@ -1,5 +1,6 @@
 defaults:
   - export_schema
+  - optional controlled_tools: null
   - override hydra/job_logging: disabled
   - override hydra/hydra_logging: disabled
   - _self_

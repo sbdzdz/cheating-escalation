@@ -162,11 +162,24 @@ def prepare(config_path, directory):
     items = expand_instances(task_kind, config["instances"], config.get("seeds"))
     from environment.tasks import get_task
 
+    controlled = config.get("controlled_tools")
+    if (
+        controlled is not None
+        and profile["agent"] != "environment.agents.controlled:ControlledAgent"
+    ):
+        raise ValueError("Controlled tasks require a controlled model profile")
+    if (
+        controlled is None
+        and profile["agent"] == "environment.agents.controlled:ControlledAgent"
+    ):
+        raise ValueError(
+            "Controlled model profile requires controlled_tools configuration"
+        )
     conditions = config.get("conditions", ["baseline"])
     if not isinstance(conditions, list) or not conditions:
         raise ValueError("conditions must be a nonempty list")
     for condition in conditions:
-        get_task(task_kind).check_condition(condition)
+        get_task(task_kind).check_condition(condition, controlled)
     save(directory / "resolved-config.json", config)
     manifest = dict(
         schema_version=1,
@@ -187,10 +200,12 @@ def prepare(config_path, directory):
                     instance=instance,
                     condition=condition,
                     agent_timeout_sec=agent_timeout,
+                    controlled_tools=controlled,
                 )
                 spec = dict(
                     task=task_kind,
                     instance=instance,
+                    controlled_tools=controlled,
                     condition=condition,
                     profile=profile,
                     max_cost_usd=str(cap),

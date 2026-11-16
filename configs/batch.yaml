@@ -1,5 +1,6 @@
 defaults:
   - model: deepseek-v4-flash
+  - optional controlled_tools: null
   - _self_
   - experiments: complexity-sweep
 

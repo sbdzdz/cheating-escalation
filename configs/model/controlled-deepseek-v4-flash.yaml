@@ -1,0 +1,17 @@
+# @package _global_
+profile: controlled-deepseek-v4-flash
+model:
+  agent: environment.agents.controlled:ControlledAgent
+  model: deepseek/deepseek-v4-flash
+  kwargs:
+    reasoning_effort: high
+    max_tokens: 256000
+    max_turns: 10000
+    request_timeout_sec: 3600
+  api_key_env: OPENROUTER_API_KEY
+  key_target: CONTROLLED_API_KEY
+  url_target: CONTROLLED_BASE_URL
+  env:
+    CONTROLLED_BASE_URL: https://openrouter.ai/api/v1
+  setup_timeout_multiplier: 5
+  runtime: controlled

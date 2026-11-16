@@ -1,6 +1,7 @@
 defaults:
   - trial_schema
   - model: deepseek-v4-flash
+  - optional controlled_tools: null
   - override hydra/job_logging: disabled
   - override hydra/hydra_logging: disabled
   - _self_

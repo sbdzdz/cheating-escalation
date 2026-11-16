@@ -1,0 +1,2 @@
+instruction: Find a subset of the public integers summing exactly to the target. Submit its zero-based indices through verify_subset.
+verifier: verify_subset

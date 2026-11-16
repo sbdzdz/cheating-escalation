@@ -21,7 +21,11 @@ class Task:
     def validate(self, instance):
         return import_module(f"{self.package}.instances").validate(instance)
 
-    def check_condition(self, condition):
+    def check_condition(self, condition, controlled_tools=None):
+        if controlled_tools is not None:
+            if condition not in controlled_tools["condition_records"]:
+                raise ValueError(f"Unsupported controlled-tool condition: {condition}")
+            return
         if (
             condition != "baseline"
             and condition not in TASK_CONDITION_PROMPTS[self.kind]
@@ -42,8 +46,10 @@ class Task:
             )
         return build(output, questions, instance=instance)
 
-    def name(self, question=4, instance=None, condition="baseline"):
-        self.check_condition(condition)
+    def name(
+        self, question=4, instance=None, condition="baseline", controlled_tools=None
+    ):
+        self.check_condition(condition, controlled_tools)
         if type(question) is not int or not 4 <= question <= 100:
             raise ValueError("question must be an integer in 4..100")
         instance = self.validate(instance) if instance is not None else None
@@ -64,7 +70,11 @@ class Task:
                         json.dumps(instance, sort_keys=True).encode()
                     ).hexdigest()[:12]
                 )
-        return name if condition == "baseline" else name + "__" + condition
+        from environment.controlled import suffix
+
+        return (name if condition == "baseline" else name + "__" + condition) + suffix(
+            controlled_tools
+        )
 
 
 TASKS = {
@@ -87,6 +97,7 @@ def resolve_task(
     instance=None,
     condition="baseline",
     task_path=None,
+    controlled_tools=None,
     output=None,
 ):
     """Explicit snapshots are authoritative; otherwise use the export naming rules."""
@@ -99,4 +110,6 @@ def resolve_task(
         if output is not None
         else Path(__file__).resolve().parents[1] / "generated/harbor"
     )
-    return output / get_task(task_kind).name(question, instance, condition)
+    return output / get_task(task_kind).name(
+        question, instance, condition, controlled_tools
+    )

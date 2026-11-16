@@ -1,0 +1,6 @@
+defaults:
+  - high
+  - _self_
+condition_records:
+  r1-effective-caught: [R1]
+  r2-effective-caught: [R2]

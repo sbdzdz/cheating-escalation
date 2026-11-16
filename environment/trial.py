@@ -57,10 +57,19 @@ def run_trial(config):
         instance=args.instance,
         condition=args.condition,
         task_path=args.task_path,
+        controlled_tools=config.get("controlled_tools"),
     )
     if not (task / "task.toml").exists():
         raise ValueError(
             f"Export the selected task first; expected task.toml in {task}"
+        )
+    controlled = (task / "controlled-tools.json").exists()
+    is_controlled_runner = (
+        profile["agent"] == "environment.agents.controlled:ControlledAgent"
+    )
+    if args.agent is None and controlled != is_controlled_runner:
+        raise ValueError(
+            "Controlled tasks require the controlled model profile, and vice versa"
         )
     key_env = profile["api_key_env"]
     if key_env and cap is None:

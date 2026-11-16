@@ -43,6 +43,11 @@ def compact_job(job: Path, *, keep_debug: bool = False) -> None:
                 mapping[str((trial / source).relative_to(job))] = str(
                     (target / name).relative_to(job)
                 )
+        direct_calls = trial / "agent/model-calls.jsonl"
+        if not standard and direct_calls.exists():
+            (target / "transcript.json").write_text(
+                json.dumps(model_log.read(direct_calls), indent=2) + "\n"
+            )
         for event_file, event_format in (
             ("acp-events.jsonl", "acp-events-v1"),
             ("zcode-events.jsonl", "zcode-events-v1"),
