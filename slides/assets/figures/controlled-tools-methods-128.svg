@@ -1,0 +1,629 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1052.39952pt" height="266.97976pt" viewBox="0 0 1052.39952 266.97976" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 266.97976 
+L 1052.39952 266.97976 
+L 1052.39952 0 
+L 0 0 
+z
+" style="fill: #fafbf7"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 101.91 224.722796 
+L 290.572732 224.722796 
+L 290.572732 71.657595 
+L 101.91 71.657595 
+z
+" style="fill: #fafbf7"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 101.91 224.722796 
+L 101.91 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="101.91" y="237.972796" transform="rotate(-0 101.91 237.972796)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 139.642546 224.722796 
+L 139.642546 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="139.642546" y="237.972796" transform="rotate(-0 139.642546 237.972796)">20%</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 177.375093 224.722796 
+L 177.375093 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="177.375093" y="237.972796" transform="rotate(-0 177.375093 237.972796)">40%</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 215.107639 224.722796 
+L 215.107639 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="215.107639" y="237.972796" transform="rotate(-0 215.107639 237.972796)">60%</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 252.840185 224.722796 
+L 252.840185 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="252.840185" y="237.972796" transform="rotate(-0 252.840185 237.972796)">80%</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_11">
+      <path d="M 290.572732 224.722796 
+L 290.572732 71.657595 
+" clip-path="url(#p8a0b718e83)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12"/>
+     <g id="text_6">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="290.572732" y="237.972796" transform="rotate(-0 290.572732 237.972796)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_13"/>
+     <g id="text_7">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #182520" x="93.91" y="102.043462" transform="rotate(-0 93.91 102.043462)">Manual solving</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_14"/>
+     <g id="text_8">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #a34f43" x="93.91" y="153.065195" transform="rotate(-0 93.91 153.065195)">Computation</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_15"/>
+     <g id="text_9">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: end; fill: #a34f43" x="93.91" y="204.086929" transform="rotate(-0 93.91 204.086929)">Answer lookup</text>
+     </g>
+    </g>
+   </g>
+   <g id="tip82"><title>Baseline: Manual solving: Attempted or accessed without acceptance: 70% (21/30 trials)</title>
+    <path d="M 101.91 83.647702 
+L 233.973912 83.647702 
+L 233.973912 110.689221 
+L 101.91 110.689221 
+z
+" clip-path="url(#p8a0b718e83)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip83"><title>Baseline: Computation: Accepted after access / manual answer: 50% (15/30 trials)</title>
+    <path d="M 101.91 134.669436 
+L 196.241366 134.669436 
+L 196.241366 161.710955 
+L 101.91 161.710955 
+z
+" clip-path="url(#p8a0b718e83)" style="fill: #246b56"/>
+   </g>
+   <g id="tip84"><title>Baseline: Computation: Attempted or accessed without acceptance: 6.66667% (2/30 trials)</title>
+    <path d="M 196.241366 134.669436 
+L 208.818881 134.669436 
+L 208.818881 161.710955 
+L 196.241366 161.710955 
+z
+" clip-path="url(#p8a0b718e83)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip85"><title>Baseline: Answer lookup: Accepted after access / manual answer: 20% (6/30 trials)</title>
+    <path d="M 101.91 185.691169 
+L 139.642546 185.691169 
+L 139.642546 212.732688 
+L 101.91 212.732688 
+z
+" clip-path="url(#p8a0b718e83)" style="fill: #246b56"/>
+   </g>
+   <g id="tip101"><title>Baseline: manual work not established for 8/30 trials. These are not confirmed manual attempts.</title>
+    <path d="M 233.973912 83.647702 
+L 284.283974 83.647702 
+L 284.283974 110.689221 
+L 233.973912 110.689221 
+z
+" clip-path="url(#p8a0b718e83)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="196.241366" y="64.278689" transform="rotate(-0 196.241366 64.278689)">n = 30</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #182520" x="196.241366" y="43.657595" transform="rotate(-0 196.241366 43.657595)">Baseline</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_3">
+    <path d="M 347.911013 224.722796 
+L 536.573744 224.722796 
+L 536.573744 71.657595 
+L 347.911013 71.657595 
+z
+" style="fill: #fafbf7"/>
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_7">
+     <g id="line2d_16">
+      <path d="M 347.911013 224.722796 
+L 347.911013 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_17"/>
+     <g id="text_12">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="347.911013" y="237.972796" transform="rotate(-0 347.911013 237.972796)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_18">
+      <path d="M 385.643559 224.722796 
+L 385.643559 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_19"/>
+     <g id="text_13">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="385.643559" y="237.972796" transform="rotate(-0 385.643559 237.972796)">20%</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_20">
+      <path d="M 423.376105 224.722796 
+L 423.376105 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_21"/>
+     <g id="text_14">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="423.376105" y="237.972796" transform="rotate(-0 423.376105 237.972796)">40%</text>
+     </g>
+    </g>
+    <g id="xtick_10">
+     <g id="line2d_22">
+      <path d="M 461.108652 224.722796 
+L 461.108652 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_23"/>
+     <g id="text_15">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="461.108652" y="237.972796" transform="rotate(-0 461.108652 237.972796)">60%</text>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_24">
+      <path d="M 498.841198 224.722796 
+L 498.841198 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_25"/>
+     <g id="text_16">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="498.841198" y="237.972796" transform="rotate(-0 498.841198 237.972796)">80%</text>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_26">
+      <path d="M 536.573744 224.722796 
+L 536.573744 71.657595 
+" clip-path="url(#pf63135cb47)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_27"/>
+     <g id="text_17">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="536.573744" y="237.972796" transform="rotate(-0 536.573744 237.972796)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_4">
+     <g id="line2d_28"/>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_29"/>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_30"/>
+    </g>
+   </g>
+   <g id="tip86"><title>Computation penalised: Manual solving: Attempted or accessed without acceptance: 93.3333% (28/30 trials)</title>
+    <path d="M 347.911013 83.647702 
+L 523.996229 83.647702 
+L 523.996229 110.689221 
+L 347.911013 110.689221 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip87"><title>Computation penalised: Computation: Accepted after access / manual answer: 10% (3/30 trials)</title>
+    <path d="M 347.911013 134.669436 
+L 366.777286 134.669436 
+L 366.777286 161.710955 
+L 347.911013 161.710955 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #246b56"/>
+   </g>
+   <g id="tip88"><title>Computation penalised: Computation: Attempted or accessed without acceptance: 13.3333% (4/30 trials)</title>
+    <path d="M 366.777286 134.669436 
+L 391.932317 134.669436 
+L 391.932317 161.710955 
+L 366.777286 161.710955 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip89"><title>Computation penalised: Answer lookup: Accepted after access / manual answer: 23.3333% (7/30 trials)</title>
+    <path d="M 347.911013 185.691169 
+L 391.932317 185.691169 
+L 391.932317 212.732688 
+L 347.911013 212.732688 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #246b56"/>
+   </g>
+   <g id="tip90"><title>Computation penalised: Answer lookup: Attempted or accessed without acceptance: 20% (6/30 trials)</title>
+    <path d="M 391.932317 185.691169 
+L 429.664863 185.691169 
+L 429.664863 212.732688 
+L 391.932317 212.732688 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip102"><title>Computation penalised: manual work not established for 2/30 trials. These are not confirmed manual attempts.</title>
+    <path d="M 523.996229 83.647702 
+L 536.573744 83.647702 
+L 536.573744 110.689221 
+L 523.996229 110.689221 
+z
+" clip-path="url(#pf63135cb47)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="442.242379" y="64.278689" transform="rotate(-0 442.242379 64.278689)">n = 30</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #182520" x="442.242379" y="43.657595" transform="rotate(-0 442.242379 43.657595)">Computation penalised</text>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_4">
+    <path d="M 593.912026 224.722796 
+L 782.574757 224.722796 
+L 782.574757 71.657595 
+L 593.912026 71.657595 
+z
+" style="fill: #fafbf7"/>
+   </g>
+   <g id="matplotlib.axis_5">
+    <g id="xtick_13">
+     <g id="line2d_31">
+      <path d="M 593.912026 224.722796 
+L 593.912026 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_32"/>
+     <g id="text_20">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="593.912026" y="237.972796" transform="rotate(-0 593.912026 237.972796)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_14">
+     <g id="line2d_33">
+      <path d="M 631.644572 224.722796 
+L 631.644572 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_34"/>
+     <g id="text_21">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="631.644572" y="237.972796" transform="rotate(-0 631.644572 237.972796)">20%</text>
+     </g>
+    </g>
+    <g id="xtick_15">
+     <g id="line2d_35">
+      <path d="M 669.377118 224.722796 
+L 669.377118 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_36"/>
+     <g id="text_22">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="669.377118" y="237.972796" transform="rotate(-0 669.377118 237.972796)">40%</text>
+     </g>
+    </g>
+    <g id="xtick_16">
+     <g id="line2d_37">
+      <path d="M 707.109665 224.722796 
+L 707.109665 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_38"/>
+     <g id="text_23">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="707.109665" y="237.972796" transform="rotate(-0 707.109665 237.972796)">60%</text>
+     </g>
+    </g>
+    <g id="xtick_17">
+     <g id="line2d_39">
+      <path d="M 744.842211 224.722796 
+L 744.842211 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_40"/>
+     <g id="text_24">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="744.842211" y="237.972796" transform="rotate(-0 744.842211 237.972796)">80%</text>
+     </g>
+    </g>
+    <g id="xtick_18">
+     <g id="line2d_41">
+      <path d="M 782.574757 224.722796 
+L 782.574757 71.657595 
+" clip-path="url(#p8c6621054a)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_42"/>
+     <g id="text_25">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="782.574757" y="237.972796" transform="rotate(-0 782.574757 237.972796)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_6">
+    <g id="ytick_7">
+     <g id="line2d_43"/>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_44"/>
+    </g>
+    <g id="ytick_9">
+     <g id="line2d_45"/>
+    </g>
+   </g>
+   <g id="tip91"><title>Answer lookup penalised: Manual solving: Attempted or accessed without acceptance: 93.3333% (28/30 trials)</title>
+    <path d="M 593.912026 83.647702 
+L 769.997242 83.647702 
+L 769.997242 110.689221 
+L 593.912026 110.689221 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip92"><title>Answer lookup penalised: Computation: Accepted after access / manual answer: 26.6667% (8/30 trials)</title>
+    <path d="M 593.912026 134.669436 
+L 644.222087 134.669436 
+L 644.222087 161.710955 
+L 593.912026 161.710955 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #246b56"/>
+   </g>
+   <g id="tip93"><title>Answer lookup penalised: Computation: Attempted or accessed without acceptance: 6.66667% (2/30 trials)</title>
+    <path d="M 644.222087 134.669436 
+L 656.799603 134.669436 
+L 656.799603 161.710955 
+L 644.222087 161.710955 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip94"><title>Answer lookup penalised: Answer lookup: Accepted after access / manual answer: 3.33333% (1/30 trials)</title>
+    <path d="M 593.912026 185.691169 
+L 600.200783 185.691169 
+L 600.200783 212.732688 
+L 593.912026 212.732688 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #246b56"/>
+   </g>
+   <g id="tip95"><title>Answer lookup penalised: Answer lookup: Attempted or accessed without acceptance: 6.66667% (2/30 trials)</title>
+    <path d="M 600.200783 185.691169 
+L 612.778299 185.691169 
+L 612.778299 212.732688 
+L 600.200783 212.732688 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip103"><title>Answer lookup penalised: manual work not established for 2/30 trials. These are not confirmed manual attempts.</title>
+    <path d="M 769.997242 83.647702 
+L 782.574757 83.647702 
+L 782.574757 110.689221 
+L 769.997242 110.689221 
+z
+" clip-path="url(#p8c6621054a)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="688.243391" y="64.278689" transform="rotate(-0 688.243391 64.278689)">n = 30</text>
+   </g>
+   <g id="text_27">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #182520" x="688.243391" y="43.657595" transform="rotate(-0 688.243391 43.657595)">Answer lookup penalised</text>
+   </g>
+  </g>
+  <g id="axes_4">
+   <g id="patch_5">
+    <path d="M 839.913038 224.722796 
+L 1028.57577 224.722796 
+L 1028.57577 71.657595 
+L 839.913038 71.657595 
+z
+" style="fill: #fafbf7"/>
+   </g>
+   <g id="matplotlib.axis_7">
+    <g id="xtick_19">
+     <g id="line2d_46">
+      <path d="M 839.913038 224.722796 
+L 839.913038 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_47"/>
+     <g id="text_28">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="839.913038" y="237.972796" transform="rotate(-0 839.913038 237.972796)">0%</text>
+     </g>
+    </g>
+    <g id="xtick_20">
+     <g id="line2d_48">
+      <path d="M 877.645585 224.722796 
+L 877.645585 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_49"/>
+     <g id="text_29">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="877.645585" y="237.972796" transform="rotate(-0 877.645585 237.972796)">20%</text>
+     </g>
+    </g>
+    <g id="xtick_21">
+     <g id="line2d_50">
+      <path d="M 915.378131 224.722796 
+L 915.378131 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_51"/>
+     <g id="text_30">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="915.378131" y="237.972796" transform="rotate(-0 915.378131 237.972796)">40%</text>
+     </g>
+    </g>
+    <g id="xtick_22">
+     <g id="line2d_52">
+      <path d="M 953.110677 224.722796 
+L 953.110677 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_53"/>
+     <g id="text_31">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="953.110677" y="237.972796" transform="rotate(-0 953.110677 237.972796)">60%</text>
+     </g>
+    </g>
+    <g id="xtick_23">
+     <g id="line2d_54">
+      <path d="M 990.843224 224.722796 
+L 990.843224 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_55"/>
+     <g id="text_32">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="990.843224" y="237.972796" transform="rotate(-0 990.843224 237.972796)">80%</text>
+     </g>
+    </g>
+    <g id="xtick_24">
+     <g id="line2d_56">
+      <path d="M 1028.57577 224.722796 
+L 1028.57577 71.657595 
+" clip-path="url(#pd99542d36f)" style="fill: none; stroke: #e2e8df; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_57"/>
+     <g id="text_33">
+      <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="1028.57577" y="237.972796" transform="rotate(-0 1028.57577 237.972796)">100%</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_8">
+    <g id="ytick_10">
+     <g id="line2d_58"/>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_59"/>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_60"/>
+    </g>
+   </g>
+   <g id="tip96"><title>Both penalised: Manual solving: Attempted or accessed without acceptance: 96.6667% (29/30 trials)</title>
+    <path d="M 839.913038 83.647702 
+L 1022.287012 83.647702 
+L 1022.287012 110.689221 
+L 839.913038 110.689221 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip97"><title>Both penalised: Computation: Accepted after access / manual answer: 13.3333% (4/30 trials)</title>
+    <path d="M 839.913038 134.669436 
+L 865.068069 134.669436 
+L 865.068069 161.710955 
+L 839.913038 161.710955 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #246b56"/>
+   </g>
+   <g id="tip98"><title>Both penalised: Computation: Attempted or accessed without acceptance: 10% (3/30 trials)</title>
+    <path d="M 865.068069 134.669436 
+L 883.934342 134.669436 
+L 883.934342 161.710955 
+L 865.068069 161.710955 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip99"><title>Both penalised: Answer lookup: Accepted after access / manual answer: 3.33333% (1/30 trials)</title>
+    <path d="M 839.913038 185.691169 
+L 846.201796 185.691169 
+L 846.201796 212.732688 
+L 839.913038 212.732688 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #246b56"/>
+   </g>
+   <g id="tip100"><title>Both penalised: Answer lookup: Attempted or accessed without acceptance: 10% (3/30 trials)</title>
+    <path d="M 846.201796 185.691169 
+L 865.068069 185.691169 
+L 865.068069 212.732688 
+L 846.201796 212.732688 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="tip104"><title>Both penalised: manual work not established for 1/30 trials. These are not confirmed manual attempts.</title>
+    <path d="M 1022.287012 83.647702 
+L 1028.57577 83.647702 
+L 1028.57577 110.689221 
+L 1022.287012 110.689221 
+z
+" clip-path="url(#pd99542d36f)" style="fill: #c6d5c7"/>
+   </g>
+   <g id="text_34">
+    <text style="font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="934.244404" y="64.278689" transform="rotate(-0 934.244404 64.278689)">n = 30</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #182520" x="934.244404" y="43.657595" transform="rotate(-0 934.244404 43.657595)">Both penalised</text>
+   </g>
+  </g>
+  <g id="text_36">
+   <text style="font-size: 14px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #65736b" x="526.19976" y="256.68226" transform="rotate(-0 526.19976 256.68226)">Percentage of trials</text>
+  </g>
+  <g id="legend_1">
+   <g id="patch_6">
+    <path d="M 356.487807 23.335 
+L 369.487807 23.335 
+L 369.487807 11.7 
+L 356.487807 11.7 
+z
+" style="fill: #246b56; stroke: #246b56; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_37">
+    <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182520" x="379.887807" y="21.97" transform="rotate(-0 379.887807 21.97)">Accepted answer</text>
+   </g>
+   <g id="patch_7">
+    <path d="M 512.103901 23.335 
+L 525.103901 23.335 
+L 525.103901 11.7 
+L 512.103901 11.7 
+z
+" style="fill: #c6d5c7; stroke: #c6d5c7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_38">
+    <text style="font-size: 13px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #182520" x="535.503901" y="21.97" transform="rotate(-0 535.503901 21.97)">Attempted or accessed only</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p8a0b718e83">
+   <rect x="101.91" y="71.657595" width="188.662732" height="153.065201"/>
+  </clipPath>
+  <clipPath id="pf63135cb47">
+   <rect x="347.911013" y="71.657595" width="188.662732" height="153.065201"/>
+  </clipPath>
+  <clipPath id="p8c6621054a">
+   <rect x="593.912026" y="71.657595" width="188.662732" height="153.065201"/>
+  </clipPath>
+  <clipPath id="pd99542d36f">
+   <rect x="839.913038" y="71.657595" width="188.662732" height="153.065201"/>
+  </clipPath>
+ </defs>
+</svg>
