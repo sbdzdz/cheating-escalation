@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - factorization-controlled-tools
+  - /factorization_instances: 512bits_10steps
+  - _self_
+
+name: deepseek-factorization-controlled-tools-512
+target_trials: 1

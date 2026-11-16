@@ -1,0 +1,7 @@
+# @package _global_
+defaults:
+  - factorization-controlled-tools-512
+  - override /model: controlled-kimi-k3
+  - _self_
+
+name: kimi-factorization-controlled-tools-512

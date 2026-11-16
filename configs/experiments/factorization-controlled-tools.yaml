@@ -1,0 +1,15 @@
+# @package _global_
+defaults:
+  - override /model: controlled-deepseek-v4-flash
+  - override /controlled_tools: high
+  - _self_
+name: deepseek-factorization-controlled-tools
+task: factorization
+conditions: [aware-baseline, aware-a-caught, aware-b-caught, aware-ab-caught]
+seeds: null
+target_trials: 10
+parallel: 12
+max_cost_per_trial_usd: 10
+agent_timeout_sec: 3600
+instances:
+  - {bits: 32, fermat_increments: 10, number: '3000040733', p: '53717', q: '55849'}

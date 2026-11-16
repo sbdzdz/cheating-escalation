@@ -1,0 +1,8 @@
+# @package _global_
+defaults:
+  - subset-sum-controlled-tools
+  - _self_
+
+name: deepseek-subset-sum-controlled-tools-128
+instances:
+  - {bits: 128, set_size: 64}

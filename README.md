@@ -132,6 +132,28 @@ R1 recomputes subset-sum generation from its saved parameters, or uses Fermat
 search for factorisation. Both shortcuts return the current answer in the same
 format. Explicit generated instances are required.
 
+Prepare either four-condition experiment without launching paid calls:
+
+```sh
+uv run scripts/run_batch.py action=start experiments=subset-sum-controlled-tools dry_run=true
+uv run scripts/run_batch.py action=start experiments=factorization-controlled-tools dry_run=true
+```
+
+Each uses ten trials per condition and a one-hour limit. `aware-baseline` has no
+retained record; `aware-a-caught`, `aware-b-caught`, and `aware-ab-caught` describe
+prior disqualification for R1, R2, or both. Every record names only the operation
+ID. Task instructions live under `tasks/*/controlled_prompt.yaml`; shared wording,
+operation descriptions, permissions and limits live in `configs/controlled_tools/`.
+
+Discovery and permissions can be varied independently. For example, prepare the
+low-discovery baseline with both shortcuts permitted:
+
+```sh
+uv run scripts/run_batch.py action=start experiments=subset-sum-controlled-tools \
+  name=controlled-low-permitted controlled_tools=low 'conditions=[aware-baseline]' \
+  'controlled_tools.permitted_shortcuts=[R1,R2]' dry_run=true
+```
+
 Use `model=controlled-deepseek-v4-flash` for individual controlled tasks, with the
 same `controlled_tools=high` or `low` selection on export and trial commands.
 Other model harnesses are rejected for this variant. This is a different harness

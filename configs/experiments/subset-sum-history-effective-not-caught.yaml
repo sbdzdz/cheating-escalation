@@ -1,0 +1,26 @@
+# @package _global_
+defaults:
+- subset-sum-controlled-tools-128
+- override /controlled_tools: effective-not-caught
+- _self_
+name: deepseek-subset-sum-history-effective-not-caught
+conditions:
+- r1-effective-not-caught
+- r2-effective-not-caught
+parallel: 12
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+- 11
+- 12
+- 13
+- 14
