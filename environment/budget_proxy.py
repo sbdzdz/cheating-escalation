@@ -69,11 +69,26 @@ class Budget:
 
 
 class BudgetProxy:
-    def __init__(self, key, limit, path, *, client=None, log_path=None):
+    def __init__(
+        self,
+        key,
+        limit,
+        path,
+        *,
+        client=None,
+        log_path=None,
+        request_timeout_sec=600,
+        model=None,
+        expires_at=None,
+    ):
+        self.model = model
+        self.expires_at = expires_at
         self.budget = Budget(limit, path)
         self.log = ModelLog(log_path or Path(path).with_name("model-calls.jsonl"))
         self.token = secrets.token_urlsafe(32)
-        self.client = client or httpx.Client(timeout=httpx.Timeout(600, connect=30))
+        self.client = client or httpx.Client(
+            timeout=httpx.Timeout(request_timeout_sec, connect=30), trust_env=False
+        )
         self.key = key
         self.stopping = False
         proxy = self
@@ -115,6 +130,12 @@ class BudgetProxy:
                     return
                 # Covers the entire upstream request AND cost reconciliation.
                 with proxy.budget.lock:
+                    if proxy.expires_at is not None and time.time() >= proxy.expires_at:
+                        self.error(403, "Run token expired")
+                        return
+                    if proxy.model is not None and payload.get("model") != proxy.model:
+                        self.error(403, "Model not permitted for this run")
+                        return
                     if proxy.stopping:
                         self.error(503, "Run has ended")
                         return

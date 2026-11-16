@@ -49,6 +49,36 @@ def normalize_profile(profile):
     ):
         if key not in profile:
             raise ValueError(f"Profile is missing {key}")
+    # Apply to direct trials as well as batch snapshots, before command creation.
+    for key in profile["env"]:
+        if any(
+            word in key.upper()
+            for word in ("API_KEY", "TOKEN", "SECRET", "PASSWORD", "AUTHORIZATION")
+        ):
+            raise ValueError("Profile credentials must come from the Keychain broker")
+
+    def reject_credentials(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if str(key).lower().replace("-", "_") in {
+                    "api_key",
+                    "apikey",
+                    "authorization",
+                    "password",
+                    "secret",
+                    "access_token",
+                    "auth_token",
+                    "token",
+                }:
+                    raise ValueError(
+                        "Inline agent credentials are not allowed; use the Keychain broker"
+                    )
+                reject_credentials(item)
+        elif isinstance(value, list):
+            for item in value:
+                reject_credentials(item)
+
+    reject_credentials(profile["kwargs"])
     registry = profile["kwargs"].get("registry_entry_path")
     if registry:
         # Registry paths are relative to the project root, like exported task paths.

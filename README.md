@@ -12,7 +12,49 @@ Install uv and start Docker with Compose support.
 uv sync --locked
 ```
 
-Set `OPENROUTER_API_KEY` in the project-root `.env`.
+Model credentials are read only by a local macOS Keychain broker. There is no
+`.env` or inherited API-key fallback.
+
+1. In **Keychain Access**, create a password item in your login keychain:
+   name `cheating-escalation.openrouter`, account your macOS username, password
+   your OpenRouter key. Use the native UI so the key never enters shell arguments
+   or chat. Configure the item's access controls there; ordinary Keychain items
+   do not automatically require Touch ID on every read.
+2. Start the broker in a separate terminal and leave it running:
+
+   ```sh
+   env -u OPENROUTER_API_KEY uv run scripts/run_credential_broker.py
+   ```
+
+   Approve Keychain access if prompted. It reads the key once into memory.
+   After the broker reports ready, remove the credential from `.env` and shell
+   startup files. Keep unrelated non-secret settings if needed.
+3. Launch experiments normally, with a positive `max_cost_usd` (individual runs)
+   or `max_cost_per_trial_usd` (batches). Oracle/nop checks need no broker.
+
+Non-secret broker settings live in `configs/credential_broker.yaml`: Keychain
+service/account, allowed models, maximum trial budget, token lifetime, socket,
+and output directory. Override them through Hydra, for example
+`keychain_account=YOUR_ACCOUNT`. Trials use the YAML socket setting, so edit that
+setting for both processes if changing the socket location.
+
+Workers request a proxy token over an owner-only Unix socket; each token permits
+only chat completions for its assigned model and expires after four hours by
+default. The broker preserves per-trial cost ledgers and model-call logs. Limits
+are checked between requests, so one response can exceed the remaining budget.
+Tokens are revoked when trials end; expiry handles workers that disappear.
+The upstream key is never exported to worker or container environments.
+
+Stop the broker with Ctrl+C after trials finish. A crash can leave its socket
+behind; remove `outputs/credential-broker/control.sock` only after confirming no
+broker is running, then restart. Broker shutdown interrupts active API requests.
+Completed evidence remains on disk. Existing experiment fingerprints are not
+rewritten by this migration; prepare new experiments under the new implementation.
+
+This separates credentials from ordinary worker processes, not from arbitrary
+code running as your macOS user. Such code can access the management socket or
+modify this repository. Stronger isolation requires a separately installed,
+restricted service. Keychain authorization follows macOS access controls.
 
 ## Batch runs
 
@@ -52,7 +94,7 @@ Edit instances in `configs/experiments/` and model settings in `configs/model/`.
 
 Select `model=glm-5.3-flash` for GLM 5.3 Flash through OpenRouter in Z.ai's
 ZCode harness. Individual runs use `model=glm-5.3-flash`. It uses the same
-`OPENROUTER_API_KEY` and `max_cost_usd` / `max_cost_per_trial_usd` controls.
+Keychain credential and `max_cost_usd` / `max_cost_per_trial_usd` controls.
 The ZCode source commit is pinned in `configs/zcode/source.json`; its first
 runtime build downloads and compiles the CLI. Build it ahead of time with:
 

@@ -8,8 +8,6 @@ from pathlib import Path
 from types import SimpleNamespace
 from uuid import uuid4
 
-from dotenv import load_dotenv
-
 from environment.model_config import resolve_profile
 from environment.outputs import compact_job
 from environment.tasks import resolve_task
@@ -37,6 +35,12 @@ def run_trial(config):
         )
     else:
         _, profile = resolve_profile(config)
+        if not all(
+            profile.get(k) for k in ("api_key_env", "key_target", "url_target", "model")
+        ):
+            raise ValueError(
+                "Model runs require the Keychain broker credential configuration"
+            )
     cap = None
     if args.max_cost_usd is not None:
         try:
@@ -58,7 +62,11 @@ def run_trial(config):
         raise ValueError(
             f"Export the selected task first; expected task.toml in {task}"
         )
-    load_dotenv(ROOT / ".env")
+    key_env = profile["api_key_env"]
+    if key_env and cap is None:
+        raise ValueError(
+            "Model runs require max_cost_usd and the Keychain credential broker"
+        )
     if (
         args.max_cost_usd
         and profile["env"].get(profile["url_target"], "").rstrip("/")
@@ -125,13 +133,16 @@ def run_trial(config):
         command += ["--ak", f"{key}={value}"]
     for key, value in profile["env"].items():
         command += ["--ae", f"{key}={value}"]
-    key_env = profile["api_key_env"]
     key_target, url_target = profile["key_target"], profile["url_target"]
     if key_env:
-        if not args.print_config and not os.environ.get(key_env):
-            raise ValueError(f"Set {key_env} in .env or the shell")
         command += ["--ae", f"{key_target}=${{{key_env}}}"]
-    child_env = dict(os.environ)
+    child_env = {
+        k: v
+        for k, v in os.environ.items()
+        if not k.endswith(("_API_KEY", "_SECRET", "_TOKEN"))
+    }
+    if key_env:
+        child_env.pop(key_env, None)
     child_env["PYTHONPATH"] = str(ROOT) + os.pathsep + child_env.get("PYTHONPATH", "")
     if args.print_config:
         command.append("--print-config")
@@ -149,19 +160,16 @@ def run_trial(config):
                 file=sys.stderr,
             )
         else:
-            from environment.budget_proxy import BudgetProxy
+            from environment.credential_broker import trial_proxy
 
             ledger = job / "budget.json"
-            with BudgetProxy(os.environ[key_env], cap, ledger) as proxy:
-                command[url_arg] = url_target + "=" + proxy.url
+            with trial_proxy(run_id, profile["model"], cap, ledger) as proxy:
+                command[url_arg] = url_target + "=" + proxy["url"]
                 child_env.pop(key_env, None)
                 child_env.pop(key_target, None)
-                child_env["BUDGET_PROXY_TOKEN"] = proxy.token
+                child_env["BUDGET_PROXY_TOKEN"] = proxy["token"]
                 print(f"Budget ledger: {ledger}", flush=True)
                 result = subprocess.run(command, env=child_env)
-                print(
-                    f"Budget status: {proxy.budget.status}; reported spend: ${proxy.budget.spent}"
-                )
             compact_job(job, keep_debug=args.keep_raw_outputs)
             return result.returncode
     result = subprocess.run(command, env=child_env)
