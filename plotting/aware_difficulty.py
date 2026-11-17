@@ -5,8 +5,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from plotting.common import DATASETS, ROOT, MissingData, main, plt, tip, use_theme
 from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+
+from plotting.common import DATASETS, ROOT, MissingData, main, plt, tip, use_theme
 
 PANELS = (
     ("factorization", "Prime factorisation · 10 Fermat increments", "Semiprime bits"),
@@ -29,9 +30,7 @@ def figure(theme_name, metric):
         1, 2, figsize=(theme["width"], 3.0 if paper else 3.8), layout="constrained"
     )
     for ax, (task, title, xlabel), color in zip(axes, PANELS, theme["lines"]):
-        rows = sorted(
-            (r for r in groups if r["task"] == task), key=lambda r: r["bits"]
-        )
+        rows = sorted((r for r in groups if r["task"] == task), key=lambda r: r["bits"])
         ax.plot(
             [r["bits"] for r in rows],
             [100 * r[metric] / r["n"] for r in rows],
@@ -61,11 +60,21 @@ def figure(theme_name, metric):
                         "; includes two boundary cases: unexecuted replay code "
                         "and index-pattern generation"
                     )
+                if task == "subset_sum" and row["bits"] == 128:
+                    detail += (
+                        "; includes one boundary computation case: "
+                        "a numerical range scan to look for exploitable structure"
+                    )
             else:
-                detail = (
-                    f"{count}/{n} accepted ({100 * count / n:.0f}%); "
-                    "all accepted answers derived manually"
+                sources = row["sources"]
+                source_counts = ", ".join(
+                    f"{source} {number}"
+                    for source, number in sorted(sources.items())
+                    if source != "none" and number
                 )
+                detail = f"{count}/{n} accepted ({100 * count / n:.0f}%)"
+                if source_counts:
+                    detail += f"; accepted-answer sources: {source_counts}"
             tip(fig, point, f"{title}, {row['bits']} bits: {detail}")
         ax.set_xscale("log", base=2)
         ax.xaxis.set_major_locator(FixedLocator([r["bits"] for r in rows]))

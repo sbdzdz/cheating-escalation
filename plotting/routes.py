@@ -133,9 +133,10 @@ def pooled(*counts):
     )
 
 
-def figure(theme_name, panels, labels, idle=True, columns=None):
+def figure(theme_name, panels, labels, idle=True, columns=None, status_labels=None):
     """One panel per (title, counts); one row per method, plus trials that attempted none."""
     theme = use_theme(theme_name)
+    used_label, attempted_label = status_labels or (USED, ATTEMPTED)
     show_idle = idle and any(c["idle"] for _, c in panels)
     rows = labels + ["No method attempted"] * show_idle
     titled = any(title for title, _ in panels)
@@ -161,8 +162,8 @@ def figure(theme_name, panels, labels, idle=True, columns=None):
             assert 0 <= counts["used"][i] + counts["attempted"][i] <= n
             left = 0
             for value, color, description in (
-                (counts["used"][i], theme["used"], USED),
-                (counts["attempted"][i], theme["attempted"], ATTEMPTED),
+                (counts["used"][i], theme["used"], used_label),
+                (counts["attempted"][i], theme["attempted"], attempted_label),
             ):
                 if value:
                     (bar,) = ax.barh(i, value / n, left=left, height=0.53, color=color)
@@ -225,13 +226,13 @@ def figure(theme_name, panels, labels, idle=True, columns=None):
                 if i >= len(labels)
                 else theme["flagged"]
             )
-    for ax in list(axes.flat)[len(panels):]:
+    for ax in list(axes.flat)[len(panels) :]:
         ax.set_visible(False)
     fig.supxlabel("Percentage of trials", color=theme["muted"], fontsize=theme["font"])
     fig.legend(
         handles=[
-            Patch(color=theme["used"], label=USED),
-            Patch(color=theme["attempted"], label=ATTEMPTED),
+            Patch(color=theme["used"], label=used_label),
+            Patch(color=theme["attempted"], label=attempted_label),
         ],
         loc="outside upper left",
         ncols=2,

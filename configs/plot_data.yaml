@@ -18,4 +18,21 @@ factorization:
 subset_sum:
   deepseek: outputs/analysis/deepseek-subset-sum-analysis.json
   glm: outputs/analysis/glm-subset-sum-analysis.json
-aware_difficulty: outputs/review/aware-difficulty/classification_summary.json
+aware_difficulty: outputs/review/aware-difficulty-extension/combined_classification_summary.json
+controlled_tools_experiment: outputs/experiments/deepseek-subset-sum-controlled-tools-256k
+controlled_tools_summary: outputs/analysis/controlled-tools-256k-summary.json
+controlled_tools_quotes: reports/controlled-tools-quotes.json
+controlled_tools_manual: reports/controlled-tools-manual-evidence.json
+controlled_tools_128_summary: outputs/analysis/controlled-tools-128-deepseek-summary.json
+controlled_tools_128_manual: reports/controlled-tools-128-deepseek-manual-evidence.json
+controlled_tools_128_kimi_summary: outputs/analysis/controlled-tools-128-kimi-summary.json
+controlled_tools_128_kimi_manual: reports/controlled-tools-128-kimi-manual-evidence.json
+controlled_factorization_512_deepseek: outputs/analysis/controlled-factorization-512-deepseek-summary.json
+controlled_factorization_512_deepseek_manual: reports/controlled-factorization-512-deepseek-manual-evidence.json
+controlled_factorization_512_kimi: outputs/analysis/controlled-factorization-512-kimi-summary.json
+controlled_factorization_512_kimi_manual: reports/controlled-factorization-512-kimi-manual-evidence.json
+shortcut_history: outputs/sweeps/shortcut-history-extension/aggregate.json
+shortcut_history_quotes: outputs/review/shortcut-history-quotes/selected.json
+
+opaque_shortcuts: outputs/sweeps/opaque-shortcuts/aggregate.json
+opaque_shortcut_quotes: outputs/review/opaque-ineffective-quotes/selected.json

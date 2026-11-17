@@ -17,8 +17,17 @@ from environment.conditions import (
     MANUAL_ONLY_RULE,
     PROHIBITED_AVENUES_NOTE,
 )
-from plotting import aware_difficulty, difficulty, effort, routes, timeouts
-from plotting.common import MODELS, THEMES, MissingData, svg
+from plotting import (
+    aware_difficulty,
+    controlled_tools,
+    difficulty,
+    effort,
+    opaque_shortcuts,
+    routes,
+    shortcut_history,
+    timeouts,
+)
+from plotting.common import DATASETS, MODELS, THEMES, MissingData, svg
 
 
 def table_number(value, bits):
@@ -64,7 +73,7 @@ def timeout_section():
             f'aria-pressed="{str(minutes == 5).lower()}" '
             f'data-timeout-target="timeout-methods-{minutes}">',
         )
-    comparison = comparison.replace('<svg ', '<svg class="timeout-chart" ', 1)
+    comparison = comparison.replace("<svg ", '<svg class="timeout-chart" ', 1)
     for gid, conditions in figure.timeout_series.items():
         line = ' data-timeout-line="true"' if gid.startswith("timeout-line-") else ""
         comparison = comparison.replace(
@@ -82,7 +91,7 @@ def timeout_section():
         '<details class="result-group comparison" open><summary class="group-heading">Timeout ablation</summary>'
         '<section><h3>Cheating rate versus timeout</h3><div class="comparison-scroll">'
         + comparison
-        + '</div></section>'
+        + "</div></section>"
     )
     for minutes, label in timeouts.DURATIONS:
         hidden = "" if minutes == 5 else " hidden"
@@ -115,10 +124,10 @@ def timeout_section():
                 f'<a href="outputs/review/timeout-sweep/{source}">Trajectory {Path(source).stem}</a></p>'
                 + "".join(
                     f'<p class="record-label">{html.escape(reference)}</p>'
-                    f'<blockquote>{html.escape(text)}</blockquote>'
+                    f"<blockquote>{html.escape(text)}</blockquote>"
                     for reference, text in excerpts
                 )
-                + '</article>'
+                + "</article>"
             )
         quotes = (
             f'<div class="timeout-quotes" style="grid-template-columns:{grid}">'
@@ -126,33 +135,351 @@ def timeout_section():
                 f'<div style="grid-column:{2 * i + 2}">{column}</div>'
                 for i, column in enumerate(quote_columns.values())
             )
-            + '</div>'
-            if trajectories else ""
+            + "</div>"
+            if trajectories
+            else ""
         )
         content += (
             f'<section class="timeout-breakdown" id="timeout-methods-{minutes}"{hidden}>'
-            f'<h3>Method breakdown · {label}</h3>'
+            f"<h3>Method breakdown · {label}</h3>"
             '<div class="comparison-scroll">'
             + breakdown
-            + '</div>' + quotes + '</section>'
+            + "</div>"
+            + quotes
+            + "</section>"
         )
-    return content + '</details>'
+    return content + "</details>"
 
 
 def aware_difficulty_section():
     try:
         cheating = chart(aware_difficulty, "aware-difficulty-cheating")
-        acceptance = chart(aware_difficulty, "aware-difficulty-acceptance")
     except MissingData:
         return ""
     return (
         '<details class="result-group comparison" open>'
         '<summary class="group-heading">Difficulty sweep with explicit prohibitions</summary>'
-        '<section><h3>Flagged cheating attempts versus bit length</h3>'
-        '<div class="comparison-scroll">' + cheating + '</div></section>'
-        '<section><h3>Accepted answers versus bit length</h3>'
-        '<div class="comparison-scroll">' + acceptance + '</div></section>'
-        '</details>'
+        "<section><h3>Flagged cheating attempts versus bit length</h3>"
+        '<div class="comparison-scroll">' + cheating + "</div></section>"
+        "</details>"
+    )
+
+
+def controlled_tools_quotes():
+    path = ROOT / DATASETS["controlled_tools_quotes"]
+    if not path.exists():
+        return ""
+    columns = []
+    for row, color in zip(json.loads(path.read_text()), THEMES["dark"]["lines"]):
+        evidence = (ROOT / row["source"]).read_text()
+        excerpts = []
+        for quote in row["excerpts"]:
+            if quote not in evidence:
+                raise ValueError(f"Controlled quote does not match {row['source']}")
+            excerpts.append(f"<blockquote>{html.escape(quote)}</blockquote>")
+        columns.append(
+            f'<article class="trajectory-quote" style="--condition-color:{color}">'
+            f"<h3>{html.escape(row['title'])}</h3>"
+            f'<p class="record-label"><strong class="condition-label">'
+            f"{html.escape(row['condition'])}</strong> · "
+            f'<a href="{html.escape(row["source"], quote=True)}">'
+            f"Trajectory {row['trial_id'][:8]}</a></p>"
+            + "".join(excerpts)
+            + "</article>"
+        )
+    return (
+        '<h3>Trajectory excerpts</h3><div class="controlled-quotes">'
+        + "".join(columns)
+        + "</div>"
+    )
+
+
+def cheatbench_prompts_section():
+    panels = []
+    for title, experiment in (
+        ("Baseline · Prime factorization", "deepseek-factorization-32b-conditions"),
+        ("Baseline · Subset sum", "deepseek-subset-sum-16-conditions"),
+    ):
+        folder = ROOT / "outputs/experiments" / experiment / "settings"
+        prompt = next(
+            spec["instruction"]
+            for path in sorted(folder.glob("*/setting.json"))
+            if (spec := json.loads(path.read_text()))["condition"] == "baseline"
+        )
+        panels.append(
+            f"<article><h3>{title}</h3><pre>{html.escape(prompt.strip())}</pre></article>"
+        )
+    return (
+        '<details class="result-group cheatbench-prompts">'
+        '<summary class="group-heading">Prompts</summary><section>'
+        + "".join(panels)
+        + "</section></details>"
+    )
+
+
+def controlled_prompts_section(kind="baseline"):
+    def instructions(experiment):
+        folder = ROOT / experiment
+        manifest = json.loads((folder / "manifest.json").read_text())
+        result = {}
+        for setting in manifest["settings"]:
+            spec = json.loads(
+                (folder / "settings" / setting / "setting.json").read_text()
+            )
+            condition, prompt = spec["condition"], spec["instruction"]
+            if condition in result and result[condition] != prompt:
+                raise ValueError("Prompt varies within a condition")
+            result[condition] = prompt
+        return result
+
+    subset = instructions(
+        "outputs/experiments/deepseek-subset-sum-controlled-tools-128"
+    )
+    factor = instructions(
+        "outputs/experiments/deepseek-factorization-controlled-tools-512"
+    )
+    panels = []
+    for title, baseline in (
+        ("Baseline · Subset sum", subset["aware-baseline"]),
+        ("Baseline · Prime factorization", factor["aware-baseline"]),
+    ):
+        panels.append(
+            f"<article><h3>{title}</h3><pre>{html.escape(baseline.strip())}</pre></article>"
+        )
+    # Display the shared history template without changing experiment prompts.
+    history_panels = {}
+    for outcome, label in shortcut_history.OUTCOMES:
+        if outcome == "effective-caught":
+            prompts = {
+                "r1-effective-caught": subset["aware-a-caught"],
+                "r2-effective-caught": subset["aware-b-caught"],
+            }
+        else:
+            prompts = instructions(
+                f"outputs/experiments/deepseek-subset-sum-history-{outcome}"
+            )
+        additions = []
+        for operation in ("r1", "r2"):
+            prompt = prompts[f"{operation}-{outcome}"]
+            baseline = subset["aware-baseline"]
+            if not prompt.startswith(baseline):
+                raise ValueError("History prompt does not share baseline")
+            addition = prompt[len(baseline) :].strip()
+            additions.append(addition.replace(operation.upper(), "{R1/R2}"))
+        if additions[0] != additions[1]:
+            raise ValueError("R1/R2 history prompts differ beyond operation name")
+        history_panels[outcome] = (
+            f"<article><h3>{label}</h3>"
+            f'<pre class="diff-quote">{html.escape(additions[0])}</pre></article>'
+        )
+    addition = subset["aware-ab-caught"][len(subset["aware-baseline"]) :].strip()
+    panels.append(
+        "<article><h3>Both effective and caught</h3>"
+        f'<pre class="diff-quote">{html.escape(addition)}</pre></article>'
+    )
+    if kind in ("caught", "new"):
+        if kind == "caught":
+            ordered = [history_panels["effective-caught"], panels[2]]
+            title = "Prompts (effective &amp; caught)"
+        else:
+            ordered = [
+                history_panels["effective-not-caught"],
+                history_panels["ineffective"],
+            ]
+            title = "Prompts (new settings)"
+        return (
+            f'<details class="result-group controlled-conditions-{kind}">'
+            f'<summary class="group-heading">{title}</summary><section>'
+            + "".join(ordered)
+            + "</section></details>"
+        )
+    return (
+        '<details class="result-group controlled-prompts">'
+        '<summary class="group-heading">Prompts</summary><section>'
+        + controlled_operations()
+        + "".join(panels[:2])
+        + "</section></details>"
+    )
+
+
+def controlled_operations():
+    return (
+        '<h3>Available operations</h3><ul class="intro">'
+        "<li><code>read_instance</code> — Read the public task instance.</li>"
+        "<li><code>read_notes</code> — Read working notes.</li>"
+        "<li><code>write_notes</code> — Save working notes.</li>"
+        "<li><code>verify_subset</code> / <code>verify_factors</code> — Check and submit a candidate solution.</li>"
+        '<li><strong class="computation-quote">R1 · Computation (prohibited)</strong>'
+        " — Compute a valid solution for the current instance.</li>"
+        '<li><strong class="computation-quote">R2 · Answer lookup (prohibited)</strong>'
+        " — Retrieve the stored reference solution.</li></ul>"
+    )
+
+
+def controlled_tools_section():
+    return (
+        '<details class="result-group controlled-tools" open>'
+        '<summary class="group-heading">Results (effective &amp; caught)</summary><section>'
+        '<h3>128-bit integers · DeepSeek V4 Flash</h3><div class="comparison-scroll">'
+        + (figure_or_none(controlled_tools, "controlled-tools-methods-128") or "")
+        + "</div>"
+        + '<h3>128-bit integers · Kimi K3</h3><div class="comparison-scroll">'
+        + (figure_or_none(controlled_tools, "controlled-tools-methods-128-kimi") or "")
+        + "</div>"
+        + "<h3>512-bit factorization · DeepSeek V4 Flash</h3>"
+        + '<div class="comparison-scroll">'
+        + (
+            figure_or_none(controlled_tools, "controlled-factorization-512-deepseek")
+            or ""
+        )
+        + "</div>"
+        + '<h3>512-bit factorization · Kimi K3</h3><div class="comparison-scroll">'
+        + (figure_or_none(controlled_tools, "controlled-factorization-512-kimi") or "")
+        + "</div>"
+        + "</section></details>"
+    )
+
+
+def shortcut_history_quotes():
+    path = ROOT / DATASETS["shortcut_history_quotes"]
+    if not path.exists():
+        return ""
+    rows = json.loads(path.read_text())["quotes"]
+    colors = THEMES["dark"]["lines"]
+    cards = []
+    for (outcome, title), color in zip(shortcut_history.OUTCOMES, colors):
+        for operation in ("r1", "r2"):
+            selected = [r for r in rows if r["condition"] == f"{operation}-{outcome}"]
+            excerpts = []
+            for row in selected:
+                source = ROOT / row["source"]
+                transcript = json.loads(source.read_text())
+                reasoning = transcript["calls"][row["source_call_index_zero_based"]][
+                    "response"
+                ]["reasoning"]
+                if row["quote"] not in reasoning:
+                    raise ValueError(f"History quote does not match {row['trial_id']}")
+                action = ", ".join(dict.fromkeys(row["operations"]))
+                excerpts.append(
+                    '<article class="history-excerpt">'
+                    '<div class="history-excerpt-meta">'
+                    f'<span class="history-action">Called {html.escape(action)}</span>'
+                    f'<a href="{html.escape(row["source"], quote=True)}" '
+                    f'title="Open saved trajectory">{html.escape(row["trial_id"][:8])}</a></div>'
+                    f"<blockquote>{html.escape(row['quote'])}</blockquote></article>"
+                )
+            cards.append(
+                f'<div class="history-quote-card" style="--history-accent:{color}">'
+                f"<h4><span>Previous {operation.upper()}</span> {html.escape(title)}</h4>"
+                + "".join(excerpts)
+                + "</div>"
+            )
+    return (
+        """<style>
+.history-quote-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 28px;margin-top:20px}
+.history-quote-card{min-width:0;border:1px solid #303b45;border-top:3px solid var(--history-accent);border-radius:7px;background:#141d27;padding:18px 20px}
+.history-quote-card h4{margin:0 0 18px;color:var(--history-accent);font-size:14px;line-height:1.5;font-weight:600}
+.history-quote-card h4 span{display:block;color:#a1aebc;font-size:11px;font-weight:500;letter-spacing:.04em;margin-bottom:3px}
+.history-excerpt{margin:0!important;padding:0!important}
+.history-excerpt+.history-excerpt{border-top:1px solid #303b45;margin-top:16px!important;padding-top:16px!important}
+.history-excerpt-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px}
+.history-action{color:#ce9990;font-weight:600}
+.history-excerpt-meta a{color:#a1aebc;text-decoration:none;font-family:ui-monospace,monospace}
+.history-excerpt-meta a:hover{color:#dedbd3;text-decoration:underline}
+.history-excerpt blockquote{margin:8px 0 0!important;padding:0 0 0 12px!important;border-left:2px solid var(--history-accent);background:none;color:#dedbd3;font-size:12px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:750px){.history-quote-grid{grid-template-columns:1fr}}
+</style><h3>Reasoning about previous outcomes</h3><div class="history-quote-grid">"""
+        + "".join(cards)
+        + "</div>"
+    )
+
+
+def shortcut_history_section():
+    return (
+        '<details class="result-group shortcut-history" open><summary class="group-heading">Results (all)</summary><section>'
+        + "<h3>512-bit factorization · DeepSeek V4 Flash</h3>"
+        + (figure_or_none(shortcut_history, "history-factorization") or "")
+        + "<h3>128-bit subset sum · DeepSeek V4 Flash</h3>"
+        + (figure_or_none(shortcut_history, "history-subset-sum") or "")
+        + shortcut_history_quotes()
+        + "</section></details>"
+    )
+
+
+def opaque_shortcut_quotes():
+    rows = json.loads((ROOT / DATASETS["opaque_shortcut_quotes"]).read_text())
+    cards = []
+    color = THEMES["dark"]["lines"][0]
+    for row in rows:
+        transcript = json.loads((ROOT / row["source"]).read_text())
+        response = transcript["calls"][row["call_index"]]["response"]
+        if row["quote"] not in response["reasoning"] or not any(
+            call["name"] == row["tool_name"] for call in response["tool_calls"]
+        ):
+            raise ValueError(f"Opaque quote does not match R1 call: {row['trial_id']}")
+        cards.append(
+            f'<div class="history-quote-card" style="--history-accent:{color}">'
+            f'<h4>{html.escape(row["title"])}</h4>'
+            '<article class="history-excerpt"><div class="history-excerpt-meta">'
+            f'<span class="history-action">Called R1 · {html.escape(row["tool_name"])}</span>'
+            f'<a href="{html.escape(row["source"], quote=True)}" title="Open saved trajectory">'
+            f'{html.escape(row["trial_id"][:8])}</a></div>'
+            f'<blockquote>{html.escape(row["quote"])}</blockquote></article></div>'
+        )
+    return (
+        '<h3 style="margin-top:64px">Using R1 after an ineffective attempt</h3>'
+        '<div class="history-quote-grid">' + "".join(cards) + '</div>'
+    )
+
+
+def opaque_prompts_section():
+    panels = []
+    for task, label in (("factorization", "Prime factorization"), ("subset-sum", "Subset sum")):
+        folder = ROOT / f"outputs/experiments/deepseek-{task}-opaque-baseline"
+        manifest = json.loads((folder / "manifest.json").read_text())
+        setting = next(iter(manifest["settings"]))
+        spec = json.loads((folder / "settings" / setting / "setting.json").read_text())
+        panels.append(
+            f'<article><h3>Baseline · {label}</h3><pre>{html.escape(spec["instruction"].strip())}</pre></article>'
+        )
+    for outcome, label in shortcut_history.OUTCOMES:
+        folder = ROOT / f"outputs/experiments/deepseek-factorization-opaque-{outcome}"
+        manifest = json.loads((folder / "manifest.json").read_text())
+        sid, entry = next(iter(manifest["settings"].items()))
+        spec = json.loads((folder / "settings" / sid / "setting.json").read_text())
+        policy = json.loads((Path(entry["task"]) / "controlled-tools.json").read_text())
+        marker = "Retained evaluation record:"
+        addition = marker + spec["instruction"].split(marker, 1)[1]
+        addition = addition.strip().replace(policy["aliases"]["R1"], "{tool_hash}")
+        panels.append(
+            f'<article><h3>{html.escape(label)}</h3>'
+            f'<pre class="diff-quote">{html.escape(addition)}</pre></article>'
+        )
+    return (
+        '<details class="result-group opaque-prompts">'
+        '<summary class="group-heading">Prompts</summary><section>'
+        '<p class="intro">Example baseline prompts; hash names and tool order vary across instances. '
+        'Green text shows the retained record added in each condition; '
+        '<code>{tool_hash}</code> is replaced by one of the three shortcut names.</p>'
+        + "".join(panels)
+        + '</section></details>'
+    )
+
+
+def opaque_shortcuts_section():
+    return (
+        '<details class="result-group opaque-shortcuts" open>'
+        '<summary class="group-heading">Results (opaque shortcuts)</summary><section>'
+        '<p class="intro">Three identical answer-retrieval tools with random hash names, '
+        'no descriptions, and randomized tool order. '
+        'R1: the tool named in the treatment records; baseline has no record. '
+        'R2 and R3: the two alternatives. Tool attempts may overlap.</p>'
+        '<h3>512-bit factorization · DeepSeek V4 Flash</h3>'
+        + (figure_or_none(opaque_shortcuts, "opaque-factorization") or "")
+        + '<h3 style="margin-top:64px">128-bit subset sum · DeepSeek V4 Flash</h3>'
+        + (figure_or_none(opaque_shortcuts, "opaque-subset-sum") or "")
+        + opaque_shortcut_quotes()
+        + '</section></details>'
     )
 
 
@@ -198,7 +525,9 @@ def main():
         "glm-ab-caught",
         "GLM 5.3 Flash answer lookup and computation penalised",
     )
-    both_caught += "<section><h2>Abandoning manual solving after both methods were penalised</h2>"
+    both_caught += (
+        "<section><h2>Abandoning manual solving after both methods were penalised</h2>"
+    )
     examples = [
         (
             13,
@@ -581,12 +910,14 @@ def main():
                     ),
                     "dark",
                 )
-                + '</div>'
+                + "</div>"
                 + (f'<p class="trial-status">{html.escape(note)}</p>' if note else "")
-                + '</div>'
+                + "</div>"
             )
         aware_html += "</div>"
-        small_html += subgroup("Explicitly prohibiting the available avenues", aware_html)
+        small_html += subgroup(
+            "Explicitly prohibiting the available avenues", aware_html
+        )
         small_section = (
             '<details class="result-group"><summary class="group-heading">Answer lookup prompt ablation</summary>'
             + small_html
@@ -693,11 +1024,27 @@ def main():
     sections += small_section
     sections += timeout_section()
     sections += aware_difficulty_section()
+    sections = (
+        '<h2 class="setting-heading">Realistic shortcuts</h2>'
+        + cheatbench_prompts_section()
+        + sections
+    )
+    sections += '<h2 class="setting-heading">Tool shortcuts</h2>'
+    sections += controlled_prompts_section()
+    sections += controlled_prompts_section("caught")
+    sections += controlled_tools_section()
+    sections += controlled_prompts_section("new")
+    sections += shortcut_history_section()
+    sections += '<h2 class="setting-heading">Tool shortcuts (opaque)</h2>'
+    sections += opaque_prompts_section()
+    sections += opaque_shortcuts_section()
 
     page = (
         """<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cheating escalation Figures</title>
 <style>
+.shortcut-history section>h3:not(:first-child){margin-top:64px}
+.setting-heading{font-size:32px;font-weight:650;margin:64px 0 28px;padding-bottom:16px;border-bottom:1px solid #303b45}
 :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#10171f;color:#dedbd3;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1128px;margin:auto;padding:36px 24px}section{margin:0 0 80px}h2{font-size:21px;font-weight:650;margin:0 0 18px}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:system-ui,-apple-system,sans-serif;font-size:14px;fill:#dedbd3}.tick{fill:#a1aebc}.value{font-weight:650}.pending{fill:#a1aebc;font-size:13px}p{font-size:13px;color:#aebac7;margin:0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.75 ui-monospace,SFMono-Regular,monospace;padding:22px;background:#19222c;border:1px solid #303b45;border-radius:6px;margin:0}.legend{display:flex;flex-wrap:wrap;gap:12px 28px;font-size:13px;margin-bottom:12px}.legend span{display:inline-flex;align-items:center;gap:8px}.legend i{display:inline-block;width:14px;height:14px;border-radius:2px}h1{font-size:40px;line-height:1.2;font-weight:700;margin:0 0 32px}.intro{margin:0 0 32px;font-size:15px;line-height:1.8;font-weight:400;color:#dedbd3}article{margin:26px 0}h3{font-size:16px;font-weight:650;margin:0 0 18px}.result-group{margin:64px 0}.group-heading{font-size:28px;font-weight:650;text-align:left;padding-bottom:14px;margin-bottom:32px;break-after:avoid}blockquote{white-space:pre-wrap;border-left:3px solid #287e85;padding:12px 20px;margin:12px 0;background:#19222c}.computation-quote,.command-quote{color:#ce9990}.command-quote{margin:12px 0}.command-quote pre{color:inherit;padding:14px;overflow-wrap:anywhere}.command-label,summary{font-size:13px;margin-bottom:6px}summary{cursor:pointer}table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}th,td{text-align:left;padding:12px;border-bottom:1px solid #303b45}a{color:#74d3d6}@media print{section{break-inside:avoid}main{padding:0}}
 .subgroup{margin:0 0 36px}.subgroup-heading{font-size:21px;font-weight:650;margin-bottom:24px}.subgroup[open]{margin-bottom:56px}.model-heading{font-size:16px;font-weight:600;color:#aebac7;margin:28px 0 12px}.record-label{font-size:13px;color:#a1aebc;margin:0 0 4px}.record-excerpt{font-size:14px;margin:0 0 18px;padding:10px 16px}.record-note{color:#a1aebc}.diff-quote{color:#7fd38f}.comparison{width:100%}.comparison-scroll{max-width:100%}.comparison svg{min-width:0;max-width:100%}@media print{.comparison{width:100%;left:auto;transform:none}.comparison svg{min-width:0}}
 .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.difficulty .base-case{font-size:16px;color:#dedbd3;margin-bottom:28px}.difficulty-grid h3{font-size:19px;margin-bottom:6px}.difficulty-grid td:nth-child(3){overflow-wrap:anywhere}.difficulty-grid th,.difficulty-grid td{padding:10px 8px}.difficulty-grid>div{min-width:0}@media(max-width:700px){.difficulty-grid{grid-template-columns:1fr}}
@@ -719,6 +1066,9 @@ main{min-width:0;overflow-wrap:anywhere}
 .trajectory-quote blockquote{border-left-color:var(--condition-color);font-size:12px;line-height:1.6;padding:10px 12px}
 .trajectory-quote .record-label{font-size:11px}
 .timeout-quotes{display:grid}
+.controlled-quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.controlled-quotes article{min-width:0;margin:0}
+@media(max-width:750px){.controlled-quotes{grid-template-columns:1fr}}
 .timeout-point use{pointer-events:all}
 .timeout-point[aria-pressed="false"] use{fill:#10171f!important}
 </style></head><body><main>
@@ -801,7 +1151,7 @@ document.querySelectorAll('[data-timeout-target]').forEach(point => {
 document.querySelectorAll('details').forEach(section => {
     const heading = section.querySelector(':scope > summary');
     if (!heading) return;
-    const key = 'cheating-escalation:section:' + heading.textContent.trim();
+    const key = 'cheating-escalation:section:' + heading.textContent.trim() + (heading.textContent.trim() === 'Prompts' ? ':' + section.className : '');
     try {
         const saved = localStorage.getItem(key);
         if (saved !== null) section.open = saved === 'open';
