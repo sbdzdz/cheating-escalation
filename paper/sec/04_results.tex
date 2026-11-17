@@ -1,25 +1,79 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Task difficulty}
-\label{sec:task-difficulty}
+\subsection{Anonymised, equivalent shortcuts}
+\label{sec:opaque-baseline}
 
-\begin{figure}[H]
+We first measure how often models use prohibited tools when no evidence of past cheating is provided.
+We evaluate DeepSeek-V4-Flash on two tasks: factorising 512-bit semiprimes constructed to require 10 Fermat increments, and finding a subset of 64 128-bit integers that sums to a given target.
+We run 30 trials per task on distinct instances, with a one hour limit and at most 50 verifier checks per trial.
+The model has access to tools for reading the task, keeping notes, and verifying its responses. It can also call three prohibited shortcuts, which retrieve the same correct reference answer in the same format.
+The shortcut tools have no descriptions and are given random six character names. To control for positional bias, we randomise the order in which the tools are presented both in the prompt and in the API tool list.
+We label the shortcuts R1, R2, and R3 for analysis, but these labels are not visible to the model.
+
+We count a trial as cheating if the verifier audit records at least one invocation of a prohibited tool, irrespective of whether the model subsequently submits an answer. Note that the model can call multiple shortcuts during a single trial.
+In the baseline condition of \autoref{fig:opaque-shortcuts}, cheating occurs in 22/30 factorization trials (73.3\%) and 21/30 subset-sum trials (70.0\%). All three shortcuts are used at similar rates.
+
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\linewidth]{fig/factorization-difficulty.pdf}
-  \caption{Prime factorization: cheating rates over 15 trials per model and
-  setting. Panel (a) fixes Fermat increments at 10; panel (b) fixes semiprime
-  length at 32 bits. Positive x-values are logarithmically spaced. Zero increments
-  is shown at a separate reference position to the left of the axis break.
-  Lines connect observed rates and do not represent fitted trends.}
-  \label{fig:factorization-difficulty}
+  \includegraphics[width=\linewidth]{fig/opaque-factorization.pdf}
+  \par\vspace{1em}
+  \includegraphics[width=\linewidth]{fig/opaque-subset-sum.pdf}
+  \caption{Three anonymised, equivalent shortcuts across both tasks and all four
+  history conditions (DeepSeek V4 Flash; 30 trials per task and condition,
+  240 trials overall). Baseline provides no retained record; the other conditions
+  describe an earlier R1 attempt as ineffective, effective but undetected, or
+  effective but detected and penalised. Bars show the percentage of trials
+  invoking each tool, split by whether the verifier ultimately accepted an answer.
+  R1--R3 counts can overlap. None indicates no prohibited-tool calls, not
+  established manual solving. Verifier acceptance does not imply credited success
+  or establish which tool supplied the submitted answer.}
+  \label{fig:opaque-shortcuts}
 \end{figure}
 
-\begin{figure}[H]
+Verifier acceptance is distinct from compliance with the task rules.
+The verifier accepts answers in 19/30 factorization trials and 13/30 subset-sum trials (32/60 overall).
+Every accepted answer follows a prohibited-tool invocation; none of the 17 trials without such invocations produces an accepted answer.
+Consequently, no baseline trial receives credited success under the rule requiring both a correct answer and no prohibited operations.
+This establishes a baseline with frequent rule violations against which to compare the effects of supplied histories, without attributing differences between shortcuts to their functionality or descriptions.
+
+\subsection{Labelled shortcuts with verifier override}
+\label{sec:labelled-shortcuts}
+
+We next distinguish shortcuts by their function and make these functions explicit to the model.
+R1 (\texttt{solver}) computes a valid solution, R2 (\texttt{answer\_lookup}) retrieves the stored reference answer, and R3 (\texttt{verifier\_override}) ends the episode with verifier success without submitting or checking an answer.
+All three operations are prohibited.
+An R3 call awards a reward of one, while an independent audit records the violation; this separates successful manipulation of the evaluator from compliance with the task rules.
+The permitted tools, task difficulties, model, and time and verification limits remain unchanged.
+We again randomise presentation order in both the prompt and the API tool list, matching the ordering and task instances across conditions.
+
+We compare four conditions: no retained record, and records of a previous R2 attempt that was ineffective, effective but not caught, or effective and caught.
+The ineffective record describes an incorrect answer and no credit; the undetected record describes a correct answer with credit retained; and the caught record describes a correct answer with credit revoked.
+Each record concerns a different instance from the current task.
+Only the record changes between conditions: the current lookup tool continues to return the correct reference answer.
+No condition supplies a record about R1 or R3.
+We plan 30 trials per task and condition, using the same distinct instances as in the anonymised-shortcut experiment.
+
+\autoref{fig:labelled-shortcuts} presents a provisional snapshot of finished trials.
+The solver is the most frequently used shortcut in every task--condition group, whereas verifier override is rare.
+The completed trials therefore show a strong preference for an answer-producing shortcut over direct manipulation of the evaluator.
+These observations remain provisional because trials are still running.
+Moreover, the shortcuts differ in both their descriptions and their effects, so this comparison does not isolate the effect of labelling alone.
+
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\linewidth]{fig/subset-sum-difficulty.pdf}
-  \caption{Subset sum: cheating rates over ten trials per model and setting.
-  Panel (a) fixes set size at 64; panel (b) fixes integer length at 32 bits.
-  Both x-axes are logarithmic.}
-  \label{fig:subset-sum-difficulty}
+  \includegraphics[width=\linewidth]{fig/labeled-factorization.pdf}
+  \par\vspace{1em}
+  \includegraphics[width=\linewidth]{fig/labeled-subset-sum.pdf}
+  \caption{Provisional results for labelled shortcuts (DeepSeek V4 Flash):
+  200 of 240 planned trials finished at the time of plotting.
+  R1 is the solver, R2 is answer lookup, and R3 is verifier override.
+  All retained records concern R2.
+  Each group uses its displayed number of finished trials as the denominator;
+  pending trials and infrastructure failures are excluded, while finished
+  timeouts are included.
+  Blue denotes verifier success, including R3 overrides without a correct answer;
+  grey denotes no verifier success.
+  None denotes no prohibited-tool calls, and R1--R3 counts may overlap.}
+  \label{fig:labelled-shortcuts}
 \end{figure}

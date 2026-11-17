@@ -13,14 +13,23 @@ OUTPUT = "cheating_escalation.pdf"
 
 
 def main():
+    jobname = Path(OUTPUT).stem
     subprocess.run(
-        ["latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error", SOURCE],
+        [
+            "latexmk",
+            "-pdf",
+            f"-jobname={jobname}",
+            "-interaction=nonstopmode",
+            "-halt-on-error",
+            SOURCE,
+        ],
         cwd=PAPER,
         check=True,
     )
-    subprocess.run(["latexmk", "-c", SOURCE], cwd=PAPER, check=True)
-    (PAPER / Path(SOURCE).with_suffix(".bbl")).unlink(missing_ok=True)
-    (PAPER / Path(SOURCE).with_suffix(".pdf")).replace(PAPER / OUTPUT)
+    subprocess.run(
+        ["latexmk", "-c", f"-jobname={jobname}", SOURCE], cwd=PAPER, check=True
+    )
+    (PAPER / f"{jobname}.bbl").unlink(missing_ok=True)
     print(f"PDF: {PAPER / OUTPUT}")
 
 
