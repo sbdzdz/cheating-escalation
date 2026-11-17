@@ -170,6 +170,13 @@ credited score is zero after any prohibited operation, including a failed attemp
 `accepted_after_exposure` records chronology, not proof that an answer was copied.
 Native unknown tool requests cannot execute and remain in the model-call trace.
 
+Summarize these events without a trajectory judge:
+
+```sh
+uv run trajectory_review/summarize_controlled.py \
+  manifest=outputs/experiments/deepseek-subset-sum-controlled-tools/manifest.json
+```
+
 Validate the real runner and MCP transport against a fake model, with container
 networking disabled and no paid API calls:
 

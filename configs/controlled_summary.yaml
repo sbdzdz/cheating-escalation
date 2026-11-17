@@ -1,0 +1,13 @@
+defaults:
+  - summary_schema
+  - override hydra/job_logging: disabled
+  - override hydra/hydra_logging: disabled
+  - _self_
+manifest: outputs/experiments/deepseek-subset-sum-controlled-tools/manifest.json
+output: outputs/analysis/controlled-tools-summary.json
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false
