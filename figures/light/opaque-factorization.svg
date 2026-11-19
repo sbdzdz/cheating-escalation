@@ -186,7 +186,7 @@ L 811.19952 69.68324
      </g>
     </g>
    </g>
-   <g id="tip64"><title>Baseline. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip96"><title>Baseline (no evidence). None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 88.181772 300.227607 
 L 107.876959 300.227607 
 L 107.876959 300.227607 
@@ -194,7 +194,7 @@ L 88.181772 300.227607
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip65"><title>Baseline. None — No accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip97"><title>Baseline (no evidence). None — No accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 88.181772 300.227607 
 L 107.876959 300.227607 
 L 107.876959 238.749109 
@@ -202,7 +202,7 @@ L 88.181772 238.749109
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip66"><title>Baseline. R1 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip98"><title>Baseline (no evidence). R1 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 125.342502 300.227607 
 L 145.037689 300.227607 
 L 145.037689 238.749109 
@@ -210,7 +210,7 @@ L 125.342502 238.749109
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip67"><title>Baseline. R1 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip99"><title>Baseline (no evidence). R1 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 125.342502 238.749109 
 L 145.037689 238.749109 
 L 145.037689 215.694672 
@@ -218,7 +218,7 @@ L 125.342502 215.694672
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip68"><title>Baseline. R2 — Accepted answer: 10/30 runs (33%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip100"><title>Baseline (no evidence). R2 — Accepted answer: 10/30 runs (33%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 162.503232 300.227607 
 L 182.198419 300.227607 
 L 182.198419 223.379485 
@@ -226,7 +226,7 @@ L 162.503232 223.379485
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip69"><title>Baseline. R2 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip101"><title>Baseline (no evidence). R2 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 162.503232 223.379485 
 L 182.198419 223.379485 
 L 182.198419 200.325048 
@@ -234,7 +234,7 @@ L 162.503232 200.325048
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip70"><title>Baseline. R3 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip102"><title>Baseline (no evidence). R3 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 199.663962 300.227607 
 L 219.359149 300.227607 
 L 219.359149 238.749109 
@@ -242,7 +242,7 @@ L 199.663962 238.749109
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip71"><title>Baseline. R3 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip103"><title>Baseline (no evidence). R3 — No accepted answer: 3/30 runs (10%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 199.663962 238.749109 
 L 219.359149 238.749109 
 L 219.359149 215.694672 
@@ -250,7 +250,7 @@ L 199.663962 215.694672
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip72"><title>Ineffective. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip104"><title>R1 ineffective. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 273.985423 300.227607 
 L 293.68061 300.227607 
 L 293.68061 300.227607 
@@ -258,7 +258,7 @@ L 273.985423 300.227607
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip73"><title>Ineffective. None — No accepted answer: 7/30 runs (23%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip105"><title>R1 ineffective. None — No accepted answer: 7/30 runs (23%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 273.985423 300.227607 
 L 293.68061 300.227607 
 L 293.68061 246.433921 
@@ -266,7 +266,7 @@ L 273.985423 246.433921
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip74"><title>Ineffective. R1 — Accepted answer: 9/30 runs (30%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip106"><title>R1 ineffective. R1 — Accepted answer: 9/30 runs (30%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 311.146153 300.227607 
 L 330.84134 300.227607 
 L 330.84134 231.064297 
@@ -274,7 +274,7 @@ L 311.146153 231.064297
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip75"><title>Ineffective. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip107"><title>R1 ineffective. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 311.146153 231.064297 
 L 330.84134 231.064297 
 L 330.84134 231.064297 
@@ -282,7 +282,7 @@ L 311.146153 231.064297
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip76"><title>Ineffective. R2 — Accepted answer: 9/30 runs (30%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip108"><title>R1 ineffective. R2 — Accepted answer: 9/30 runs (30%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 348.306883 300.227607 
 L 368.00207 300.227607 
 L 368.00207 231.064297 
@@ -290,7 +290,7 @@ L 348.306883 231.064297
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip77"><title>Ineffective. R2 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip109"><title>R1 ineffective. R2 — No accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 348.306883 231.064297 
 L 368.00207 231.064297 
 L 368.00207 223.379485 
@@ -298,7 +298,7 @@ L 348.306883 223.379485
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip78"><title>Ineffective. R3 — Accepted answer: 13/30 runs (43%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip110"><title>R1 ineffective. R3 — Accepted answer: 13/30 runs (43%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 385.467614 300.227607 
 L 405.162801 300.227607 
 L 405.162801 200.325048 
@@ -306,7 +306,7 @@ L 385.467614 200.325048
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip79"><title>Ineffective. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip111"><title>R1 ineffective. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 385.467614 200.325048 
 L 405.162801 200.325048 
 L 405.162801 200.325048 
@@ -314,7 +314,7 @@ L 385.467614 200.325048
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip80"><title>Effective, not caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip112"><title>R1 effective, not caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 459.789074 300.227607 
 L 479.484261 300.227607 
 L 479.484261 300.227607 
@@ -322,7 +322,7 @@ L 459.789074 300.227607
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip81"><title>Effective, not caught. None — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip113"><title>R1 effective, not caught. None — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 459.789074 300.227607 
 L 479.484261 300.227607 
 L 479.484261 300.227607 
@@ -330,7 +330,7 @@ L 459.789074 300.227607
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip82"><title>Effective, not caught. R1 — Accepted answer: 16/30 runs (53%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip114"><title>R1 effective, not caught. R1 — Accepted answer: 16/30 runs (53%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 496.949805 300.227607 
 L 516.644992 300.227607 
 L 516.644992 177.270611 
@@ -338,7 +338,7 @@ L 496.949805 177.270611
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip83"><title>Effective, not caught. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip115"><title>R1 effective, not caught. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 496.949805 177.270611 
 L 516.644992 177.270611 
 L 516.644992 177.270611 
@@ -346,7 +346,7 @@ L 496.949805 177.270611
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip84"><title>Effective, not caught. R2 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip116"><title>R1 effective, not caught. R2 — Accepted answer: 8/30 runs (27%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 534.110535 300.227607 
 L 553.805722 300.227607 
 L 553.805722 238.749109 
@@ -354,7 +354,7 @@ L 534.110535 238.749109
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip85"><title>Effective, not caught. R2 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip117"><title>R1 effective, not caught. R2 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 534.110535 238.749109 
 L 553.805722 238.749109 
 L 553.805722 238.749109 
@@ -362,7 +362,7 @@ L 534.110535 238.749109
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip86"><title>Effective, not caught. R3 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip118"><title>R1 effective, not caught. R3 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 571.271265 300.227607 
 L 590.966452 300.227607 
 L 590.966452 254.118733 
@@ -370,7 +370,7 @@ L 571.271265 254.118733
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip87"><title>Effective, not caught. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip119"><title>R1 effective, not caught. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 571.271265 254.118733 
 L 590.966452 254.118733 
 L 590.966452 254.118733 
@@ -378,7 +378,7 @@ L 571.271265 254.118733
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip88"><title>Effective, caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip120"><title>R1 effective, caught. None — Accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 645.592726 300.227607 
 L 665.287913 300.227607 
 L 665.287913 300.227607 
@@ -386,7 +386,7 @@ L 645.592726 300.227607
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip89"><title>Effective, caught. None — No accepted answer: 20/30 runs (67%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip121"><title>R1 effective, caught. None — No accepted answer: 20/30 runs (67%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 645.592726 300.227607 
 L 665.287913 300.227607 
 L 665.287913 146.531362 
@@ -394,7 +394,7 @@ L 645.592726 146.531362
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip90"><title>Effective, caught. R1 — Accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip122"><title>R1 effective, caught. R1 — Accepted answer: 1/30 runs (3%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 682.753456 300.227607 
 L 702.448643 300.227607 
 L 702.448643 292.542795 
@@ -402,7 +402,7 @@ L 682.753456 292.542795
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip91"><title>Effective, caught. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip123"><title>R1 effective, caught. R1 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 682.753456 292.542795 
 L 702.448643 292.542795 
 L 702.448643 292.542795 
@@ -410,7 +410,7 @@ L 682.753456 292.542795
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip92"><title>Effective, caught. R2 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip124"><title>R1 effective, caught. R2 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 719.914186 300.227607 
 L 739.609373 300.227607 
 L 739.609373 254.118733 
@@ -418,7 +418,7 @@ L 719.914186 254.118733
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip93"><title>Effective, caught. R2 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip125"><title>R1 effective, caught. R2 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 719.914186 254.118733 
 L 739.609373 254.118733 
 L 739.609373 254.118733 
@@ -426,7 +426,7 @@ L 719.914186 254.118733
 z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
-   <g id="tip94"><title>Effective, caught. R3 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip126"><title>R1 effective, caught. R3 — Accepted answer: 6/30 runs (20%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 757.074916 300.227607 
 L 776.770103 300.227607 
 L 776.770103 254.118733 
@@ -434,7 +434,7 @@ L 757.074916 254.118733
 z
 " clip-path="url(#p008733fbdf)" style="fill: #287e85"/>
    </g>
-   <g id="tip95"><title>Effective, caught. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
+   <g id="tip127"><title>R1 effective, caught. R3 — No accepted answer: 0/30 runs (0%). R1: tool named in the treatment records; baseline has no record. R2/R3: the alternatives. Tool attempts may overlap; acceptance does not establish the answer source.</title>
     <path d="M 757.074916 254.118733 
 L 776.770103 254.118733 
 L 776.770103 254.118733 
@@ -443,16 +443,16 @@ z
 " clip-path="url(#p008733fbdf)" style="fill: #d5dbde"/>
    </g>
    <g id="text_23">
-    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="153.770461" y="335.767931" transform="rotate(-0 153.770461 335.767931)">Baseline</text>
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="153.770461" y="335.767931" transform="rotate(-0 153.770461 335.767931)">Baseline (no evidence)</text>
    </g>
    <g id="text_24">
-    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="339.574112" y="335.767931" transform="rotate(-0 339.574112 335.767931)">Ineffective</text>
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="339.574112" y="335.767931" transform="rotate(-0 339.574112 335.767931)">R1 ineffective</text>
    </g>
    <g id="text_25">
-    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="525.377763" y="335.767931" transform="rotate(-0 525.377763 335.767931)">Effective, not caught</text>
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="525.377763" y="335.767931" transform="rotate(-0 525.377763 335.767931)">R1 effective, not caught</text>
    </g>
    <g id="text_26">
-    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="711.181414" y="335.767931" transform="rotate(-0 711.181414 335.767931)">Effective, caught</text>
+    <text style="font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #64717b" x="711.181414" y="335.767931" transform="rotate(-0 711.181414 335.767931)">R1 effective, caught</text>
    </g>
    <g id="text_27">
     <text style="font-weight: 700; font-size: 10.5px; font-family: 'Helvetica', 'Arial', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #27343b" x="432.475937" y="53.68324" transform="rotate(-0 432.475937 53.68324)">Previous R1 outcome</text>
