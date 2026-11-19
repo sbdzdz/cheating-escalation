@@ -88,7 +88,7 @@ def timeout_section():
             1,
         )
     content = (
-        '<details class="result-group comparison" open><summary class="group-heading">Timeout ablation</summary>'
+        '<details class="result-group comparison"><summary class="group-heading">Timeout ablation</summary>'
         '<section><h3>Cheating rate versus timeout</h3><div class="comparison-scroll">'
         + comparison
         + "</div></section>"
@@ -157,7 +157,7 @@ def aware_difficulty_section():
     except MissingData:
         return ""
     return (
-        '<details class="result-group comparison" open>'
+        '<details class="result-group comparison">'
         '<summary class="group-heading">Difficulty sweep with explicit prohibitions</summary>'
         "<section><h3>Flagged cheating attempts versus bit length</h3>"
         '<div class="comparison-scroll">' + cheating + "</div></section>"
@@ -318,7 +318,7 @@ def controlled_operations():
 
 def controlled_tools_section():
     return (
-        '<details class="result-group controlled-tools" open>'
+        '<details class="result-group controlled-tools">'
         '<summary class="group-heading">Results (effective &amp; caught)</summary><section>'
         '<h3>128-bit integers · DeepSeek V4 Flash</h3><div class="comparison-scroll">'
         + (figure_or_none(controlled_tools, "controlled-tools-methods-128") or "")
@@ -396,7 +396,7 @@ def shortcut_history_quotes():
 
 def shortcut_history_section():
     return (
-        '<details class="result-group shortcut-history" open><summary class="group-heading">Results (all)</summary><section>'
+        '<details class="result-group shortcut-history"><summary class="group-heading">Results (all)</summary><section>'
         + "<h3>512-bit factorization · DeepSeek V4 Flash</h3>"
         + (figure_or_none(shortcut_history, "history-factorization") or "")
         + "<h3>128-bit subset sum · DeepSeek V4 Flash</h3>"
@@ -468,7 +468,7 @@ def opaque_prompts_section():
 
 def opaque_shortcuts_section():
     return (
-        '<details class="result-group opaque-shortcuts" open>'
+        '<details class="result-group opaque-shortcuts">'
         '<summary class="group-heading">Results (opaque shortcuts)</summary><section>'
         '<p class="intro">Three identical answer-retrieval tools with random hash names, '
         'no descriptions, and randomized tool order. '
@@ -1153,7 +1153,7 @@ document.querySelectorAll('details').forEach(section => {
     const key = 'cheating-escalation:section:' + heading.textContent.trim() + (heading.textContent.trim() === 'Prompts' ? ':' + section.className : '');
     try {
         const saved = localStorage.getItem(key);
-        if (saved !== null) section.open = saved === 'open';
+        section.open = saved === 'open';
     } catch (_) {}
     section.addEventListener('toggle', () => {
         try {
