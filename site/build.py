@@ -25,7 +25,7 @@ report = re.sub(
     flags=re.DOTALL,
 )
 # Match the site chrome; preserve the chart colours and interactions.
-report = report.replace("#10171f", "#121212").replace("#19222c", "#191919")
+report = report.replace("#10171f", "#10151d").replace("#19222c", "#171e28")
 (DEST / "report.html").write_text(report)
 (DEST / ".nojekyll").touch()
 print(f"Built {DEST}")
