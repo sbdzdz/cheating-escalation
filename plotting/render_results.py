@@ -1025,17 +1025,17 @@ def main():
     sections += timeout_section()
     sections += aware_difficulty_section()
     sections = (
-        '<h2 class="setting-heading">Realistic shortcuts</h2>'
+        '<h2 class="setting-heading">1. Realistic shortcuts</h2>'
         + cheatbench_prompts_section()
         + sections
     )
-    sections += '<h2 class="setting-heading">Tool shortcuts</h2>'
+    sections += '<h2 class="setting-heading">2. Tool shortcuts</h2>'
     sections += controlled_prompts_section()
     sections += controlled_prompts_section("caught")
     sections += controlled_tools_section()
     sections += controlled_prompts_section("new")
     sections += shortcut_history_section()
-    sections += '<h2 class="setting-heading">Tool shortcuts (opaque)</h2>'
+    sections += '<h2 class="setting-heading">3. Tool shortcuts (opaque)</h2>'
     sections += opaque_prompts_section()
     sections += opaque_shortcuts_section()
 
@@ -1044,7 +1044,7 @@ def main():
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cheating escalation Figures</title>
 <style>
 .shortcut-history section>h3:not(:first-child){margin-top:64px}
-.setting-heading{font-size:32px;font-weight:650;margin:64px 0 28px;padding-bottom:16px;border-bottom:1px solid #303b45}
+.setting-heading{font-size:32px;font-weight:650;margin:64px 0 28px;padding-bottom:16px}
 :root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#10171f;color:#dedbd3;font:16px/1.6 system-ui,-apple-system,sans-serif}main{max-width:1128px;margin:auto;padding:36px 24px}section{margin:0 0 80px}h2{font-size:21px;font-weight:650;margin:0 0 18px}svg{display:block;width:100%;height:auto;overflow:visible}svg text{font-family:system-ui,-apple-system,sans-serif;font-size:14px;fill:#dedbd3}.tick{fill:#a1aebc}.value{font-weight:650}.pending{fill:#a1aebc;font-size:13px}p{font-size:13px;color:#aebac7;margin:0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.75 ui-monospace,SFMono-Regular,monospace;padding:22px;background:#19222c;border:1px solid #303b45;border-radius:6px;margin:0}.legend{display:flex;flex-wrap:wrap;gap:12px 28px;font-size:13px;margin-bottom:12px}.legend span{display:inline-flex;align-items:center;gap:8px}.legend i{display:inline-block;width:14px;height:14px;border-radius:2px}h1{font-size:40px;line-height:1.2;font-weight:700;margin:0 0 32px}.intro{margin:0 0 32px;font-size:15px;line-height:1.8;font-weight:400;color:#dedbd3}article{margin:26px 0}h3{font-size:16px;font-weight:650;margin:0 0 18px}.result-group{margin:64px 0}.group-heading{font-size:28px;font-weight:650;text-align:left;padding-bottom:14px;margin-bottom:32px;break-after:avoid}blockquote{white-space:pre-wrap;border-left:3px solid #287e85;padding:12px 20px;margin:12px 0;background:#19222c}.computation-quote,.command-quote{color:#ce9990}.command-quote{margin:12px 0}.command-quote pre{color:inherit;padding:14px;overflow-wrap:anywhere}.command-label,summary{font-size:13px;margin-bottom:6px}summary{cursor:pointer}table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}th,td{text-align:left;padding:12px;border-bottom:1px solid #303b45}a{color:#74d3d6}@media print{section{break-inside:avoid}main{padding:0}}
 .subgroup{margin:0 0 36px}.subgroup-heading{font-size:21px;font-weight:650;margin-bottom:24px}.subgroup[open]{margin-bottom:56px}.model-heading{font-size:16px;font-weight:600;color:#aebac7;margin:28px 0 12px}.record-label{font-size:13px;color:#a1aebc;margin:0 0 4px}.record-excerpt{font-size:14px;margin:0 0 18px;padding:10px 16px}.record-note{color:#a1aebc}.diff-quote{color:#7fd38f}.comparison{width:100%}.comparison-scroll{max-width:100%}.comparison svg{min-width:0;max-width:100%}@media print{.comparison{width:100%;left:auto;transform:none}.comparison svg{min-width:0}}
 .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.difficulty .base-case{font-size:16px;color:#dedbd3;margin-bottom:28px}.difficulty-grid h3{font-size:19px;margin-bottom:6px}.difficulty-grid td:nth-child(3){overflow-wrap:anywhere}.difficulty-grid th,.difficulty-grid td{padding:10px 8px}.difficulty-grid>div{min-width:0}@media(max-width:700px){.difficulty-grid{grid-template-columns:1fr}}
@@ -1074,7 +1074,6 @@ main{min-width:0;overflow-wrap:anywhere}
 </style></head><body><main>
 <svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><pattern id="pending" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#19222c"/><path d="M0 8L8 0" stroke="#303b45"/></pattern></defs></svg>
 """
-        + "<header><h1>Cheating escalation</h1></header>"
         + sections
         + """
 </main>

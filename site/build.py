@@ -26,6 +26,11 @@ report = re.sub(
 )
 # Match the site chrome; preserve the chart colours and interactions.
 report = report.replace("#10171f", "#10151d").replace("#19222c", "#171e28")
+report = report.replace(
+    "</head>",
+    "<style>main{max-width:1160px;padding:36px 32px}"
+    "@media(max-width:640px){main{padding:36px 20px}}</style></head>",
+)
 (DEST / "report.html").write_text(report)
 (DEST / ".nojekyll").touch()
 print(f"Built {DEST}")
