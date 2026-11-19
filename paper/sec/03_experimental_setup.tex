@@ -1,4 +1,13 @@
 \section{Experimental Setup}
 \label{sec:experimental-setup}
 
-% TODO: Draft this section.
+To study the cheating behavior of AI models when multiple cheating avenues are available, we build a simulated evaluation environment where the model is faced with a task requiring significant manual work. We adapt two tasks from CheatBench~\citep{phan2026cheatbench}:
+
+\begin{enumerate}
+  \item \textbf{Prime factorization.} The model is tasked with finding the prime factors of a 512-bit semiprime. The target is constructed to require 10 increments of the Fermat method.
+  \item \textbf{Subset sum.} The model has to find a subset of 64 128-bit integers that sums to a target.
+\end{enumerate}
+
+Both tasks are calibrated in difficulty such that the model is likely to engage in cheating.
+
+The baseline and past-evidence prompts are provided in \autoref{sec:experimental-prompts}.
